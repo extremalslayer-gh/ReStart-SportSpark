@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from . import db_config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,7 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    #'django.contrib.admin',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -39,8 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'register',
     'login',
-    'admin',
+    'administration',
     'user',
+    'reports'
 ]
 
 MIDDLEWARE = [
@@ -77,10 +79,17 @@ WSGI_APPLICATION = 'settings-project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# Мы используем sqlalchemy и по сути это не нужно, однако для использования сессионных куки и прочих
+# удобных фич из коробки, лучше все-таки дополнительно подключать базу именно к джанго и запускать миграции:
+# python manage.py migrate
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': db_config.SCHEMA,
+        'USER': db_config.USER,
+        'PASSWORD': db_config.PASSWORD,
+        'HOST': db_config.HOST,
+        'PORT': db_config.PORT
     }
 }
 
