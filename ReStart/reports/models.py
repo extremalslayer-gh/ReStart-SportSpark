@@ -1,10 +1,9 @@
 from datetime import datetime
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
-import importlib
 from sqlalchemy.types import LargeBinary
-engine = importlib.import_module("settings-project.db_config").engine
-Base = importlib.import_module("settings-project.models").Base
+from ReStart.db_config import engine
+from ReStart.models import Base
 
 
 class Organization(Base):

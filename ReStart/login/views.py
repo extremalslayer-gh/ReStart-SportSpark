@@ -1,7 +1,6 @@
 from django.http import JsonResponse
 import json
-import importlib
-Session = importlib.import_module('settings-project.db_config').Session
+from ReStart.db_config import Session
 from user.models import User
 from django.views.decorators.csrf import csrf_exempt
 

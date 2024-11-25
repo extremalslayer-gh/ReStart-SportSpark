@@ -1,8 +1,7 @@
 from django.http import JsonResponse
 import json
-import importlib
-Session = importlib.import_module('settings-project.db_config').Session
-TEMP_PASSWORD_LENGTH = importlib.import_module('settings-project.settings').TEMP_PASSWORD_LENGTH
+from ReStart.db_config import Session
+from ReStart.settings import TEMP_PASSWORD_LENGTH
 from user.models import User
 from reports.models import Organization
 from django.views.decorators.csrf import csrf_exempt
