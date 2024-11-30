@@ -6,11 +6,6 @@ from ReStart.db_config import engine
 from ReStart.models import Base
 
 
-# Отслеживание изменений в отчетах:
-# Foreign Key не работает с неуникальными полями, поэтому для извлечения последнего
-# Изменения данных об организации, лучше написать кастомный @property, который будет учитывать дату.
-# Либо можно использовать id(не organization_id) для foreign key и автоматически обновлять его везде, где это требуется,
-# Однако я счел используемый способ предпочтительным, т.к. в данном случае отслеживание изменений становится проще
 class User(Base):
     __tablename__ = 'users'
     __table_args__ = { 'extend_existing': True }
@@ -22,11 +17,10 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(32))
     _password: Mapped[str] = mapped_column('password', String(256))
     organization_id: Mapped[int] = mapped_column()
-    #organization_id: Mapped[int] = mapped_column(ForeignKey('organizations.organization_id'))
-    #organization: Mapped['Organization'] = relationship()
     municipality_name: Mapped[str] = mapped_column(String(256))
     is_admin: Mapped[bool] = mapped_column(Boolean(), default=False)
     occupation: Mapped[str] = mapped_column(String(32))
+    temp_password_changed: Mapped[str] = mapped_column(Boolean(), default=False)
 
     @property
     def password(self):

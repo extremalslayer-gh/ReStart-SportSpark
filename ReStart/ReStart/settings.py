@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+
+from .notifier.email_notifier import EmailNotifier
 from . import db_config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -138,3 +140,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Длина временного пароля
 TEMP_PASSWORD_LENGTH = 8
+
+# Система уведомлений для регистрации и прочего
+# Можно использовать почтовые сервера gmail, mail.ru и т.д.
+# gmail: https://support.google.com/a/answer/176600?hl=ru
+# mail.ru: https://help.mail.ru/mail/mailer/2fa/
+# yandex: https://yandex.ru/support/yandex-360/customers/mail/ru/mail-clients/others.html
+NOTIFIER = EmailNotifier('', 587, '', '')
+EMAIL_NOTIFICATION_TEXT = '''Subject: Уведомление о регистрации в системе мониторинга деятельности ШСК\n\n
+Вы были зарегистрированы в системе мониторинга деятельности ШСК, для продолжения перейдите по ссылке:
+TO_CHANGE_NO_URL
+Для входа используйте вашу электронную почту и пароль: {0}
+'''

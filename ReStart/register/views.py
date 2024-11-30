@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 import json
 from ReStart.db_config import Session
-from ReStart.settings import TEMP_PASSWORD_LENGTH
+from ReStart.settings import TEMP_PASSWORD_LENGTH, NOTIFIER, EMAIL_NOTIFICATION_TEXT
 from user.models import User
 from reports.models import Organization
 from django.views.decorators.csrf import csrf_exempt
@@ -10,13 +10,12 @@ import random
 import string
 
 
-# Временная заглушка для отправки email письма с временным паролем
-def send_email(email, password):
-    print(f'An email was sent to {email}, password {password}')
-
 def generate_password(length):
     return ''.join([random.choice(string.ascii_letters + string.digits) for i in range(length)])
 
+# todo: добавить проверку, что запрос пришел от админа
+# user = session.query(User).filter(User.id==request.session['user_id'].first()
+# if not user.is_admin: ...
 @csrf_exempt
 def create_account(request):
     try:
@@ -44,9 +43,11 @@ def create_account(request):
             **json_data['user'],
             password=temp_password,
             organization_id=organization_id,
-            is_admin=False
+            is_admin=False,
+            temp_password_changed=False
         )
-        send_email(user.email, temp_password)
+
+        NOTIFIER.send_notification(user.email, EMAIL_NOTIFICATION_TEXT.format(temp_password))
 
         session.add_all([organization, user])
         session.commit()
