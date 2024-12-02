@@ -6,6 +6,9 @@ from ReStart.db_config import engine
 from ReStart.models import Base
 
 
+def get_nullable_data(json_data, key, default):
+    return json_data[key] if key in json_data else default
+
 class Organization(Base):
     __tablename__ = 'organizations'
     __table_args__ = { 'extend_existing': True }
@@ -38,6 +41,31 @@ class Organization(Base):
     inventory_used: Mapped[str] = mapped_column(String(256), nullable=True)
     achievements: Mapped[str] = mapped_column(String(512), nullable=True)
 
+    def modify_from_dict(self, data):
+        self.students_grade_1 = get_nullable_data(data, 'students_grade_1', self.students_grade_1)
+        self.students_grade_2 = get_nullable_data(data, 'students_grade_2', self.students_grade_2)
+        self.students_grade_3 = get_nullable_data(data, 'students_grade_3', self.students_grade_3)
+        self.students_grade_4 = get_nullable_data(data, 'students_grade_4', self.students_grade_4)
+        self.students_grade_5 = get_nullable_data(data, 'students_grade_5', self.students_grade_5)
+        self.students_grade_6 = get_nullable_data(data, 'students_grade_6', self.students_grade_6)
+        self.students_grade_7 = get_nullable_data(data, 'students_grade_7', self.students_grade_7)
+        self.students_grade_8 = get_nullable_data(data, 'students_grade_8', self.students_grade_8)
+        self.students_grade_9 = get_nullable_data(data, 'students_grade_9', self.students_grade_9)
+        self.students_grade_10 = get_nullable_data(data, 'students_grade_10', self.students_grade_10)
+        self.students_grade_11 = get_nullable_data(data, 'students_grade_11', self.students_grade_11)
+        self.students_total = get_nullable_data(data, 'students_total', self.students_total)
+        self.hours_mon = get_nullable_data(data, 'hours_mon', self.hours_mon)
+        self.hours_tue = get_nullable_data(data, 'hours_tue', self.hours_tue)
+        self.hours_wed = get_nullable_data(data, 'hours_wed', self.hours_wed)
+        self.hours_thu = get_nullable_data(data, 'hours_thu', self.hours_thu)
+        self.hours_fri = get_nullable_data(data, 'hours_fri', self.hours_fri)
+        self.hours_sat = get_nullable_data(data, 'hours_sat', self.hours_sat)
+        self.hours_sun = get_nullable_data(data, 'hours_sun', self.hours_sun)
+        self.class_location = get_nullable_data(data, 'class_location', self.class_location)
+        self.inventory_all = get_nullable_data(data, 'inventory_all', self.inventory_all)
+        self.inventory_used = get_nullable_data(data, 'inventory_used', self.inventory_used)
+        self.achievements = get_nullable_data(data, 'achievements', self.achievements)
+
 class Sports(Base):
     __tablename__ = 'sports'
     __table_args__ = { 'extend_existing': True }
@@ -46,6 +74,10 @@ class Sports(Base):
     name: Mapped[str] = mapped_column(String(64), nullable=False)
     student_count: Mapped[int] = mapped_column(default=None, nullable=True)
     organization_id: Mapped[int] = mapped_column(default=None, nullable=True)
+
+    def modify_from_dict(self, data):
+        self.name = get_nullable_data(data, 'name', self.name)
+        self.student_count = get_nullable_data(data, 'student_count', self.student_count)
 
 class Event(Base):
     __tablename__ = 'events'
@@ -57,5 +89,11 @@ class Event(Base):
     organization_id: Mapped[int] = mapped_column(default=None, nullable=True)
     date: Mapped[datetime] = mapped_column(default=None, nullable=True)
     document = mapped_column(LargeBinary, default=None, nullable=True)
+    
+    def modify_from_dict(self, data):
+        self.name = get_nullable_data(data, 'name', self.name)
+        self.student_count = get_nullable_data(data, 'student_count', self.student_count)
+        self.date = get_nullable_data(data, 'date', self.date)
+        self.document = get_nullable_data(data, 'document', self.document)
 
 Base.metadata.create_all(bind=engine)

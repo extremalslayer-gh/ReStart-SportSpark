@@ -8,25 +8,34 @@ from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime
 import random
 import string
+from user.utils import is_logged_in
 
 
 def generate_password(length):
     return ''.join([random.choice(string.ascii_letters + string.digits) for i in range(length)])
 
-# todo: добавить проверку, что запрос пришел от админа
-# user = session.query(User).filter(User.id==request.session['user_id'].first()
-# if not user.is_admin: ...
 @csrf_exempt
 def create_account(request):
     try:
         json_data = json.loads(request.body.decode())
         session = Session()
 
+        if not is_logged_in(request):
+            return JsonResponse({
+                'message': 'Неавторизованный доступ'
+            }, status=403)
+        
+        caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+        if not caller_user.is_admin:
+            return JsonResponse({
+                'message': 'Неавторизованный доступ'
+            }, status=403)
+
         same_user = session.query(User).filter(User.email==json_data['user']['email']).exists()
         if session.query(same_user).scalar():
             return JsonResponse({
-            'message': 'Пользователь с данным email уже существует'
-        }, status=409)
+                'message': 'Пользователь с данным email уже существует'
+            }, status=409)
 
         last_organization = session.query(Organization).order_by(Organization.organization_id.desc()).first()
         organization_id = last_organization.organization_id + 1 if last_organization is not None else 0

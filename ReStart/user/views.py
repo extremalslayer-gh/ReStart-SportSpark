@@ -3,10 +3,8 @@ import json
 from ReStart.db_config import Session
 from user.models import User
 from django.views.decorators.csrf import csrf_exempt
+from user.utils import is_logged_in
 
-
-def is_logged_in(request):
-    return 'user_id' in request.session
 
 @csrf_exempt
 def change_password(request):
