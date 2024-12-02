@@ -2,15 +2,12 @@ from django.contrib.auth.hashers import make_password, check_password
 from sqlalchemy import Boolean
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
-from ReStart.db_config import engine
+from ReStart.db_config import engine, Session, PASSWORD
 from ReStart.models import Base
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
 
 
-# Отслеживание изменений в отчетах:
-# Foreign Key не работает с неуникальными полями, поэтому для извлечения последнего
-# Изменения данных об организации, лучше написать кастомный @property, который будет учитывать дату.
-# Либо можно использовать id(не organization_id) для foreign key и автоматически обновлять его везде, где это требуется,
-# Однако я счел используемый способ предпочтительным, т.к. в данном случае отслеживание изменений становится проще
 class User(Base):
     __tablename__ = 'users'
     __table_args__ = { 'extend_existing': True }
@@ -22,11 +19,10 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(32))
     _password: Mapped[str] = mapped_column('password', String(256))
     organization_id: Mapped[int] = mapped_column()
-    #organization_id: Mapped[int] = mapped_column(ForeignKey('organizations.organization_id'))
-    #organization: Mapped['Organization'] = relationship()
     municipality_name: Mapped[str] = mapped_column(String(256))
     is_admin: Mapped[bool] = mapped_column(Boolean(), default=False)
     occupation: Mapped[str] = mapped_column(String(32))
+    temp_password_changed: Mapped[str] = mapped_column(Boolean(), default=False)
 
     @property
     def password(self):
@@ -40,3 +36,27 @@ class User(Base):
         return check_password(password, self._password)
 
 Base.metadata.create_all(bind=engine)
+
+@receiver(post_migrate)
+def create_admin_user(sender, **kwargs):
+    session = Session()
+    same_user = session.query(User).filter(User.email=='admin@example.com').exists()
+    if session.query(same_user).scalar():
+        return
+
+    user = User(
+        first_name='System Admin',
+        second_name='',
+        last_name='',
+        organization_id=-1,
+        password=PASSWORD,
+        email='admin@example.com', # todo: изменить домен когда будет, ни на что не влияет
+        municipality_name='',
+        is_admin=True,
+        occupation='Администратор',
+        temp_password_changed=True
+    )
+    print('Аккаунт администратора создан')
+
+    session.add(user)
+    session.commit()
