@@ -6,6 +6,9 @@ from ReStart.db_config import engine
 from ReStart.models import Base
 
 
+def convert_to_dict(obj):
+    return { c.name: getattr(obj, c.name) for c in obj.__table__.columns }
+
 def get_nullable_data(json_data, key, default):
     return json_data[key] if key in json_data else default
 
