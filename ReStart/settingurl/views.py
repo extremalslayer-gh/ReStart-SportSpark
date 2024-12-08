@@ -20,3 +20,11 @@ def renamepass(request):
 
 def success(request):
     return render(request, 'settingurl/success.html')
+
+
+def personal(request):
+    return render(request, 'settingurl/personal.html')
+
+
+def reports(request):
+    return render(request, 'settingurl/reports.html')
