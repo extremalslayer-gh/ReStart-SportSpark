@@ -6,6 +6,9 @@ from ReStart.db_config import engine
 from ReStart.models import Base
 
 
+def convert_to_dict(obj):
+    return { c.name: getattr(obj, c.name) for c in obj.__table__.columns }
+
 def get_nullable_data(json_data, key, default):
     return json_data[key] if key in json_data else default
 
@@ -73,6 +76,7 @@ class Sports(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(64), nullable=False)
     student_count: Mapped[int] = mapped_column(default=None, nullable=True)
+    # Привязка к версии отчета, Именно к Organization.id, не Organization.organization_id!
     organization_id: Mapped[int] = mapped_column(default=None, nullable=True)
 
     def modify_from_dict(self, data):
@@ -86,6 +90,7 @@ class Event(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(64), nullable=False)
     student_count: Mapped[int] = mapped_column(default=None, nullable=True)
+    # Привязка к версии отчета, Именно к Organization.id, не Organization.organization_id!
     organization_id: Mapped[int] = mapped_column(default=None, nullable=True)
     date: Mapped[datetime] = mapped_column(default=None, nullable=True)
     document = mapped_column(LargeBinary, default=None, nullable=True)
