@@ -10,6 +10,7 @@ from sqlalchemy import func
 import pandas as pd
 import uuid
 import os
+from administration.utils import export_to_excel_common
 
 
 @csrf_exempt
@@ -77,46 +78,47 @@ def export_reports(request):
         if not caller_user.is_admin:
             return HttpResponse(status=403)
 
-        subquery = (
-            session.query(
-                Organization.organization_id,
-                func.max(Organization.creation_time).label('max_creation_time')
-            )
-            .group_by(Organization.organization_id)
-            .subquery()
-        )
+        #subquery = (
+        #    session.query(
+        #        Organization.organization_id,
+        #        func.max(Organization.creation_time).label('max_creation_time')
+        #    )
+        #    .group_by(Organization.organization_id)
+        #    .subquery()
+        #)
 
-        organizations = (
-            session.query(Organization)
-            .join(subquery, (Organization.organization_id == subquery.c.organization_id) & (Organization.creation_time == subquery.c.max_creation_time))
-            .all()
-        )
+        #organizations = (
+        #    session.query(Organization)
+        #    .join(subquery, (Organization.organization_id == subquery.c.organization_id) & (Organization.creation_time == subquery.c.max_creation_time))
+        #    .all()
+        #)
 
-        result = []
-        for organization in organizations:
-            organization_dict = convert_to_dict(organization)
-            user = session.query(User).filter(User.organization_id==organization.organization_id).first()
-            name = f'{user.second_name} {user.first_name} {user.last_name}' if user is not None else 'Не определено'
+        #result = []
+        #for organization in organizations:
+        #    organization_dict = convert_to_dict(organization)
+        #    user = session.query(User).filter(User.organization_id==organization.organization_id).first()
+        #    name = f'{user.second_name} {user.first_name} {user.last_name}' if user is not None else 'Не определено'
+        #    result.append([name] + list(organization_dict.values()))
 
-            result.append([name] + list(organization_dict.values()))
+        #df = pd.DataFrame(result, columns=[
+        #    'ФИО', 'Системный идентификатор', 
+        #    'Идентификатор организции', 'Назание организации', 
+        #    '1 класс', '2 класс', '3 класс', 
+        #    '4 класс', '5 класс', '6 класс', 
+        #    '7 класс', '8 класс', '9 класс', 
+        #    '19 класс', '11 класс', 'Всего обучающихся',
+        #    'Время создания', 'Часов в пн', 'Часов в вт', 
+        #    'Часов в ср', 'Часов в чт', 'Часов в пт', 
+        #    'Часов в сб', 'Часов в вс', 'Место проведения занятий',
+        #    'Весь инвентарь', 'Используемый инвентарь', 'Достижения'
+        #])
 
-        df = pd.DataFrame(result, columns=[
-            'ФИО', 'Системный идентификатор', 
-            'Идентификатор организции', 'Назание организации', 
-            '1 класс', '2 класс', '3 класс', 
-            '4 класс', '5 класс', '6 класс', 
-            '7 класс', '8 класс', '9 класс', 
-            '19 класс', '11 класс', 'Всего обучающихся',
-            'Время создания', 'Часов в пн', 'Часов в вт', 
-            'Часов в ср', 'Часов в чт', 'Часов в пт', 
-            'Часов в сб', 'Часов в вс', 'Место проведения занятий',
-            'Весь инвентарь', 'Используемый инвентарь', 'Достижения'
-        ])
 
         filename = f'report_{uuid.uuid4()}.xlsx'
         filepath = f'{TEMP_FOLDER}\\{filename}'
         writer = pd.ExcelWriter(filepath)
-        df.to_excel(writer)
+        export_to_excel_common(session, writer)
+        #df.to_excel(writer)
         writer.close()
 
         with open(filepath, 'rb') as f:
