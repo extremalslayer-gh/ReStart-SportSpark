@@ -1,0 +1,126 @@
+/* Сброс стандартных стилей */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #eaeaea;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Шапка */
+.header {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.menu li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+
+.profile a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.profile-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+/* Фильтры */
+.filters {
+    background-color: #fff;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.filter-item label {
+    font-size: 14px;
+    color: #333;
+}
+
+.filter-item select {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Таблица */
+.table-container {
+    background-color: #fff;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-x: auto;
+}
+
+.reports-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.reports-table thead th {
+    font-size: 14px;
+    color: #666;
+    padding: 10px;
+    border-bottom: 2px solid #ddd;
+}
+
+.reports-table tbody td {
+    font-size: 14px;
+    color: #333;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.reports-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.reports-table tbody td a {
+    color: #6a5acd;
+    text-decoration: none;
+}
+
+.reports-table tbody td a:hover {
+    text-decoration: underline;
+}
