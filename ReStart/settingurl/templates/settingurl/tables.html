@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма Входа</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'settingurl/css/tables.css' %}">
+</head>
+<body>
+<header class="header">
+    <nav class="navbar">
+        <ul class="menu">
+            <li><a href="#">Руководители</a></li>
+            <li><a href="{% url 'tables' %}">Посмотреть таблицу</a></li>
+            <li><a href="#">Посмотреть отчеты</a></li>
+        </ul>
+        <div class="profile">
+            <a href="#">
+                <img src="profile-icon.png" alt="Профиль" class="profile-icon">
+                Профиль
+            </a>
+        </div>
+    </nav>
+</header>
+    <!-- Блок с фильтрами -->
+    <section class="filters">
+        <div class="filter-item">
+            <label for="city">Название Муниципального образования (город)</label>
+            <select id="city">
+                <option>Все</option>
+                <option>Каменск-Уральский</option>
+                <option>Екатеринбург</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label for="organization">Общеобразовательная организация</label>
+            <select id="organization">
+                <option>Все</option>
+                <option>Школа №34</option>
+                <option>Лицей №1</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label for="leader">ФИО руководителя Школьного спортивного клуба</label>
+            <select id="leader">
+                <option>Все</option>
+                <option>Иванов Иван</option>
+                <option>Петров Петр</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label for="date">Дата</label>
+            <select id="date">
+                <option>Все</option>
+                <option>29.10.24</option>
+                <option>30.10.24</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label for="edits">Правки</label>
+            <select id="edits">
+                <option>Все</option>
+                <option>Обновлено</option>
+                <option>Не обновлено</option>
+            </select>
+        </div>
+    </section>
+    <button class="download-btn">Скачать таблицу</button>
+      <div class="table-container">
+          <!-- Контейнер для прокрутки -->
+          <table class="styled-table">
+              <!-- Заголовок таблицы -->
+              <thead>
+              <tr>
+                  <th>
+                      <button class="filter-btn">▼</button>
+                      <div class="filter-dropdown">
+                          <label><input type="checkbox" value="Иванов Иван" checked> Иванов Иван</label>
+                          <label><input type="checkbox" value="Петров Петр" checked> Петров Петр</label>
+                      </div>
+                      Руководитель
+                  </th>
+                  <th>
+                      <button class="filter-btn">▼</button>
+
+                      Количество обучающихся в образовательной организации
+                  </th>
+                  <th>
+                      <button class="filter-btn">▼</button>
+
+                      Количество занимающихся на базе ШСК
+                  </th>
+                  <th>
+                      <button class="filter-btn">▼</button>
+
+                      1 класс
+                  </th>
+                  <th>
+                      <button class="filter-btn">▼</button>
+
+                      2 класс
+                  </th>
+                  <th>
+                      <button class="filter-btn">▼</button>
+
+                      3 класс
+                  </th>
+                  <th>
+                      <button class="filter-btn">▼</button>
+
+                      4 класс
+                  </th>
+                  <th>
+                      <button class="filter-btn">▼</button>
+
+                      5 класс
+                  </th>
+                  <th>
+                      <button class="filter-btn">▼</button>
+
+                      6 класс
+                  </th>
+                  <th>
+                      <button class="filter-btn">▼</button>
+
+                      7 класс
+                  </th>
+                  <th>
+                      <button class="filter-btn">▼</button>
+
+                      8 класс
+                  </th>
+                  <th>
+                      <button class="filter-btn">▼</button>
+
+                      9 класс
+                  </th>
+                  <th>
+                      <button class="filter-btn">▼</button>
+
+                      10 класс
+                  </th>
+                  <th>
+                      <button class="filter-btn">▼</button>
+
+                      11 класс
+                  </th>
+              </tr>
+              </thead>
+              <tbody>
+              <!-- Данные таблицы -->
+              <tr>
+                  <td>Иванов Иван</td>
+                  <td>200</td>
+                  <td>50</td>
+                  <td>5</td>
+                  <td>4</td>
+                  <td>3</td>
+                  <td>6</td>
+                  <td>7</td>
+                  <td>8</td>
+                  <td>10</td>
+                  <td>15</td>
+                  <td>12</td>
+                  <td>10</td>
+                  <td>9</td>
+              </tr>
+              <tr>
+                <td>Петров Петр</td>
+                <td>180</td>
+                <td>45</td>
+                <td>6</td>
+                <td>5</td>
+                <td>4</td>
+            </tr>
+              </tbody>
+          </table>
+      </div>
+  </main>
+<script src="{% static 'settingurl/js/tables.js' %}"></script>
+</body>
+</html>
+
