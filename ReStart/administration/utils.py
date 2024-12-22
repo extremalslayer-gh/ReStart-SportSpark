@@ -1,8 +1,9 @@
 import pandas as pd
-from reports.models import Organization, Event, convert_to_dict
+from reports.models import Organization, Sports, Event
 from user.models import User
 
-
+# todo:
+# - там, где указано 0 или '-' - этих значений не было в ТЗ
 def export_to_excel_common(session, writer):
     result = []
     users = session.query(User).filter(User.is_admin==False).all()
@@ -24,7 +25,7 @@ def export_to_excel_common(session, writer):
                 report_first.creation_time, report_changed.creation_time, report_changed.hours_mon,
                 report_changed.hours_tue, report_changed.hours_wed, report_changed.hours_thu, report_changed.hours_fri, report_changed.hours_sat, report_changed.hours_sun,
                 hours_total, event.name, 
-                0, event.date, 
+                event.student_count, event.date, 
                 0, 0, 
                 report_changed.students_total, report_changed.students_grade_1, report_changed.students_grade_2, report_changed.students_grade_3, report_changed.students_grade_4, 
                 report_changed.students_grade_5, report_changed.students_grade_6, report_changed.students_grade_7, report_changed.students_grade_8, report_changed.students_grade_9, report_changed.students_grade_10, report_changed.students_grade_11, 
@@ -90,3 +91,26 @@ def export_to_excel_student_count(session, writer):
         '8 класс', '9 класс', '10 класс', '11 класс'
     ])
     df.to_excel(writer, sheet_name='Численность обучающихся', index=False)
+
+# todo: 
+# - привязывать инвенатрь к виду спорта?
+# - хранить кол-во инвентаря
+def export_to_excel_sports(session, writer):
+    result = []
+    users = session.query(User).filter(User.is_admin==False).all()
+    for user in users:
+        report_changed = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
+                                                .order_by(Organization.creation_time.desc()).first()
+        sports_list = session.query(Sports).filter(Sports.organization_id==report_changed.id).all()
+        for sports in sports_list:
+            result.append([
+                user.municipality_name, report_changed.name, 
+                sports.name, sports.student_count, report_changed.class_location, 
+                report_changed.inventory_all, 0, report_changed.inventory_used
+            ])
+
+    df = pd.DataFrame(result, columns=[
+        'Муниципальное образование', 'Школьный спортивный клуб', 'Вид спорта', 
+        'Кол-во занимающихся', 'Место проведения', 'Инвентарь', 'Кол-во', 'Используемый инвентарь'
+    ])
+    df.to_excel(writer, sheet_name='Виды спорта ШСК', index=False)

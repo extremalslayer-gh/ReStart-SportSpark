@@ -82,8 +82,9 @@ def export_reports(request):
         filepath = f'{TEMP_FOLDER}\\{filename}'
         writer = pd.ExcelWriter(filepath)
         export_to_excel_common(session, writer)
-        export_to_excel_student_count(session, writer)
         export_to_excel_schedule(session, writer)
+        export_to_excel_student_count(session, writer)
+        export_to_excel_sports(session, writer)
         writer.close()
 
         with open(filepath, 'rb') as f:
