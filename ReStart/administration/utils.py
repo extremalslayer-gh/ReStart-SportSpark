@@ -114,3 +114,24 @@ def export_to_excel_sports(session, writer):
         'Кол-во занимающихся', 'Место проведения', 'Инвентарь', 'Кол-во', 'Используемый инвентарь'
     ])
     df.to_excel(writer, sheet_name='Виды спорта ШСК', index=False)
+
+# todo: хранить кол-во участников обр организации и ШСК отдельно?(опять не было в ТЗ)
+def export_to_excel_events(session, writer):
+    result = []
+    users = session.query(User).filter(User.is_admin==False).all()
+    for user in users:
+        report_changed = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
+                                                .order_by(Organization.creation_time.desc()).first()
+        events =  session.query(Event).filter(Event.organization_id==report_changed.id)
+        for event in events:
+            result.append([
+                user.municipality_name, report_changed.name, 
+                event.name, event.student_count, event.date,
+                0
+            ])
+
+    df = pd.DataFrame(result, columns=[
+        'Муниципальное образование', 'Школьный спортивный клуб', 'Название', 
+        'Кол-во участников образовательной организации', 'Дата проведения', 'Кол-во участников ШСК'
+    ])
+    df.to_excel(writer, sheet_name='Мероприятия в рамках ШСК', index=False)
