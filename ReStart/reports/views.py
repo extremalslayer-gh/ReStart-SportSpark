@@ -30,9 +30,10 @@ def create_report(request):
         
         event_list = []
         for event in json_data['events']:
-            event_without_document = {k: event[k] for k in event if k not in ('document', 'date')}
+            event_without_document = {k: event[k] for k in event if k not in ('document', 'official_regulations', 'date')}
             event_list.append(Event(**event_without_document, 
                                     date=datetime.strptime(event['date'], '%d.%m.%Y'),
+                                    official_regulations=base64.b64decode(event['official_regulations']) if event['is_official'] else None,
                                     document=base64.b64decode(event['document']),
                                     organization_id=organization.id))
 
@@ -97,9 +98,10 @@ def edit_report(request):
         
         event_list = []
         for event in json_data['events']:
-            event_without_document = {k: event[k] for k in event if k not in ('document', 'date')}
+            event_without_document = {k: event[k] for k in event if k not in ('document', 'official_regulations', 'date')}
             event_list.append(Event(**event_without_document, 
                                     date=datetime.strptime(event['date'], '%d.%m.%Y'),
+                                    official_regulations=base64.b64decode(event['official_regulations']) if event['is_official'] else None,
                                     document=base64.b64decode(event['document']),
                                     organization_id=modified_organization.id))
 

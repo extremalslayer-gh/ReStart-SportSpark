@@ -85,7 +85,9 @@ def export_reports(request):
         export_to_excel_schedule(session, writer)
         export_to_excel_student_count(session, writer)
         export_to_excel_sports(session, writer)
+        export_to_excel_events_official(session, writer)
         export_to_excel_events(session, writer)
+        # todo: изменить ширину столбцов
         writer.close()
 
         with open(filepath, 'rb') as f:
