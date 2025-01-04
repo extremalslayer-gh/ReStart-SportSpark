@@ -1,0 +1,173 @@
+/* Сбрасываем стандартные отступы браузера, задаем шрифт и цвет фона */
+body {
+  margin: 0; /* Убирает отступы по краям страницы */
+  font-family: Arial, sans-serif; /* Устанавливает основной шрифт для текста */
+  background-color: #e0e0e0; /* Задает цвет фона страницы */
+  color: #333; /* Цвет текста */
+}
+
+.header {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.menu li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+
+.profile a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.profile-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+/* Фильтры */
+.filters {
+    background-color: #fff;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.filter-item label {
+    font-size: 14px;
+    color: #333;
+}
+
+.filter-item select {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Стили для кнопок */
+.btn {
+  background-color: #007BFF; /* Синий фон */
+  color: #fff; /* Белый текст */
+  border: none; /* Убираем обводку */
+  padding: 5px 10px; /* Отступы внутри кнопки */
+  cursor: pointer; /* Указатель меняется на руку при наведении */
+}
+
+.download-btn {
+  margin-bottom: 20px; /* Отступ снизу */
+  padding: 10px 15px; /* Отступы внутри кнопки */
+  background-color: #28A745; /* Зеленый фон */
+  color: #fff; /* Белый текст */
+  border: none; /* Убираем обводку */
+  cursor: pointer; /* Указатель меняется на руку при наведении */
+}
+
+/* Контейнер с прокруткой */
+.table-container {
+  width: 100%; /* Таблица занимает всю ширину контейнера */
+  overflow-x: auto; /* Добавляет горизонтальную прокрутку */
+  border: 1px solid #ccc; /* Граница вокруг таблицы */
+  padding: 10px; /* Отступы вокруг таблицы */
+  background-color: #f4f4f4; /* Светлый фон для всей области */
+}
+
+/* Общие стили для таблицы */
+.styled-table {
+  width: 100%; /* Таблица занимает всю ширину контейнера */
+  border-collapse: collapse; /* Убирает промежутки между границами ячеек */
+  font-family: Arial, sans-serif; /* Шрифт таблицы */
+}
+
+/* Заголовок таблицы */
+.styled-table thead th {
+  background-color: #e0e0e0; /* Светло-серый фон заголовка */
+  text-align: center; /* Текст выравнивается по центру */
+  padding: 10px; /* Внутренние отступы */
+  border: 1px solid #ccc; /* Границы между ячейками */
+  font-size: 14px; /* Размер шрифта */
+  font-weight: bold; /* Жирный текст */
+  white-space: nowrap; /* Предотвращает перенос текста на новую строку */
+}
+
+/* Тело таблицы */
+.styled-table tbody td {
+  text-align: center; /* Выравнивание текста по центру */
+  padding: 8px; /* Внутренние отступы */
+  border: 1px solid #ccc; /* Границы ячеек */
+  font-size: 13px; /* Размер шрифта */
+  white-space: nowrap; /* Предотвращает перенос текста */
+}
+
+/* Зебра для строк (необязательно) */
+.styled-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* Светло-серый фон для четных строк */
+}
+
+/* Добавляет выделение строки при наведении */
+.styled-table tbody tr:hover {
+  background-color: #dcdcdc; /* Темно-серый фон при наведении */
+}
+
+/* Вертикальные и горизонтальные границы */
+.styled-table th, .styled-table td {
+  border: 1px solid #000; /* Четкие черные границы для таблицы */
+}
+
+
+/* Стиль для кнопки фильтра */
+.filter-btn {
+    border: none;
+    background: none;
+    font-size: 12px;
+    cursor: pointer;
+}
+/* Выпадающий фильтр */
+.filter-dropdown {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    width: 200px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+}
+.filter-dropdown label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+.filter-dropdown input {
+    margin-right: 5px;
+}
+
