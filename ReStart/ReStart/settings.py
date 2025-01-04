@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
-from .notifier.email_notifier import EmailNotifier
+#from .notifier.email_notifier import EmailNotifier
+from .notifier.console_notifier import ConsoleNotifier
 from . import db_config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,7 +29,7 @@ SECRET_KEY = 'django-insecure-lyqy2p*96$xn$uzrxm^c7svdea0$lee0h2dids*!6zj4icoyl*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -86,14 +87,18 @@ WSGI_APPLICATION = 'ReStart.wsgi.application'
 # удобных фич из коробки, лучше все-таки дополнительно подключать базу именно к джанго и запускать миграции:
 # python manage.py migrate
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': db_config.SCHEMA,
-        'USER': db_config.USER,
-        'PASSWORD': db_config.PASSWORD,
-        'HOST': db_config.HOST,
-        'PORT': db_config.PORT
-    }
+    #'default': {
+    #    'ENGINE': 'django.db.backends.postgresql',
+    #    'NAME': db_config.SCHEMA,
+    #    'USER': db_config.USER,
+    #    'PASSWORD': db_config.PASSWORD,
+    #    'HOST': db_config.HOST,
+    #    'PORT': db_config.PORT
+    #}
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": 'restart.db',
+    },
 }
 
 
@@ -146,10 +151,12 @@ TEMP_PASSWORD_LENGTH = 8
 # gmail: https://support.google.com/a/answer/176600?hl=ru
 # mail.ru: https://help.mail.ru/mail/mailer/2fa/
 # yandex: https://yandex.ru/support/yandex-360/customers/mail/ru/mail-clients/others.html
-NOTIFIER = EmailNotifier('', 587, '', '')
+#NOTIFIER = EmailNotifier('', 587, '', '')
+
+NOTIFIER = ConsoleNotifier('', 587, '', '')
 EMAIL_NOTIFICATION_TEXT = '''Subject: Уведомление о регистрации в системе мониторинга деятельности ШСК\n\n
 Вы были зарегистрированы в системе мониторинга деятельности ШСК, для продолжения перейдите по ссылке:
-TO_CHANGE_NO_URL
+https://restartdev.pythonanywhere.com/
 Для входа используйте вашу электронную почту и пароль: {0}
 '''
 
