@@ -28,3 +28,11 @@ def personal(request):
 
 def reports(request):
     return render(request, 'settingurl/reports.html')
+
+
+def tables(request):
+    return render(request, 'settingurl/tables.html')
+
+
+def managers(request):
+    return render(request, 'settingurl/managers.html')
