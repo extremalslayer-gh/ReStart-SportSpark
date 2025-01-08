@@ -36,3 +36,11 @@ def tables(request):
 
 def managers(request):
     return render(request, 'settingurl/managers.html')
+
+
+def personalmanage(request):
+    return render(request, 'settingurl/personalmanage.html')
+
+
+def recentrep(request):
+    return render(request, 'settingurl/recentrep.html')
