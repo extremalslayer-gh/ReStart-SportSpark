@@ -34,7 +34,7 @@ def create_report(request):
             event_list.append(Event(**event_without_document, 
                                     date=datetime.strptime(event['date'], '%d.%m.%Y'),
                                     official_regulations=base64.b64decode(event['official_regulations']) if event['is_official'] else None,
-                                    document=base64.b64decode(event['document']),
+                                    #document=base64.b64decode(event['document']),
                                     organization_id=organization.id))
 
         session.add_all([*sports_list, *event_list])

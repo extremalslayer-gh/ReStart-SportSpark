@@ -31,6 +31,7 @@ class Organization(Base):
     students_grade_10: Mapped[int] = mapped_column(default=None, nullable=True)
     students_grade_11: Mapped[int] = mapped_column(default=None, nullable=True)
     students_total: Mapped[int] = mapped_column(default=None, nullable=True)
+    students_organization: Mapped[int] = mapped_column(default=None, nullable=True)
     creation_time: Mapped[datetime] = mapped_column(nullable=False)
     hours_mon: Mapped[int] = mapped_column(default=0, nullable=True)
     hours_tue: Mapped[int] = mapped_column(default=0, nullable=True)
@@ -58,6 +59,7 @@ class Organization(Base):
         self.students_grade_10 = get_nullable_data(data, 'students_grade_10', self.students_grade_10)
         self.students_grade_11 = get_nullable_data(data, 'students_grade_11', self.students_grade_11)
         self.students_total = get_nullable_data(data, 'students_total', self.students_total)
+        self.students_organization = get_nullable_data(data, 'students_organization', self.students_organization)
         self.hours_mon = get_nullable_data(data, 'hours_mon', self.hours_mon)
         self.hours_tue = get_nullable_data(data, 'hours_tue', self.hours_tue)
         self.hours_wed = get_nullable_data(data, 'hours_wed', self.hours_wed)
@@ -75,11 +77,12 @@ class Sports(Base):
     __table_args__ = { 'extend_existing': True }
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(64), nullable=False)
+    name: Mapped[str] = mapped_column(String(64), nullable=True)
     student_count: Mapped[int] = mapped_column(default=None, nullable=True)
-    location: Mapped[str] = mapped_column(String(64), nullable=False)
-    inventory_name: Mapped[str] = mapped_column(String(64), nullable=True)
-    inventory_all: Mapped[int] = mapped_column(default=None, nullable=True)
+    location: Mapped[str] = mapped_column(String(64), nullable=True)
+    inventory: Mapped[str] = mapped_column(String(512), nullable=True)
+    #inventory_name: Mapped[str] = mapped_column(String(64), nullable=True)
+    #inventory_all: Mapped[int] = mapped_column(default=None, nullable=True)
     inventory_used: Mapped[int] = mapped_column(default=None, nullable=True)
     # Привязка к версии отчета, Именно к Organization.id, не Organization.organization_id!
     organization_id: Mapped[int] = mapped_column(default=None, nullable=True)
@@ -88,8 +91,9 @@ class Sports(Base):
         self.name = get_nullable_data(data, 'name', self.name)
         self.student_count = get_nullable_data(data, 'student_count', self.student_count)
         self.location = get_nullable_data(data, 'location', self.location)
-        self.inventory_name = get_nullable_data(data, 'inventory_name', self.inventory_name)
-        self.inventory_all = get_nullable_data(data, 'inventory_all', self.inventory_all)
+        self.inventory = get_nullable_data(data, 'inventory', self.inventory)
+        #self.inventory_name = get_nullable_data(data, 'inventory_name', self.inventory_name)
+        #self.inventory_all = get_nullable_data(data, 'inventory_all', self.inventory_all)
         self.inventory_used = get_nullable_data(data, 'inventory_used', self.inventory_used)
 
 
@@ -98,7 +102,7 @@ class Event(Base):
     __table_args__ = { 'extend_existing': True }
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(64), nullable=False)
+    name: Mapped[str] = mapped_column(String(64), nullable=True)
     # Если is_official - то используется только это поле
     student_count_all: Mapped[int] = mapped_column(default=None, nullable=True)
     student_count_organization: Mapped[int] = mapped_column(default=None, nullable=True)
@@ -112,7 +116,7 @@ class Event(Base):
     official_regulations = mapped_column(LargeBinary, default=None, nullable=True)
 
     date: Mapped[datetime] = mapped_column(default=None, nullable=True)
-    document = mapped_column(LargeBinary, default=None, nullable=True)
+    #document = mapped_column(LargeBinary, default=None, nullable=True)
     
     def modify_from_dict(self, data):
         self.name = get_nullable_data(data, 'name', self.name)
@@ -124,7 +128,7 @@ class Event(Base):
         self.official_organizer = get_nullable_data(data, 'official_organizer', self.official_organizer)
         self.official_regulations = get_nullable_data(data, 'official_regulations', self.official_regulations)
         self.date = get_nullable_data(data, 'date', self.date)
-        self.document = get_nullable_data(data, 'document', self.document)
+        #self.document = get_nullable_data(data, 'document', self.document)
 
 
 Base.metadata.create_all(bind=engine)

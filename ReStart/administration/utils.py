@@ -2,7 +2,7 @@ import pandas as pd
 from reports.models import Organization, Sports, Event
 from user.models import User
 
-# todo: поменять после фикса таблицы апналитиком
+
 def export_to_excel_common(session, writer):
     result = []
     users = session.query(User).filter(User.is_admin==False).all()
@@ -11,8 +11,12 @@ def export_to_excel_common(session, writer):
                                                   .order_by(Organization.creation_time.asc()).first()
         report_changed = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
                                                     .order_by(Organization.creation_time.desc()).first()
-        events =  session.query(Event).filter(Event.organization_id==report_changed.id)
-        for event in events:
+        latest_unofficial_event =  session.query(Event).filter(Event.organization_id.like(report_changed.id), Event.is_official.is_(False))\
+                                                       .order_by(Event.date.desc()).first()
+        latest_official_event =  session.query(Event).filter(Event.organization_id.like(report_changed.id), Event.is_official.is_(True))\
+                                                     .order_by(Event.date.desc()).first()
+        sports_list = session.query(Sports).filter(Sports.organization_id==report_changed.id)
+        for sports in sports_list:
             name = f'{user.second_name} {user.first_name} {user.last_name}' if user is not None else 'Не определено'
             hours_total = sum([report_changed.hours_mon, report_changed.hours_tue, 
                             report_changed.hours_wed, report_changed.hours_thu, 
@@ -21,32 +25,30 @@ def export_to_excel_common(session, writer):
 
             result.append([
                 user.municipality_name, report_changed.name, name, 
-                report_first.creation_time, report_changed.creation_time, report_changed.hours_mon,
-                report_changed.hours_tue, report_changed.hours_wed, report_changed.hours_thu, report_changed.hours_fri, report_changed.hours_sat, report_changed.hours_sun,
-                hours_total, event.name, 
-                event.student_count_all, event.date, 
-                0, 0, 
-                report_changed.students_total, report_changed.students_grade_1, report_changed.students_grade_2, report_changed.students_grade_3, report_changed.students_grade_4, 
-                report_changed.students_grade_5, report_changed.students_grade_6, report_changed.students_grade_7, report_changed.students_grade_8, report_changed.students_grade_9, report_changed.students_grade_10, report_changed.students_grade_11, 
-                '-', 0, '-', 0, 0, 
-                '-', 
-                0, None, '-', '-', 
-                '-', '-', report_changed.achievements 
+                report_first.creation_time, report_changed.creation_time, sports.name, sports.student_count,
+                sports.location, sports.inventory, 
+                report_changed.hours_mon, report_changed.hours_tue, report_changed.hours_wed, report_changed.hours_thu, report_changed.hours_fri, report_changed.hours_sat, report_changed.hours_sun, 
+                hours_total, report_changed.students_total, report_changed.students_organization,
+                report_changed.students_grade_1, report_changed.students_grade_2, report_changed.students_grade_3, report_changed.students_grade_4, report_changed.students_grade_5, report_changed.students_grade_6, report_changed.students_grade_7, report_changed.students_grade_8, report_changed.students_grade_9, report_changed.students_grade_10, report_changed.students_grade_11, 
+                latest_unofficial_event.name, latest_unofficial_event.student_count_all, latest_unofficial_event.date,
+                latest_unofficial_event.student_count_organization, latest_official_event.name, 
+                latest_official_event.student_count_all, latest_official_event.date, latest_official_event.official_type,
+                latest_official_event.official_location, latest_official_event.official_organizer, 'Файл', 'Файл' 
             ])
 
     df = pd.DataFrame(result, columns=[
-        'Муниципальное образование', 'Школьный спортивный клуб', 'ФИО руководителя',
-        'Дата направления отчёта', 'Дата внесения правок', 'Понедельник',
-        'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье',
-        'Всего часов', 'Физкультурные мероприятия и спортивные мероприятия, проходящие в рамках деятельности школьного спортивного клуба',
+        'Муниципальное образование', 'Школьный спортивный клуб', 'ФИО Руководителя',
+        'Дата направления отчёта', 'Дата внесения правок', 'Деятельность ШСК', 'Численность занимающихся', 
+        'Место проведения', 'Инвентарь: количество',
+        'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье',
+        'Всего часов', 'Численность обучающихся', 'Из них участники школьного спортивного клуба',
+        '1 класс', '2 класс', '3 класс', '4 класс',	'5 класс',	'6 класс',	'7 класс',	'8 класс',	'9 класс', '10 класс', '11 класс',
+        'Физкультурные мероприятия и спортивные мероприятия, проходящие в рамках деятельности школьного спортивного клуба',
         'Кол-во участников из числа обучающихся образовательной организации', 'Дата проведения мероприятия',
-        'Кол-во участников, состоящих в школьном спортивном клубе', 'Численность обучающихся',
-        'Из них участники школьного спортивного клуба', '1 класс','2 класс','3 класс','4 класс',
-        '5 класс','6 класс','7 класс','8 класс', '9 класс', '10 класс', '11 класс',
-        'Деятельность ШСК', 'Численность занимающихся', 'Место проведения', 'Инвентарь', 'Кол-во',
+        'Кол-во участников, состоящих в школьном спортивном клубе', 
         'Участие школьного спортивного клуба в официальных всероссийских/региональных/муниципальных физкультурных мероприятиях и спортивных мероприятиях',
-        'Кол-во участников', 'Дата проведения мероприятия', 'Уровень проводимого мероприятия', 'Место проведения',
-        'Организатор', 'Положение', 'Достижения ШСК'
+        'Кол-во участников', 'Дата проведения мероприятия', 'Уровень проводимого мероприятия', 
+        'Место проведения', 'Организатор', 'Положение', 'Достижения ШСК'
     ])
     df.to_excel(writer, sheet_name='Общий', index=False)
 
@@ -54,10 +56,11 @@ def export_to_excel_schedule(session, writer):
     result = []
     users = session.query(User).filter(User.is_admin==False).all()
     for user in users:
+        name = f'{user.second_name} {user.first_name} {user.last_name}' if user is not None else 'Не определено'
         report_changed = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
                                                     .order_by(Organization.creation_time.desc()).first()
         result.append([
-            user.municipality_name, report_changed.name, 
+            user.municipality_name, report_changed.name, name, 
             report_changed.hours_mon, report_changed.hours_tue, 
             report_changed.hours_wed, report_changed.hours_thu, 
             report_changed.hours_fri, report_changed.hours_sat, 
@@ -65,8 +68,8 @@ def export_to_excel_schedule(session, writer):
         ])
 
     df = pd.DataFrame(result, columns=[
-        'Муниципальное образование', 'Школьный спортивный клуб', 'Понедельник',
-        'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'
+        'Муниципальное образование', 'Школьный спортивный клуб', 'ФИО Руководителя',
+        'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'
     ])
     df.to_excel(writer, sheet_name='Расписание занятий', index=False)
 
@@ -74,18 +77,21 @@ def export_to_excel_student_count(session, writer):
     result = []
     users = session.query(User).filter(User.is_admin==False).all()
     for user in users:
+        name = f'{user.second_name} {user.first_name} {user.last_name}' if user is not None else 'Не определено'
         report_changed = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
                                                     .order_by(Organization.creation_time.desc()).first()
         result.append([
-            user.municipality_name, report_changed.name, 
-            report_changed.students_total, report_changed.students_grade_1, report_changed.students_grade_2, 
+            user.municipality_name, report_changed.name, name,
+            report_changed.students_total, report_changed.students_organization,
+            report_changed.students_grade_1, report_changed.students_grade_2, 
             report_changed.students_grade_3, report_changed.students_grade_4, report_changed.students_grade_5, 
             report_changed.students_grade_6, report_changed.students_grade_7, report_changed.students_grade_8, 
             report_changed.students_grade_9, report_changed.students_grade_10, report_changed.students_grade_11
         ])
 
     df = pd.DataFrame(result, columns=[
-        'Муниципальное образование', 'Школьный спортивный клуб', 'Всего', 
+        'Муниципальное образование', 'Школьный спортивный клуб', 'ФИО руководителя',
+        'Всего', 'На базе ШСК',
         '1 класс', '2 класс', '3 класс', '4 класс', '5 класс', '6 класс', '7 класс',
         '8 класс', '9 класс', '10 класс', '11 класс'
     ])
@@ -95,19 +101,19 @@ def export_to_excel_sports(session, writer):
     result = []
     users = session.query(User).filter(User.is_admin==False).all()
     for user in users:
+        name = f'{user.second_name} {user.first_name} {user.last_name}' if user is not None else 'Не определено'
         report_changed = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
                                                     .order_by(Organization.creation_time.desc()).first()
         sports_list = session.query(Sports).filter(Sports.organization_id==report_changed.id).all()
         for sports in sports_list:
             result.append([
-                user.municipality_name, report_changed.name, 
-                sports.name, sports.student_count, sports.location, 
-                sports.inventory_name, sports.inventory_all, sports.inventory_used
+                user.municipality_name, report_changed.name, name, sports.name, 
+                sports.student_count, sports.location, sports.inventory
             ])
 
     df = pd.DataFrame(result, columns=[
-        'Муниципальное образование', 'Школьный спортивный клуб', 'Вид спорта', 
-        'Кол-во занимающихся', 'Место проведения', 'Инвентарь', 'Кол-во', 'Используемый инвентарь'
+        'Муниципальное образование', 'Школьный спортивный клуб', 'ФИО руководителя', 'Вид спорта', 
+        'Кол-во занимающихся', 'Место проведения', 'Инвентарь: количество'
     ])
     df.to_excel(writer, sheet_name='Виды спорта ШСК', index=False)
 
@@ -115,19 +121,20 @@ def export_to_excel_events_official(session, writer):
     result = []
     users = session.query(User).filter(User.is_admin==False).all()
     for user in users:
+        name = f'{user.second_name} {user.first_name} {user.last_name}' if user is not None else 'Не определено'
         report_changed = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
                                                     .order_by(Organization.creation_time.desc()).first()
         events =  session.query(Event).filter(Event.organization_id.like(report_changed.id), Event.is_official.is_(True))
         for event in events:
             result.append([
-                user.municipality_name, report_changed.name, event.name, 
+                user.municipality_name, report_changed.name, name, event.name, 
                 event.student_count_all, event.date,
                 event.official_type, event.official_location, event.official_organizer, 
-                'Файл', report_changed.achievements #todo: link to file download API?
+                'Файл', 'Файл'
             ])
 
     df = pd.DataFrame(result, columns=[
-        'Муниципальное образование', 'Школьный спортивный клуб', 'Название', 
+        'Муниципальное образование', 'Школьный спортивный клуб', 'ФИО руководителя', 'Название', 
         'Кол-во участвующих', 'Дата проведения', 
         'Тип', 'Место проведения', 'Организатор', 
         'Положение', 'Достижения школьного спортивного клуба'
@@ -138,19 +145,22 @@ def export_to_excel_events(session, writer):
     result = []
     users = session.query(User).filter(User.is_admin==False).all()
     for user in users:
+        name = f'{user.second_name} {user.first_name} {user.last_name}' if user is not None else 'Не определено'
         report_changed = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
                                                     .order_by(Organization.creation_time.desc()).first()
         events =  session.query(Event).filter(Event.organization_id.like(report_changed.id), Event.is_official.is_(False))
         for event in events:
             result.append([
-                user.municipality_name, report_changed.name, 
+                user.municipality_name, report_changed.name, name,
                 event.name, event.student_count_all, event.date,
                 event.student_count_organization
             ])
 
     df = pd.DataFrame(result, columns=[
-        'Муниципальное образование', 'Школьный спортивный клуб', 'Название', 
-        'Кол-во участников образовательной организации', 'Дата проведения', 
+        'Муниципальное образование', 'Школьный спортивный клуб', 'ФИО руководителя', 
+        'Название',  'Кол-во участников образовательной организации', 'Дата проведения', 
         'Кол-во участников ШСК'
     ])
+
     df.to_excel(writer, sheet_name='Мероприятия в рамках ШСК', index=False)
+    
