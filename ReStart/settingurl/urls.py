@@ -10,5 +10,7 @@ urlpatterns = [
     path('personal', views.personal, name='personal'),
     path('reports', views.reports, name='reports'),
     path('tables', views.tables, name='tables'),
-    path('managers', views.managers, name='managers')
+    path('managers', views.managers, name='managers'),
+    path('personalmanage', views.personalmanage, name='personalmanage'),
+    path('recentrep', views.recentrep, name='recentrep')
 ]
