@@ -168,3 +168,33 @@ def set_user_ban(request):
         return JsonResponse({
             'message': 'Вы должны отправить JSON со значениями "id" и "ban"'
         }, status=422)
+
+@csrf_exempt
+def verify_password(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+
+    try:
+        session = Session()
+        json_data = json.loads(request.body.decode())
+        
+        caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+        if not caller_user.is_admin:
+            return JsonResponse({
+                'message': 'Неавторизованный доступ'
+            }, status=403)
+
+        if not caller_user.verify_password(json_data['password']):
+            return JsonResponse({
+                'message': 'Неверный пароль'
+            }, status=403)
+
+        return JsonResponse({
+            'message': 'Доступ разрешен'
+        }, status=200)
+    except:
+        return JsonResponse({
+            'message': 'Вы должны отправить JSON со значениями "password"'
+        }, status=422)
