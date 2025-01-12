@@ -24,18 +24,18 @@ def export_to_excel_common(session, writer):
                             report_changed.hours_sun])
 
             result.append([
-                user.municipality_name, report_changed.name, name, 
+                user.municipality_name, report_changed.name, name,
                 report_first.creation_time, report_changed.creation_time, sports.name, sports.student_count,
-                sports.location, sports.inventory, 
-                report_changed.hours_mon, report_changed.hours_tue, report_changed.hours_wed, report_changed.hours_thu, report_changed.hours_fri, report_changed.hours_sat, report_changed.hours_sun, 
+                sports.location, sports.inventory,
+                report_changed.hours_mon, report_changed.hours_tue, report_changed.hours_wed, report_changed.hours_thu, report_changed.hours_fri, report_changed.hours_sat, report_changed.hours_sun,
                 hours_total, report_changed.students_total, report_changed.students_organization,
-                report_changed.students_grade_1, report_changed.students_grade_2, report_changed.students_grade_3, report_changed.students_grade_4, report_changed.students_grade_5, report_changed.students_grade_6, report_changed.students_grade_7, report_changed.students_grade_8, report_changed.students_grade_9, report_changed.students_grade_10, report_changed.students_grade_11, 
-                latest_unofficial_event.name, latest_unofficial_event.student_count_all, latest_unofficial_event.date,
-                latest_unofficial_event.student_count_organization, latest_official_event.name, 
-                latest_official_event.student_count_all, latest_official_event.date, latest_official_event.official_type,
-                latest_official_event.official_location, latest_official_event.official_organizer, 'Файл', 'Файл' 
+                report_changed.students_grade_1, report_changed.students_grade_2, report_changed.students_grade_3, report_changed.students_grade_4, report_changed.students_grade_5, report_changed.students_grade_6, report_changed.students_grade_7, report_changed.students_grade_8, report_changed.students_grade_9, report_changed.students_grade_10, report_changed.students_grade_11,
+                latest_unofficial_event.name if latest_unofficial_event is not None else '-', latest_unofficial_event.student_count_all if latest_unofficial_event is not None else '-', latest_unofficial_event.date if latest_unofficial_event is not None else '-',
+                latest_unofficial_event.student_count_organization if latest_unofficial_event is not None else '-', latest_official_event.name if latest_official_event is not None else '-',
+                latest_official_event.student_count_all if latest_official_event is not None else '-', latest_official_event.date if latest_official_event is not None else '-', latest_official_event.official_type if latest_official_event is not None else '-',
+                latest_official_event.official_location if latest_official_event is not None else '-', latest_official_event.official_organizer if latest_official_event is not None else '-', 'Файл', 'Файл'
             ])
-
+            
     df = pd.DataFrame(result, columns=[
         'Муниципальное образование', 'Школьный спортивный клуб', 'ФИО Руководителя',
         'Дата направления отчёта', 'Дата внесения правок', 'Деятельность ШСК', 'Численность занимающихся', 

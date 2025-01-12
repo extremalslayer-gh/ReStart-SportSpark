@@ -100,3 +100,68 @@ def export_reports(request):
         return response
     except:
         return HttpResponse(status=503)
+
+@csrf_exempt
+def get_users(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+
+    try:
+        session = Session()
+        
+        caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+        if not caller_user.is_admin:
+            return JsonResponse({
+                'message': 'Неавторизованный доступ'
+            }, status=403)
+
+        result = {
+            'users': []
+        }
+
+        users = session.query(User).filter(User.is_admin==False).all()
+        for user in users:
+            user_dict = user.convert_to_dict()
+            result['users'].append(user_dict)
+
+        return JsonResponse(result, status=200)
+    except:
+        return JsonResponse({
+            'message': 'Ошибка'
+        }, status=503)
+
+@csrf_exempt
+def set_user_ban(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+
+    try:
+        session = Session()
+        json_data = json.loads(request.body.decode())
+        
+        caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+        if not caller_user.is_admin:
+            return JsonResponse({
+                'message': 'Неавторизованный доступ'
+            }, status=403)
+
+        user = session.query(User).filter(User.id==json_data['id']).first()
+        if user is None:
+            return JsonResponse({
+                'message': 'Пользователь не найден'
+            }, status=404)
+
+        user.is_banned = json_data['ban']
+        session.commit()
+
+        return JsonResponse({
+            'message': 'Доступ обновлен'
+        }, status=200)
+    except:
+        return JsonResponse({
+            'message': 'Вы должны отправить JSON со значениями "id" и "ban"'
+        }, status=422)

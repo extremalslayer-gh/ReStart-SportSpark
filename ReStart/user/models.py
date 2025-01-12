@@ -22,6 +22,7 @@ class User(Base):
     municipality_name: Mapped[str] = mapped_column(String(256))
     is_admin: Mapped[bool] = mapped_column(Boolean(), default=False)
     occupation: Mapped[str] = mapped_column(String(32))
+    is_banned: Mapped[bool] = mapped_column(Boolean(), default=False)
     temp_password_changed: Mapped[str] = mapped_column(Boolean(), default=False)
 
     @property
@@ -34,6 +35,22 @@ class User(Base):
     
     def verify_password(self, password):
         return check_password(password, self._password)
+    
+    # отдельная функция для преобразования, т.к. пароль читать нельзя читать
+    def convert_to_dict(self):
+        return {
+            'id': self.id,
+            'first_name': self.first_name,
+            'second_name': self.second_name,
+            'last_name': self.last_name,
+            'email': self.email,
+            'organization_id': self.organization_id,
+            'municipality_name': self.municipality_name,
+            'is_admin': self.is_admin,
+            'occupation': self.occupation,
+            'is_banned': self.is_banned,
+            'temp_password_changed': self.temp_password_changed
+        }
 
 Base.metadata.create_all(bind=engine)
 
