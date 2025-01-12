@@ -123,7 +123,10 @@ def get_users(request):
 
         users = session.query(User).filter(User.is_admin==False).all()
         for user in users:
+            organization = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
+                                                    .order_by(Organization.creation_time.desc()).first()
             user_dict = user.convert_to_dict()
+            user_dict['organization_name'] = organization.name
             result['users'].append(user_dict)
 
         return JsonResponse(result, status=200)
