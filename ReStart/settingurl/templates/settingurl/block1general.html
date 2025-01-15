@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма Входа</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'settingurl/css/block1general.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <ul class="menu">
+                <li><a href="{% url 'block_student' %}">Заполнить отчет</a></li>
+                <li><a href="{% url 'recentrep' %}">Посмотреть отчеты</a></li>
+            </ul>
+            <div class="profile">
+                <img src="{% static 'settingurl/img/profile-icon.png' %}" alt="Профиль" class="profile-icon">
+                <a href="{% url 'personalmanage' %}">Профиль</a>
+            </div>
+        </nav>
+    </header>
+  <div class="card">
+    <main class="content">
+      <h2 class="title">Общее</h2>
+      <form class="form">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <p class="step-description">Расписание занятий Школьного спортивного клуба.</p>
+            <div class="day">
+              <label>
+                <input type="checkbox" class="day-checkbox" data-day="monday">
+                Понедельник
+              </label>
+              <div class="hours-container hidden" id="hours-monday">
+                <label>
+                  Количество часов
+                  <input type="number" value="0" min="0" class="hours-input">
+                </label>
+              </div>
+            </div>
+            <div class="day">
+              <label>
+                <input type="checkbox" class="day-checkbox" data-day="tuesday">
+                Вторник
+              </label>
+              <div class="hours-container hidden" id="hours-tuesday">
+                <label>
+                  Количество часов
+                  <input type="number" value="0" min="0" class="hours-input">
+                </label>
+              </div>
+            </div>
+            <div class="day">
+              <label>
+                <input type="checkbox" class="day-checkbox" data-day="wednesday">
+                Среда
+              </label>
+              <div class="hours-container hidden" id="hours-wednesday">
+                <label>
+                  Количество часов
+                  <input type="number" value="0" min="0" class="hours-input">
+                </label>
+              </div>
+            </div>
+            <div class="day">
+              <label>
+                <input type="checkbox" class="day-checkbox" data-day="thursday">
+                Четверг
+              </label>
+              <div class="hours-container hidden" id="hours-thursday">
+                <label>
+                  Количество часов
+                  <input type="number" value="0" min="0" class="hours-input">
+                </label>
+              </div>
+            </div>
+            <div class="day">
+              <label>
+                <input type="checkbox" class="day-checkbox" data-day="friday">
+                Пятница
+              </label>
+              <div class="hours-container hidden" id="hours-friday">
+                <label>
+                  Количество часов
+                  <input type="number" value="0" min="0" class="hours-input">
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer>
+            <a href="{% url 'block_student' %}"><button type="button" class="button-back">Назад</button></a>
+            <a href="{% url 'block1_3' %}" class="button"><button type="button" class="button-next">Далее</button></a>
+        </footer>
+      </form>
+    </main>
+  </div>
+  <script src="{% static 'settingurl/js/block1general.js' %}"></script>
+</body>
+</html>

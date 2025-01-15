@@ -13,12 +13,12 @@
     <header class="header">
         <nav class="navbar">
             <ul class="menu">
-                <li><a href="{% url 'tables' %}">Заполнить отчет</a></li>
+                <li><a href="{% url 'block_student' %}">Заполнить отчет</a></li>
                 <li><a href="{% url 'recentrep' %}">Посмотреть отчеты</a></li>
             </ul>
             <div class="profile">
                 <img src="{% static 'settingurl/img/profile-icon.png' %}" alt="Профиль" class="profile-icon">
-                <a href="#">Профиль</a>
+                <a href="{% url 'personalmanage' %}">Профиль</a>
             </div>
         </nav>
     </header>
