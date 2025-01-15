@@ -13,12 +13,12 @@
     <header class="header">
         <nav class="navbar">
             <ul class="menu">
-                <li><a href="{% url 'tables' %}">Заполнить отчет</a></li>
+                <li><a href="{% url 'block_student' %}">Заполнить отчет</a></li>
                 <li><a href="{% url 'recentrep' %}">Посмотреть отчеты</a></li>
             </ul>
             <div class="profile">
                 <img src="{% static 'settingurl/img/profile-icon.png' %}" alt="Профиль" class="profile-icon">
-                <a href="#">Профиль</a>
+                <a href="{% url 'personalmanage' %}">Профиль</a>
             </div>
         </nav>
     </header>
@@ -32,32 +32,32 @@
           <div class="report-icon">
             <img src="eye-icon.png" alt="View Icon">
           </div>
-          <span class="report-date">29.10.24</span>
-          <button class="edit-btn">✎</button>
+          <span class="report-date">29.12.24</span>
+            <a href="{% url 'block_student' %}"><button class="edit-btn">✎</button></a>
         </div>
 
         <div class="report-card">
           <div class="report-icon">
             <img src="eye-icon.png" alt="View Icon">
           </div>
-          <span class="report-date">29.10.24</span>
-          <button class="edit-btn">✎</button>
+          <span class="report-date">29.08.24</span>
+            <a href="{% url 'block_student' %}"><button class="edit-btn">✎</button></a>
         </div>
 
         <div class="report-card">
           <div class="report-icon">
             <img src="eye-icon.png" alt="View Icon">
           </div>
-          <span class="report-date">29.10.24</span>
-          <button class="edit-btn">✎</button>
+          <span class="report-date">29.04.24</span>
+            <a href="{% url 'block_student' %}"><button class="edit-btn">✎</button></a>
         </div>
 
         <div class="report-card">
           <div class="report-icon">
             <img src="eye-icon.png" alt="View Icon">
           </div>
-          <span class="report-date">29.10.24</span>
-          <button class="edit-btn">✎</button>
+          <span class="report-date">29.01.24</span>
+            <a href="{% url 'block_student' %}"><button class="edit-btn">✎</button></a>
         </div>
       </div>
     </main>

@@ -1,0 +1,162 @@
+/* Сброс стандартных стилей */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #eaeaea;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center; /* Центрирование по горизонтали */
+    align-items: center;    /* Центрирование по вертикали */
+}
+
+/* Header */
+.header {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+    position: absolute; /* Фиксация шапки сверху */
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.menu li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+
+.profile a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.profile-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.hidden {
+    display: none;
+}
+
+.hours-container {
+    margin-top: 10px;
+}
+
+.card {
+    width: 800px; /* Увеличена ширина карточки */
+    background-color: #ffffff;
+    border-radius: 12px;
+    border: 2px solid #4a90e2;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 20px; /* Добавлен внутренний отступ */
+}
+
+.content {
+    padding: 30px; /* Увеличен внутренний отступ */
+}
+
+.title {
+    font-size: 28px; /* Увеличен размер заголовка */
+    color: #6a6a6a;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.step {
+    display: flex;
+    gap: 20px; /* Увеличено расстояние между номером и содержимым */
+    margin-bottom: 25px;
+}
+
+.step-number {
+    width: 50px; /* Увеличен размер номера шага */
+    height: 50px;
+    background-color: #6a4ccf;
+    color: #ffffff;
+    font-size: 20px; /* Увеличен размер шрифта */
+    font-weight: bold;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.step-content {
+    flex-grow: 1;
+}
+
+.step-description {
+    margin: 0;
+    font-size: 18px; /* Увеличен размер описания */
+    margin-bottom: 15px;
+    color: #6a6a6a;
+}
+
+.day {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px; /* Увеличен отступ между днями */
+}
+
+.hours-input {
+    width: 80px; /* Увеличена ширина поля ввода */
+    padding: 8px; /* Добавлен внутренний отступ */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button-back, .button-next {
+    padding: 10px 20px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.button-back {
+    background-color: #9a9a9a;
+}
+
+.button-next {
+    background-color: #6a4ccf;
+}
+
