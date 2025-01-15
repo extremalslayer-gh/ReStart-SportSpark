@@ -24,6 +24,52 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+    // Функция для отправки данных на сервер
+    function sendDataToServer() {
+        // Получаем объект reportData из localStorage
+        const reportData = JSON.parse(localStorage.getItem('reportData'));
+
+        // Проверка наличия данных
+        if (!reportData || !reportData.events) {
+            alert('Нет данных для отправки');
+            return;
+        }
+
+        // Создание JSON объекта для отправки
+        const data = {
+            events: reportData.events || [],
+            organization: reportData.organization,
+            sports: reportData.sports || []// Передаем только массив событий
+            // Можно добавить дополнительные данные, если необходимо
+        };
+
+        // Отправка POST-запроса
+        fetch('/reports/create_report/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', // Указываем, что отправляем JSON
+            },
+            body: JSON.stringify(data), // Преобразуем объект в JSON
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json(); // Парсим ответ от сервера как JSON
+            }
+            throw new Error('Ошибка при отправке данных');
+        })
+        .then(result => {
+            // Обработка ответа от сервера
+            console.log('Данные успешно отправлены:', result);
+            alert('Данные успешно отправлены на сервер!');
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert('Произошла ошибка при отправке данных.');
+        });
+    }
+
+
+
     // Эта функция собирает данные о выбранных мероприятиях и сохраняет их в localStorage
     function saveData() {
         // Массив для хранения данных о мероприятиях
@@ -36,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "student_count_all": parseInt(studentCount), // Получаем количество участников
                 "student_count_organization": 0, // строго 0
                 "is_official": true, // только true
-                "official_type": "Региональное", // Значение передается как аргумент
+                "official_type": "Всероссийское", // Значение передается как аргумент
                 "official_location": "Официальное мероприятие", // только "Официальное мероприятие"
                 "official_organizer": "Официальное мероприятие", // только "Официальное мероприятие"
                 "official_regulations": "LQ==", // только "LQ=="
@@ -56,22 +102,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 // В зависимости от мероприятия получаем данные
                 switch (index) {
                     case 0:
-                        name = 'Региональные соревнования по баскетболу среди команд общеобразовательных организаций';
+                        name = 'Всероссийские соревнования по баскетболу среди команд общеобразовательных организаций';
                         studentCount = document.getElementById('number1').value;
                         eventDate = document.getElementById('date1').value;
                         break;
                     case 1:
-                        name = 'Региональные соревнования по волейболу «Серебряный мяч»';
+                        name = 'Всероссийские соревнования по волейболу «Серебряный мяч»';
                         studentCount = document.getElementById('number2').value;
                         eventDate = document.getElementById('date2').value;
                         break;
                     case 2:
-                        name = 'Региональные соревнования по легкоатлетическому четырехборью «Шиповка юных»';
+                        name = 'Всероссийские соревнования по легкоатлетическому четырехборью «Шиповка юных»';
                         studentCount = document.getElementById('number3').value;
                         eventDate = document.getElementById('date3').value;
                         break;
                     case 3:
-                        name = 'Региональные соревнования по лыжным гонкам';
+                        name = 'Всероссийские соревнования по лыжным гонкам';
                         studentCount = document.getElementById('number4').value;
                         eventDate = document.getElementById('date4').value;
                         break;
@@ -95,5 +141,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Сохраняем обновленные данные обратно в localStorage
         localStorage.setItem('reportData', JSON.stringify(reportData));
+
+        sendDataToServer();
+
+        localStorage.clear();
     }
+
+
+
+
 

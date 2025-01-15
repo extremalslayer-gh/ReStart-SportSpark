@@ -90,21 +90,22 @@
                 <div class="step-content">
                     <label class="step-description">Виды спорта, развиваемые на базе Школьного спортивного клуба.</label>
                     <div class="sports">
-                        <div><input type="checkbox" checked> Баскетбол: <input type="text" value="12"></div>
-                        <div><input type="checkbox"> Бокс: <input type="text" value="12"></div>
-                        <div><input type="checkbox"> Волейбол: <input type="text" value="12"></div>
-                        <div><input type="checkbox" checked> Дартс: <input type="text" value="6"></div>
-                        <div><input type="checkbox"> Лыжные гонки: <input type="text" value="12"></div>
-                        <div><input type="checkbox"> Настольный теннис: <input type="text" value="12"></div>
-                        <div><input type="checkbox"> Самбо: <input type="text" value="12"></div>
-                        <div><input type="checkbox"> Легкая атлетика: <input type="text" value="12"></div>
-                        <div><input type="checkbox"> Шахматы: <input type="text" value="12"></div>
-                        <div><input type="checkbox" checked> Футбол: <input type="text" value="16"></div>
+                        <div><input type="checkbox" checked> Баскетбол <input type="text" value="12"></div>
+                        <div><input type="checkbox"> Бокс <input type="text" value="12"></div>
+                        <div><input type="checkbox"> Волейбол <input type="text" value="12"></div>
+                        <div><input type="checkbox" checked> Дартс <input type="text" value="6"></div>
+                        <div><input type="checkbox"> Лыжные гонки <input type="text" value="12"></div>
+                        <div><input type="checkbox"> Настольный теннис <input type="text" value="12"></div>
+                        <div><input type="checkbox"> Самбо <input type="text" value="12"></div>
+                        <div><input type="checkbox"> Легкая атлетика <input type="text" value="12"></div>
+                        <div><input type="checkbox"> Шахматы <input type="text" value="12"></div>
+                        <div><input type="checkbox" checked> Футбол <input type="text" value="16"></div>
                     </div>
                 </div>
             </div>
             <div class="form-buttons">
-                <a href="{% url 'block1general' %}"><button type="button" class="button-next">Далее</button></a>
+                <a href="{% url 'block1general' %}"><button type="button" class="button-next" onclick="saveData()">Далее</button></a>
+
             </div>
         </form>
     </div>
