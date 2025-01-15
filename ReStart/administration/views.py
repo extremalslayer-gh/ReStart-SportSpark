@@ -98,5 +98,6 @@ def export_reports(request):
         response['Content-Disposition'] = f'attachment; filename="{filename}"'
         os.remove(filepath)
         return response
-    except:
+    except Exception as e:
+        print(e)
         return HttpResponse(status=503)

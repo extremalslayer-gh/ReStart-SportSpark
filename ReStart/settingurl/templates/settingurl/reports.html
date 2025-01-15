@@ -13,9 +13,9 @@
     <header class="header">
         <nav class="navbar">
             <ul class="menu">
-                <li><a href="#">Руководители</a></li>
-                <li><a href="#">Посмотреть таблицу</a></li>
-                <li><a href="#">Посмотреть отчеты</a></li>
+                <li><a href="{% url 'managers' %}">Руководители</a></li>
+                <li><a href="{% url 'tables' %}">Посмотреть таблицу</a></li>
+                <li><a href="{% url 'reports' %}">Посмотреть отчеты</a></li>
             </ul>
             <div class="profile">
                 <a href="#">
@@ -82,7 +82,7 @@
                     <th>Правки</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="reportsTableBody">
                 <tr>
                     <td>город Каменск-Уральский</td>
                     <td>Муниципальное автономное общеобразовательное учреждение "Средняя общеобразовательная школа № 34"</td>
@@ -100,5 +100,61 @@
             </tbody>
         </table>
     </main>
+
+    <script>
+        async function fetchReports(pageNumber) {
+            try {
+                const response = await fetch('/admin/get_reports/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ page: pageNumber }),
+                });
+
+                if (response.status === 200) {
+                    const data = await response.json();
+
+                    // Проверяем наличие ключа "reports"
+                    if (data.reports && Array.isArray(data.reports)) {
+                        updateTable(data.reports);
+                    } else {
+                        console.error('Некорректный формат данных:', data);
+                        alert('Ошибка: Сервер вернул некорректные данные.');
+                    }
+                } else {
+                    alert('Ошибка: Не удалось загрузить данные.');
+                }
+            } catch (error) {
+                console.error('Ошибка при запросе:', error);
+                alert('Ошибка: Не удалось подключиться к серверу.');
+            }
+        }
+
+        function updateTable(reports) {
+            const tableBody = document.getElementById('reportsTableBody');
+            tableBody.innerHTML = ''; // Очищаем таблицу перед добавлением новых данных
+
+            reports.forEach(report => {
+                const org = report.organization;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${org.name || '–'}</td>
+                    <td>${org.name || '–'}</td>
+                    <td>${report.user_name || '–'}</td>
+                    <td>${new Date(org.creation_time).toLocaleDateString() || '–'}</td>
+                    <td>${new Date(org.creation_time).toLocaleDateString() || '–'}</td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Загружаем данные при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchReports(0); // Передаём номер страницы для загрузки
+        });
+    </script>
 </body>
 </html>
