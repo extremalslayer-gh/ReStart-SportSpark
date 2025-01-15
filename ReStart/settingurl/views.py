@@ -36,3 +36,39 @@ def tables(request):
 
 def managers(request):
     return render(request, 'settingurl/managers.html')
+
+
+def personalmanage(request):
+    return render(request, 'settingurl/personalmanage.html')
+
+
+def recentrep(request):
+    return render(request, 'settingurl/recentrep.html')
+
+
+def block1general(request):
+    return render(request, 'settingurl/block1general.html')
+
+
+def block1_2(request):
+    return render(request, 'settingurl/block1_2.html')
+
+
+def block1_3(request):
+    return render(request, 'settingurl/block1_3.html')
+
+
+def block_student(request):
+    return render(request, 'settingurl/block_student.html')
+
+
+def block_russian(request):
+    return render(request, 'settingurl/block_russian.html')
+
+
+def block_35(request):
+    return render(request, 'settingurl/block_35.html')
+
+
+def block_russian2(request):
+    return render(request, 'settingurl/block_russian2.html')
