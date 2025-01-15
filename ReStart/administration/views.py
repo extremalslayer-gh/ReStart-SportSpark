@@ -80,12 +80,15 @@ def export_reports(request):
 
         filename = f'report_{uuid.uuid4()}.xlsx'
         filepath = f'{TEMP_FOLDER}\\{filename}'
-        writer = pd.ExcelWriter(filepath)
+        writer = pd.ExcelWriter(filepath, engine='xlsxwriter')
         export_to_excel_common(session, writer)
         export_to_excel_schedule(session, writer)
         export_to_excel_student_count(session, writer)
         export_to_excel_sports(session, writer)
+        export_to_excel_events_official(session, writer)
         export_to_excel_events(session, writer)
+        for sheet_name in writer.sheets.keys():
+            writer.sheets[sheet_name].autofit()
         writer.close()
 
         with open(filepath, 'rb') as f:
