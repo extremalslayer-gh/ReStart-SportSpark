@@ -43,4 +43,3 @@
         localStorage.setItem('reportData', JSON.stringify(reportData));
     }
 
-
