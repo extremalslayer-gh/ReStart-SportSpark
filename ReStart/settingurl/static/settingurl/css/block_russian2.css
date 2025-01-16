@@ -1,0 +1,162 @@
+/* Сброс стандартных стилей */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #eaeaea;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Header */
+.header {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.menu li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+
+.profile a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.profile-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+.container {
+    background: #fff;
+    border-radius: 10px;
+    width: 70%;
+    padding: 20px 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+main h1 {
+    font-size: 18px;
+    color: #4a4a4a;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.content {
+    display: flex;
+    gap: 20px;
+}
+
+.step-indicator {
+    font-size: 20px;
+    color: #fff;
+    background-color: #4b4b4b;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-section {
+    flex: 1;
+}
+
+.form-section h2 {
+    font-size: 16px;
+    color: #4a4a4a;
+    margin-bottom: 10px;
+}
+
+.form-item {
+    margin-bottom: 15px;
+}
+
+.form-item label {
+    font-size: 14px;
+    color: #4a4a4a;
+}
+
+.form-item input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* Обновляем стили для вертикального расположения */
+.form-fields {
+    display: block;  /* Элементы будут вертикальными */
+    margin-top: 5px;
+    margin-left: 25px;
+}
+
+.form-fields label {
+    font-size: 12px;
+    color: #4a4a4a;
+    display: block;  /* Обеспечивает перенос на новую строку */
+    margin-bottom: 10px; /* Добавляет отступ между полями */
+}
+
+.form-fields input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    width: 8%; /* Поля растягиваются на всю ширину контейнера */
+}
+
+footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button-back, .button-next {
+    padding: 10px 20px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.button-back {
+    background-color: #9a9a9a;
+}
+
+.button-next {
+    background-color: #6a4ccf;
+}
+

@@ -12,15 +12,56 @@
     <div class="login-container">
         <h1>Вход</h1>
         <div class="input-group">
-            <input type="email" placeholder="restart@gmail.com">
+            <input type="email" id="email" placeholder="restart@gmail.com">
         </div>
         <div class="input-group">
-            <input type="password" placeholder="••••••••">
+            <input type="password" id="password" placeholder="••••••••">
             <span class="eye-icon">👁️</span>
         </div>
         <a href="{% url 'password' %}" class="forgot-password">Забыли пароль?</a>
-        <button class="login-button">Войти</button>
+        <button id="loginButton" class="login-button">Войти</button>
     </div>
-    <script src="script.js"></script>
+    <script>
+        document.getElementById('loginButton').addEventListener('click', async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                alert('Пожалуйста, заполните все поля.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/login/authenticate/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                if (response.status === 403) {
+                    alert('Ошибка: Неверный email или пароль.');
+                } else if (response.status === 200) {
+                    const cookieHeader = response.headers.get('set-cookie');
+                    if (cookieHeader) {
+                        document.cookie = cookieHeader; // Устанавливаем куки
+                    }
+
+                    // Проверяем email и перенаправляем на нужную страницу
+                    if (email === 'admin@example.com') {
+                        window.location.href = '/personal';
+                    } else {
+                        window.location.href = '/personalmanage';
+                    }
+                } else {
+                    alert('Ошибка: Неизвестная ошибка сервера.');
+                }
+            } catch (error) {
+                console.error('Ошибка при выполнении запроса:', error);
+                alert('Ошибка: Не удалось подключиться к серверу.');
+            }
+        });
+    </script>
 </body>
 </html>

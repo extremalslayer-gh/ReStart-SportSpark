@@ -20,3 +20,55 @@ def renamepass(request):
 
 def success(request):
     return render(request, 'settingurl/success.html')
+
+
+def personal(request):
+    return render(request, 'settingurl/personal.html')
+
+
+def reports(request):
+    return render(request, 'settingurl/reports.html')
+
+
+def tables(request):
+    return render(request, 'settingurl/tables.html')
+
+
+def managers(request):
+    return render(request, 'settingurl/managers.html')
+
+
+def personalmanage(request):
+    return render(request, 'settingurl/personalmanage.html')
+
+
+def recentrep(request):
+    return render(request, 'settingurl/recentrep.html')
+
+
+def block1general(request):
+    return render(request, 'settingurl/block1general.html')
+
+
+def block1_2(request):
+    return render(request, 'settingurl/block1_2.html')
+
+
+def block1_3(request):
+    return render(request, 'settingurl/block1_3.html')
+
+
+def block_student(request):
+    return render(request, 'settingurl/block_student.html')
+
+
+def block_russian(request):
+    return render(request, 'settingurl/block_russian.html')
+
+
+def block_35(request):
+    return render(request, 'settingurl/block_35.html')
+
+
+def block_russian2(request):
+    return render(request, 'settingurl/block_russian2.html')
