@@ -5,7 +5,7 @@
                 alert(`Вы выбрали файл: ${file.name}`);
                 // Здесь можно добавить обработку файла, например, отправку на сервер
             }
-<
+
         });
 
 
@@ -44,6 +44,5 @@
         localStorage.setItem('reportData', JSON.stringify(reportData));
     }
 
-
-
         });
+
