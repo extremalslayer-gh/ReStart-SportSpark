@@ -72,3 +72,7 @@ def block_35(request):
 
 def block_russian2(request):
     return render(request, 'settingurl/block_russian2.html')
+
+
+def registration(request):
+    return render(request, 'settingurl/registration.html')
