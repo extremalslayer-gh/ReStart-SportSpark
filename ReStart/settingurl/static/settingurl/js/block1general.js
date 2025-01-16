@@ -10,6 +10,8 @@ document.querySelectorAll('.day-checkbox').forEach((checkbox) => {
   });
 });
 
+
+
     // Функция для сохранения данных в localStorage
     function saveData() {
         const data = JSON.parse(localStorage.getItem('reportData')) || {};

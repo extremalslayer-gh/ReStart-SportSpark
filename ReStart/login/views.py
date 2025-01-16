@@ -17,6 +17,11 @@ def authenticate(request):
                 'message': 'Неверный email или пароль'
             }, status=403)
         
+        if user.is_banned:
+            return JsonResponse({
+                'message': 'Доступ запрещен'
+            }, status=403)
+
         request.session['user_id'] = user.id
 
         return JsonResponse({

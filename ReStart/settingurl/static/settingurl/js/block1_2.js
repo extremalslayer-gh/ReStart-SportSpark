@@ -1,23 +1,10 @@
-        // Скрипт для открытия проводника и обработки выбора файла
-        document.getElementById('fileInput').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                alert(`Вы выбрали файл: ${file.name}`);
-                // Здесь можно добавить обработку файла, например, отправку на сервер
-            }
-
-        });
-
-
-
     // Эта функция добавляет мероприятие в массив событий
     function saveData() {
         // Собираем данные из формы
         const eventName = document.getElementById('event-name').value;
         const studentCountAll = document.getElementById('student-count-all').value;
         const eventDate = document.getElementById('event-date').value;
-        const eventLocation = document.getElementById('event-location').value;
-        const eventOrganizer = document.getElementById('event-organizer').value;
+        const studentCountOrganization = document.getElementById('student-count-organization').value;
 
         let dateSplit = eventDate.split('-');
         let dateFinal = `${dateSplit[2]}.${dateSplit[1]}.${dateSplit[0]}`;
@@ -26,13 +13,10 @@
         const event = {
             "name": eventName,
             "student_count_all": parseInt(studentCountAll),
-            "student_count_organization": 0, // Пока не указан
-            "is_official": true, // Пример, если мероприятие официальное
-            "official_type": "Муниципальное", // Пример
-            "official_location": eventLocation,
-            "official_organizer": eventOrganizer,
-            "official_regulations": "LQ==", // Пример, пока не загружен файл
+            "student_count_organization": parseInt(studentCountOrganization),
+            "is_official": false, // Пример, если мероприятие официальное
             "date": dateFinal
+
         };
 
         // Загружаем массив событий из localStorage
@@ -44,5 +28,4 @@
         localStorage.setItem('reportData', JSON.stringify(reportData));
     }
 
-        });
 

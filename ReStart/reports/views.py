@@ -18,8 +18,13 @@ def create_report(request):
             return JsonResponse({
                 'message': 'Доступ запрещен'
             }, status=403)
-        
+       
         user = session.query(User).filter_by(id=request.session['user_id']).first()
+        if user.is_banned:
+            return JsonResponse({
+                'message': 'Доступ запрещен'
+            }, status=403)
+
         organization = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
                                                   .order_by(Organization.creation_time.desc()).first()
         
@@ -30,10 +35,11 @@ def create_report(request):
         
         event_list = []
         for event in json_data['events']:
-            event_without_document = {k: event[k] for k in event if k not in ('document', 'date')}
+            event_without_document = {k: event[k] for k in event if k not in ('document', 'official_regulations', 'date')}
             event_list.append(Event(**event_without_document, 
                                     date=datetime.strptime(event['date'], '%d.%m.%Y'),
-                                    document=base64.b64decode(event['document']),
+                                    official_regulations=base64.b64decode(event['official_regulations']) if event['is_official'] else None,
+                                    #document=base64.b64decode(event['document']),
                                     organization_id=organization.id))
 
         session.add_all([*sports_list, *event_list])
@@ -56,6 +62,10 @@ def get_report(request):
             }, status=403)
         
         user = session.query(User).filter_by(id=request.session['user_id']).first()
+        if user.is_banned:
+            return JsonResponse({
+                'message': 'Доступ запрещен'
+            }, status=403)
         organization = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
                                                   .order_by(Organization.creation_time.desc()).first()
         
@@ -83,6 +93,10 @@ def edit_report(request):
             }, status=403)
         
         user = session.query(User).filter_by(id=request.session['user_id']).first()
+        if user.is_banned:
+            return JsonResponse({
+                'message': 'Доступ запрещен'
+            }, status=403)
         organization = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
                                                   .order_by(Organization.creation_time.desc()).first()
         
@@ -97,10 +111,11 @@ def edit_report(request):
         
         event_list = []
         for event in json_data['events']:
-            event_without_document = {k: event[k] for k in event if k not in ('document', 'date')}
+            event_without_document = {k: event[k] for k in event if k not in ('document', 'official_regulations', 'date')}
             event_list.append(Event(**event_without_document, 
                                     date=datetime.strptime(event['date'], '%d.%m.%Y'),
-                                    document=base64.b64decode(event['document']),
+                                    official_regulations=base64.b64decode(event['official_regulations']) if event['is_official'] else None,
+                                    #document=base64.b64decode(event['document']),
                                     organization_id=modified_organization.id))
 
         session.add_all([modified_organization, *sports_list, *event_list])

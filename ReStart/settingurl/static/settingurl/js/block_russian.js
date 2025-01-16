@@ -97,4 +97,3 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.setItem('reportData', JSON.stringify(reportData));
     }
 
-
