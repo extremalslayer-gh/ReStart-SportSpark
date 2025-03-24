@@ -17,8 +17,8 @@
                 <li><a href="{% url 'reports' %}">Посмотреть отчеты</a></li>
             </ul>
             <div class="profile">
-                <a href="#">
-                    <img src="profile-icon.png" alt="Профиль" class="profile-icon">
+                <a href="{% url 'personal' %}">
+                    <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon">
                     Профиль
                 </a>
             </div>
@@ -30,10 +30,15 @@
         <div class="profile-card">
             <h1 class="card-title">Мой профиль</h1>
             <div class="card-content">
-                <!-- Левая часть с аватаром -->
+                <!-- Avatar Section -->
                 <div class="avatar-section">
-                    <div class="avatar"></div>
-                    <a href="#" class="upload-link">Загрузить</a>
+
+                    <div class="avatar">
+                        <img id="avatar" src="{% static 'settingurl/img/profile.png' %}" alt="Аватар">
+                    </div>
+                    <input type="file" id="avatarUpload" accept="image/*" hidden>
+                    <label for="avatarUpload" class="upload-link">Загрузить</label>
+
                 </div>
                 <!-- Правая часть с полями ввода -->
                 <form class="profile-form">
@@ -53,6 +58,9 @@
             </div>
             <a href="{% url 'reports' %}"><button type="submit" class="save-btn">Сохранить</button></a>
         </div>
+        <div class="circle-bg"></div>
+        <div class="line"><img src="{% static 'settingurl/img/Wave.png' %}"></div>
     </main>
+<script src="{% static 'settingurl/js/personal.js' %}"></script>
 </body>
 </html>

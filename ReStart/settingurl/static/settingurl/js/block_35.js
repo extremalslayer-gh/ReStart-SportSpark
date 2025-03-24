@@ -18,7 +18,7 @@
         const eventLocation = document.getElementById('event-location').value;
         const eventOrganizer = document.getElementById('event-organizer').value;
 
-        let dateSplit = "2025-01-15".split('-');
+        let dateSplit = eventDate.split('-');
         let dateFinal = `${dateSplit[2]}.${dateSplit[1]}.${dateSplit[0]}`;
 
         // Сохраняем мероприятие в формате объекта
@@ -36,11 +36,9 @@
 
         // Загружаем массив событий из localStorage
         const reportData = JSON.parse(localStorage.getItem('reportData')) || {};
-        reportData['events'] = []
+        //reportData['events'] = []
         reportData['events'].push(event)
 
         // Сохраняем обновленный список событий обратно в localStorage
         localStorage.setItem('reportData', JSON.stringify(reportData));
     }
-
-

@@ -7,17 +7,42 @@
 }
 
 body {
-    background-color: #eaeaea;
+    background: linear-gradient(135deg, #003366, #0066cc, #0099ff);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
+
+
+.circle-bg {
+    width: 482px;
+    height: 460px;
+    background-color: rgba(119, 184, 51, 0.6); /* Цвет #77B833 с 60% прозрачностью */
+    position: absolute;
+    top: 318px;
+    left: 581px;
+    filter: blur(420px); /* Размытие слоя */
+    z-index: -1; /* Отправляет элемент назад */
+}
+
+.line {
+    position: absolute; /* Абсолютное позиционирование */
+    top: 400px; /* Регулируй положение */
+    left: 20px;
+    width: 10px; /* Растянуть по ширине */
+    height: 2px;
+    background-image: url('your-line.png'); /* Путь к твоей картинке */
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: 1; /* Делаем её ниже карточки */
+}
+
 /* Header */
 .header {
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: transparent;
     padding: 10px 20px;
+    color: white;
 }
 
 .navbar {
@@ -34,13 +59,13 @@ body {
 
 .menu li a {
     text-decoration: none;
-    color: #333;
+    color: white;
     font-size: 14px;
 }
 
 .profile a {
     text-decoration: none;
-    color: #333;
+    color: white;
     display: flex;
     align-items: center;
 }
@@ -49,6 +74,7 @@ body {
     width: 24px;
     height: 24px;
     margin-right: 8px;
+    color: white
 }
 
 /* Main Content */
@@ -61,7 +87,7 @@ body {
 }
 
 .profile-card {
-    background-color: #fff;
+    background: rgba(255, 255, 255, 0.9);
     border-radius: 12px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 40px 30px;
@@ -89,12 +115,15 @@ body {
     flex-shrink: 0;
 }
 
-.avatar {
+.avatar img{
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    background-color: #ccc;
     margin-bottom: 10px;
+}
+
+#avatarUpload {
+    display: none;
 }
 
 .upload-link {
@@ -149,5 +178,5 @@ body {
 }
 
 .save-btn:hover {
-    background-color: #5a4dbd;
+    background-color: #004d99;
 }

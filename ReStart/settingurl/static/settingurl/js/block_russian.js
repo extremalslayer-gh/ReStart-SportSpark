@@ -91,12 +91,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Получаем текущие данные из localStorage
         let reportData = JSON.parse(localStorage.getItem('reportData')) || {};
-        reportData['events'] = events;
+        reportData['events'] = reportData['events'].concat(events);
 
         // Сохраняем обновленные данные обратно в localStorage
         localStorage.setItem('reportData', JSON.stringify(reportData));
     }
-
-
-
 
