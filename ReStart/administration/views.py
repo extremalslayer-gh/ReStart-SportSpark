@@ -170,6 +170,50 @@ def set_user_ban(request):
         }, status=422)
 
 @csrf_exempt
+def edit_user(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+
+    try:
+        session = Session()
+        json_data = json.loads(request.body.decode())
+        
+        caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+        if not caller_user.is_admin:
+            return JsonResponse({
+                'message': 'Неавторизованный доступ'
+            }, status=403)
+
+        user = session.query(User).filter(User.id==json_data['id']).first()
+        if user is None:
+            return JsonResponse({
+                'message': 'Пользователь не найден'
+            }, status=404)
+
+        if 'first_name' in json_data.keys():
+            user.first_name = json_data['first_name']
+        if 'second_name' in json_data.keys():
+            user.second_name = json_data['second_name']
+        if 'last_name' in json_data.keys():
+            user.last_name = json_data['last_name']
+        if 'occupation' in json_data.keys():
+            user.occupation = json_data['occupation']
+        if 'profile_image' in json_data.keys():
+            user.profile_image = json_data['profile_image']
+
+        session.commit()
+
+        return JsonResponse({
+            'message': 'Профиль обновлен'
+        }, status=200)
+    except:
+        return JsonResponse({
+            'message': 'Вы должны отправить JSON со значениями "id", "first_name", "second_name", "last_name", "occupation", "profile_image"'
+        }, status=422)
+
+@csrf_exempt
 def verify_password(request):
     if not is_logged_in(request):
         return JsonResponse({

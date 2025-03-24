@@ -1,5 +1,5 @@
 from django.contrib.auth.hashers import make_password, check_password
-from sqlalchemy import Boolean
+from sqlalchemy import Boolean, Text
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
 from ReStart.db_config import engine, Session, PASSWORD
@@ -24,6 +24,7 @@ class User(Base):
     occupation: Mapped[str] = mapped_column(String(32))
     is_banned: Mapped[bool] = mapped_column(Boolean(), default=False)
     temp_password_changed: Mapped[str] = mapped_column(Boolean(), default=False)
+    profile_image: Mapped[str] = mapped_column(Text(), default=None, nullable=True) # base64 of image
 
     @property
     def password(self):
@@ -49,7 +50,8 @@ class User(Base):
             'is_admin': self.is_admin,
             'occupation': self.occupation,
             'is_banned': self.is_banned,
-            'temp_password_changed': self.temp_password_changed
+            'temp_password_changed': self.temp_password_changed,
+            'profile_image': self.profile_image
         }
 
 Base.metadata.create_all(bind=engine)
