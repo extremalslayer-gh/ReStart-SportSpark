@@ -19,5 +19,6 @@ urlpatterns = [
     path('block_student', views.block_student, name='block_student'),
     path('block_russian', views.block_russian, name='block_russian'),
     path('block_35', views.block_35, name='block_35'),
-    path('block_russian2', views.block_russian2, name='block_russian2')
+    path('block_russian2', views.block_russian2, name='block_russian2'),
+    path('registration', views.registration, name='registration')
 ]

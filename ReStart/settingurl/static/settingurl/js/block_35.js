@@ -5,6 +5,7 @@
                 alert(`Вы выбрали файл: ${file.name}`);
                 // Здесь можно добавить обработку файла, например, отправку на сервер
             }
+
         });
 
 
@@ -42,3 +43,4 @@
         // Сохраняем обновленный список событий обратно в localStorage
         localStorage.setItem('reportData', JSON.stringify(reportData));
     }
+

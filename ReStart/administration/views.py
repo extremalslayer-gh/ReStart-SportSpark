@@ -80,12 +80,15 @@ def export_reports(request):
 
         filename = f'report_{uuid.uuid4()}.xlsx'
         filepath = f'{TEMP_FOLDER}\\{filename}'
-        writer = pd.ExcelWriter(filepath)
+        writer = pd.ExcelWriter(filepath, engine='xlsxwriter')
         export_to_excel_common(session, writer)
         export_to_excel_schedule(session, writer)
         export_to_excel_student_count(session, writer)
         export_to_excel_sports(session, writer)
+        export_to_excel_events_official(session, writer)
         export_to_excel_events(session, writer)
+        for sheet_name in writer.sheets.keys():
+            writer.sheets[sheet_name].autofit()
         writer.close()
 
         with open(filepath, 'rb') as f:
@@ -97,3 +100,145 @@ def export_reports(request):
         return response
     except:
         return HttpResponse(status=503)
+
+@csrf_exempt
+def get_users(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+
+    try:
+        session = Session()
+        
+        caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+        if not caller_user.is_admin:
+            return JsonResponse({
+                'message': 'Неавторизованный доступ'
+            }, status=403)
+
+        result = {
+            'users': []
+        }
+
+        users = session.query(User).filter(User.is_admin==False).all()
+        for user in users:
+            organization = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
+                                                    .order_by(Organization.creation_time.desc()).first()
+            user_dict = user.convert_to_dict()
+            user_dict['organization_name'] = organization.name
+            result['users'].append(user_dict)
+
+        return JsonResponse(result, status=200)
+    except:
+        return JsonResponse({
+            'message': 'Ошибка'
+        }, status=503)
+
+@csrf_exempt
+def set_user_ban(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+
+    try:
+        session = Session()
+        json_data = json.loads(request.body.decode())
+        
+        caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+        if not caller_user.is_admin:
+            return JsonResponse({
+                'message': 'Неавторизованный доступ'
+            }, status=403)
+
+        user = session.query(User).filter(User.id==json_data['id']).first()
+        if user is None:
+            return JsonResponse({
+                'message': 'Пользователь не найден'
+            }, status=404)
+
+        user.is_banned = json_data['ban']
+        session.commit()
+
+        return JsonResponse({
+            'message': 'Доступ обновлен'
+        }, status=200)
+    except:
+        return JsonResponse({
+            'message': 'Вы должны отправить JSON со значениями "id" и "ban"'
+        }, status=422)
+
+@csrf_exempt
+def edit_user(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+
+    try:
+        session = Session()
+        json_data = json.loads(request.body.decode())
+        
+        caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+        if not caller_user.is_admin:
+            return JsonResponse({
+                'message': 'Неавторизованный доступ'
+            }, status=403)
+
+        user = session.query(User).filter(User.id==json_data['id']).first()
+        if user is None:
+            return JsonResponse({
+                'message': 'Пользователь не найден'
+            }, status=404)
+
+        if 'first_name' in json_data.keys():
+            user.first_name = json_data['first_name']
+        if 'second_name' in json_data.keys():
+            user.second_name = json_data['second_name']
+        if 'last_name' in json_data.keys():
+            user.last_name = json_data['last_name']
+        if 'occupation' in json_data.keys():
+            user.occupation = json_data['occupation']
+        if 'profile_image' in json_data.keys():
+            user.profile_image = json_data['profile_image']
+
+        session.commit()
+
+        return JsonResponse({
+            'message': 'Профиль обновлен'
+        }, status=200)
+    except:
+        return JsonResponse({
+            'message': 'Вы должны отправить JSON со значениями "id", "first_name", "second_name", "last_name", "occupation", "profile_image"'
+        }, status=422)
+
+@csrf_exempt
+def verify_password(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+
+    try:
+        session = Session()
+        json_data = json.loads(request.body.decode())
+        
+        caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+        if not caller_user.is_admin:
+            return JsonResponse({
+                'message': 'Неавторизованный доступ'
+            }, status=403)
+
+        if not caller_user.verify_password(json_data['password']):
+            return JsonResponse({
+                'message': 'Неверный пароль'
+            }, status=403)
+
+        return JsonResponse({
+            'message': 'Доступ разрешен'
+        }, status=200)
+    except:
+        return JsonResponse({
+            'message': 'Вы должны отправить JSON со значениями "password"'
+        }, status=422)

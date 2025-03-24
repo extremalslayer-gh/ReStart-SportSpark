@@ -24,45 +24,59 @@
         </div>
     </nav>
 </header>
-  <div class="container">
+
+<div class="container">
     <h1 class="table-title">Руководители школьных спортивных клубов</h1>
     <table class="custom-table">
-      <thead>
+        <thead>
         <tr>
-          <th>Руководитель </th>
-          <th>Муниципальное образование</th>
-          <th>Общеобразовательная организация</th>
-          <th>Почта</th>
-          <th>Доступ</th>
+            <th>Руководитель</th>
+            <th>Муниципальное образование</th>
+            <th>Общеобразовательная организация</th>
+            <th>Почта</th>
+            <th>Доступ</th>
         </tr>
-      </thead>
-      <tbody>
+        </thead>
+        <tbody id="users-table-body">
         <tr>
-          <td>Иванов Иван Иванович</td>
-          <td>город Каменск-Уральский</td>
-          <td>Муниципальное автономное общеобразовательное учреждение "Средняя общеобразовательная школа № 34"</td>
-          <td>restart@gmail.com</td>
-          <td>
-            <span class="access-icon">✔</span>
-          </td>
+            <td>Иванов Иван Иванович</td>
+            <td>город Каменск-Уральский</td>
+            <td>Муниципальное автономное общеобразовательное учреждение "Средняя общеобразовательная школа № 34"</td>
+            <td>restart@gmail.com</td>
+            <td>
+                <input type="checkbox" class="access-checkbox" checked>
+            </td>
         </tr>
-      </tbody>
+        </tbody>
     </table>
-    <button class="add-button">Добавить <span class="plus-icon">+</span></button>
-  </div>
+    <a href="{% url 'registration' %}"><button class="add-button">Добавить <span class="plus-icon">+</span></button></a>
+</div>
+
+<!-- Первое модальное окно -->
+<div id="modal-overlay" class="modal-overlay">
+    <div class="modal-content">
+        <p id="modal-text">Вы уверены, что хотите изменить доступ?</p>
+        <div class="modal-buttons">
+            <button class="modal-button cancel" onclick="closeModal()">Отменить</button>
+            <button class="modal-button confirm" onclick="confirmAction()">Подтвердить</button>
+        </div>
+    </div>
+</div>
+
+<!-- Второе модальное окно -->
+<div id="second-modal-overlay" class="modal-overlay">
+    <div class="modal-content">
+        <p>Отключить доступ руководителю?</p>
+        <p>Мы отправили вам код-подтверждение</p>
+        <input type="password" id="password-input" placeholder="Введите пароль" class="form-control mb-3">
+        <div class="modal-buttons">
+            <button class="modal-button cancel" onclick="closeSecondModal()">Отменить</button>
+            <button class="modal-button confirm" onclick="confirmSecondAction()">Подтвердить</button>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'settingurl/js/managers.js' %}"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-skodvspvksvsvsdvlskdvlksdlvkdsv;lskvlds
-{
-efls,s,;lvds,v
 
