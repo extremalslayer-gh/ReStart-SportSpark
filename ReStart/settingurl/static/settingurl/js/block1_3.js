@@ -35,5 +35,4 @@
         localStorage.setItem('reportData', JSON.stringify(data));
     }
 
-        });
 

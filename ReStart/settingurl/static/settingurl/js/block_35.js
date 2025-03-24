@@ -37,12 +37,10 @@
 
         // Загружаем массив событий из localStorage
         const reportData = JSON.parse(localStorage.getItem('reportData')) || {};
-        reportData['events'] = []
+        //reportData['events'] = []
         reportData['events'].push(event)
 
         // Сохраняем обновленный список событий обратно в localStorage
         localStorage.setItem('reportData', JSON.stringify(reportData));
     }
-
-        });
 
