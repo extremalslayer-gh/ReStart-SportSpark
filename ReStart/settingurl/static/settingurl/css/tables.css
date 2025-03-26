@@ -2,14 +2,14 @@
 body {
   margin: 0; /* Убирает отступы по краям страницы */
   font-family: Arial, sans-serif; /* Устанавливает основной шрифт для текста */
-  background-color: #e0e0e0; /* Задает цвет фона страницы */
-  color: #333; /* Цвет текста */
+  background: radial-gradient(circle at center, #00B1EB 20%, #2A3B7E 90%);
 }
 
 .header {
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: transparent;
     padding: 10px 20px;
+    color: white;
+    border: none; /* Убираем окантовку у карточек */
 }
 
 .navbar {
@@ -26,7 +26,7 @@ body {
 
 .menu li a {
     text-decoration: none;
-    color: #333;
+    color: white;
     font-size: 14px;
 }
 
@@ -45,7 +45,8 @@ body {
 
 /* Фильтры */
 .filters {
-    background-color: #fff;
+    background-color: transparent;
+    color: white;
     margin: 20px;
     padding: 20px;
     border-radius: 8px;
@@ -53,7 +54,6 @@ body {
     justify-content: space-between;
     gap: 20px;
     flex-wrap: wrap;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .filter-item {
@@ -64,7 +64,7 @@ body {
 
 .filter-item label {
     font-size: 14px;
-    color: #333;
+    color: white;
 }
 
 .filter-item select {
@@ -86,7 +86,7 @@ body {
 .download-btn {
   margin-bottom: 20px; /* Отступ снизу */
   padding: 10px 15px; /* Отступы внутри кнопки */
-  background-color: #28A745; /* Зеленый фон */
+  background-color: #00B1EB; /* Зеленый фон */
   color: #fff; /* Белый текст */
   border: none; /* Убираем обводку */
   cursor: pointer; /* Указатель меняется на руку при наведении */
@@ -98,7 +98,7 @@ body {
   overflow-x: auto; /* Добавляет горизонтальную прокрутку */
   border: 1px solid #ccc; /* Граница вокруг таблицы */
   padding: 10px; /* Отступы вокруг таблицы */
-  background-color: #f4f4f4; /* Светлый фон для всей области */
+  color: white;
 }
 
 /* Общие стили для таблицы */
@@ -108,9 +108,11 @@ body {
   font-family: Arial, sans-serif; /* Шрифт таблицы */
 }
 
+
+
 /* Заголовок таблицы */
 .styled-table thead th {
-  background-color: #e0e0e0; /* Светло-серый фон заголовка */
+  background-color: transparent; /* Светло-серый фон заголовка */
   text-align: center; /* Текст выравнивается по центру */
   padding: 10px; /* Внутренние отступы */
   border: 1px solid #ccc; /* Границы между ячейками */
@@ -130,12 +132,12 @@ body {
 
 /* Зебра для строк (необязательно) */
 .styled-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9; /* Светло-серый фон для четных строк */
+  background-color: #808080; /* Светло-серый фон для четных строк */
 }
 
 /* Добавляет выделение строки при наведении */
 .styled-table tbody tr:hover {
-  background-color: #dcdcdc; /* Темно-серый фон при наведении */
+  background-color: #808080; /* Темно-серый фон при наведении */
 }
 
 /* Вертикальные и горизонтальные границы */

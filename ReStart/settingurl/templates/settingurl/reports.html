@@ -15,11 +15,11 @@
             <ul class="menu">
                 <li><a href="{% url 'managers' %}">Руководители</a></li>
                 <li><a href="{% url 'tables' %}">Посмотреть таблицу</a></li>
-                <li><a href="{% url 'reports' %}">Посмотреть отчеты</a></li>
+                <li><a href="{% url 'reports' %}" class="underline-button" onclick="setActiveTab(this)">Посмотреть отчеты</a></li>
             </ul>
             <div class="profile">
-                <a href="#">
-                    <img src="profile-icon.png" alt="Профиль" class="profile-icon">
+                <a href="{% url 'personal' %}">
+                    <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon">
                     Профиль
                 </a>
             </div>
