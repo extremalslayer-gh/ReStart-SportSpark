@@ -59,3 +59,20 @@ def change_profile_image(request):
         return JsonResponse({
             'message': 'Вы должны отправить JSON со значением "profile_image" - base64 новой картинки профиля'
         }, status=422)
+
+@csrf_exempt
+def get_profile(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+
+    try:
+        session = Session()
+        user = session.query(User).filter(User.id==request.session['user_id']).first()
+
+        return JsonResponse(user.convert_to_dict(), status=200)
+    except:
+        return JsonResponse({
+            'message': 'Ошибка сервера'
+        }, status=503)
