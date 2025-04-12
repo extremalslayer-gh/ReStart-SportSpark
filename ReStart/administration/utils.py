@@ -1,7 +1,9 @@
 import pandas as pd
 from reports.models import Organization, Sports, Event
 from user.models import User
-
+# Пакет не обновлен в pip, ставить с гитхаба
+# pip install "XlsxPandasFormatter @ git+https://github.com/webermarcolivier/xlsxpandasformatter.git"
+from xlsxpandasformatter import FormattedWorksheet
 
 def export_to_excel_common(session, writer):
     result = []
@@ -51,6 +53,7 @@ def export_to_excel_common(session, writer):
         'Место проведения', 'Организатор', 'Положение', 'Достижения ШСК'
     ])
     df.to_excel(writer, sheet_name='Общий', index=False)
+    return df
 
 def export_to_excel_schedule(session, writer):
     result = []
@@ -72,6 +75,7 @@ def export_to_excel_schedule(session, writer):
         'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'
     ])
     df.to_excel(writer, sheet_name='Расписание занятий', index=False)
+    return df
 
 def export_to_excel_student_count(session, writer):
     result = []
@@ -96,6 +100,7 @@ def export_to_excel_student_count(session, writer):
         '8 класс', '9 класс', '10 класс', '11 класс'
     ])
     df.to_excel(writer, sheet_name='Численность обучающихся', index=False)
+    return df
 
 def export_to_excel_sports(session, writer):
     result = []
@@ -116,6 +121,7 @@ def export_to_excel_sports(session, writer):
         'Кол-во занимающихся', 'Место проведения', 'Инвентарь: количество'
     ])
     df.to_excel(writer, sheet_name='Виды спорта ШСК', index=False)
+    return df
 
 def export_to_excel_events_official(session, writer):
     result = []
@@ -140,6 +146,7 @@ def export_to_excel_events_official(session, writer):
         'Положение', 'Достижения школьного спортивного клуба'
     ])
     df.to_excel(writer, sheet_name='Соревнования', index=False)
+    return df
 
 def export_to_excel_events(session, writer):
     result = []
@@ -163,4 +170,31 @@ def export_to_excel_events(session, writer):
     ])
 
     df.to_excel(writer, sheet_name='Мероприятия в рамках ШСК', index=False)
-    
+    return df
+
+def apply_basic_styles(writer, sheet_name, df):
+    header_format = {
+        'bold': True, 
+        'font_name': 'Roboto', 
+        'font_size': 14, 
+        'align': 'center', 
+        'valign': 'vcenter', 
+        'border': 1, 
+        'text_wrap': True
+    }
+    workbook = writer.book
+    worksheet = writer.sheets[sheet_name]
+    sheet = FormattedWorksheet(worksheet, workbook, df, False)
+    sheet.format_header(headerFormat=header_format, rowHeight=[120])
+    sheet.format_cols(
+        colWidthList=[ 20 for _ in range(len(df.columns)) ], 
+        colFormatList=[ {
+            'font_name': 'Roboto', 
+            'font_size': 11, 
+            'right': 1, 
+            'text_wrap': 1, 
+            'align': 'center', 
+            'valign': 'vcenter'
+        } for _ in range(len(df.columns))])
+    sheet.format_row(df.shape[0] - 1, rowFormat={ 'bottom': 1 })
+    sheet.apply_format_table()

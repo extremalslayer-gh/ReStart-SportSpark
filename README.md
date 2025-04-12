@@ -18,10 +18,11 @@
 ```console
 cd ReStart
 pip install -r requirements.txt
+# Библиотека XlsxPandasFormatter не обновлена в pip, ее надо устанавливать с гитхаба
+pip install "XlsxPandasFormatter @ git+https://github.com/webermarcolivier/xlsxpandasformatter.git"
 python manage.py migrate
 python manage.py runserver
 ```
-
 # API
 
 Данные передаются и возвращаются с сервера в виде JSON.

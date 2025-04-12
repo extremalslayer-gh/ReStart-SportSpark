@@ -23,7 +23,7 @@ class User(Base):
     is_admin: Mapped[bool] = mapped_column(Boolean(), default=False)
     occupation: Mapped[str] = mapped_column(String(32))
     is_banned: Mapped[bool] = mapped_column(Boolean(), default=False)
-    temp_password_changed: Mapped[str] = mapped_column(Boolean(), default=False)
+    temp_password_changed: Mapped[bool] = mapped_column(Boolean(), default=False)
     profile_image: Mapped[str] = mapped_column(Text(), default=None, nullable=True) # base64 of image
 
     @property
