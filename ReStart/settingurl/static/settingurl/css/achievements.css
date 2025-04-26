@@ -1,0 +1,219 @@
+/* Сброс стандартных стилей */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #eaeaea;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center; /* Центрирование по горизонтали */
+    align-items: center;    /* Центрирование по вертикали */
+}
+
+/* Header */
+.header {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px 20px;
+    position: absolute; /* Фиксация шапки сверху */
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.menu li a {
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+}
+
+.profile a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.profile-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+
+.card {
+    width: 750px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    margin-top: 100px;
+}
+
+.title {
+    font-size: 28px;
+    text-align: center;
+    color: #4a4a4a;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 16px;
+    text-align: center;
+    color: #6a6a6a;
+    margin-bottom: 30px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.step {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background-color: #6a4ccf;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.step-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.step-description {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #4a4a4a;
+}
+
+.form-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.button-add {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #6a4ccf;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.button-add:hover {
+    background-color: #5a3bbf;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button-back, .button-next {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.button-back {
+    background-color: #9a9a9a;
+}
+
+.button-next {
+    background-color: #6a4ccf;
+}
+
+.button-back:hover {
+    background-color: #8a8a8a;
+}
+
+.button-next:hover {
+    background-color: #5a3bbf;
+}
+
+
+.upload-wrapper {
+    display: inline-block; /* Убирает влияние соседних элементов */
+    position: relative;
+}
+
+.upload-button {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 16px;
+    outline: none;
+}
+
+.upload-button img {
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+}
+
+.upload-button:hover {
+    text-decoration: underline;
+}
+
+.hidden-file-input {
+    display: none; /* Скрытие стандартного input */
+}
+
+
+.button-add {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #6a4ccf;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.button-add:hover {
+    background-color: #5a3bbf;
+}

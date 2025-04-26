@@ -20,5 +20,7 @@ urlpatterns = [
     path('block_russian', views.block_russian, name='block_russian'),
     path('block_35', views.block_35, name='block_35'),
     path('block_russian2', views.block_russian2, name='block_russian2'),
-    path('registration', views.registration, name='registration')
+    path('registration', views.registration, name='registration'),
+    path('achievements', views.achievements, name='achievements'),
+    path('treasonreport', views.treasonreport, name='treasonreport')
 ]

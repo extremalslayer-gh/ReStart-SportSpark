@@ -64,7 +64,8 @@ def create_account(request):
         return JsonResponse({
             'message': 'Пользователь создан'
         }, status=200)
-    except:
+    except Exception as e:
+        print(e)
         return JsonResponse({
             'message': 'Вы должны отправить JSON с объектами "organization" и "user"'
         }, status=422)

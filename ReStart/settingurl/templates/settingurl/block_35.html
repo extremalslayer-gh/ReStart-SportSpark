@@ -15,9 +15,10 @@
             <ul class="menu">
                 <li><a href="{% url 'block_student' %}">Заполнить отчет</a></li>
                 <li><a href="{% url 'recentrep' %}">Посмотреть отчеты</a></li>
+                <li><a href="{% url 'achievements' %}">Достижения школьного спортивного клуба</a></li>
             </ul>
             <div class="profile">
-                <img src="{% static 'settingurl/img/profile-icon.png' %}" alt="Профиль" class="profile-icon">
+                <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon">
                 <a href="{% url 'personalmanage' %}">Профиль</a>
             </div>
         </nav>
@@ -31,14 +32,14 @@
                     <div class="step-content">
                         <label class="step-description">Название мероприятия</label>
 
-                        <input type="text" class="form-input" placeholder="Турнир по шахматам" id="event-name">
+                        <input type="text" class="form-input" placeholder="Введите название мероприятия" id="event-name">
 
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
                     <div class="step-content">
-                        <label class="step-description">Количество учащихся, состоящих в Школьном спортивном клубе</label>
+                        <label class="step-description">Количество участников от ШСК</label>
 
                         <input type="number" class="form-input" placeholder="Введите число" id="student-count-all">
 
@@ -69,25 +70,11 @@
 
                     </div>
                 </div>
-                <div class="step">
-                    <div class="step-number">6</div>
-                    <div class="step-content">
-                        <label class="step-description">Положение</label>
-                        <div class="upload-wrapper">
-                            <button type="button" class="upload-button" onclick="document.getElementById('fileInput').click();">
-                                <img src="{% static 'settingurl/img/upload-icon.png' %}" alt="Загрузить">
-                                Загрузить файл
-                            </button>
-                            <input type="file" id="fileInput" class="hidden-file-input">
-                        </div>
-                    </div>
-                </div>
                 <button type="button" class="button-add">Добавить мероприятие</button>
                 <div class="form-buttons">
                     <a href="{% url 'block1_2' %}"><button type="button" class="button-back">Назад</button></a>
 
                     <a href="{% url 'block_russian2' %}"><button type="button" class="button-next" onclick="saveData()">Далее</button></a>
-
                 </div>
             </form>
         </main>

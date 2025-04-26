@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Можно добавить дополнительные данные, если необходимо
         };
 
+        console.log(data);
         // Отправка POST-запроса
         fetch('/reports/create_report/', {
             method: 'POST',
@@ -137,7 +138,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Получаем текущие данные из localStorage
         let reportData = JSON.parse(localStorage.getItem('reportData')) || {};
-        reportData['events'] = reportData['events'].concat(events);
+
+        if (reportData.hasOwnProperty('events'))
+        {
+               reportData['events'] = reportData['events'].concat(events);
+            }
+            else {
+                reportData['events'] = events;
+            }
 
         // Сохраняем обновленные данные обратно в localStorage
         localStorage.setItem('reportData', JSON.stringify(reportData));

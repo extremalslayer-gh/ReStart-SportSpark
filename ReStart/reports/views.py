@@ -27,7 +27,7 @@ def create_report(request):
 
         organization = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
                                                   .order_by(Organization.creation_time.desc()).first()
-        
+
         organization.modify_from_dict(json_data['organization'])
         sports_list = []
         for sports in json_data['sports']:
@@ -47,7 +47,8 @@ def create_report(request):
         return JsonResponse({
             'message': 'Информация отправлена'
         }, status=200)
-    except:
+    except Exception as e:
+        print(e)
         return JsonResponse({
             'message': 'Вы должны отправить JSON с объектом "organization", массив "sports" и массив "events"'
         }, status=422)
