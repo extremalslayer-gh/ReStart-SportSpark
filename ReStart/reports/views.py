@@ -102,12 +102,13 @@ def edit_report(request):
         
         organization_dict = convert_to_dict(organization)
         organization_dict = { k: v for k, v in organization_dict.items() if k not in ['id', 'creation_time'] }
-        modified_organization = Organization(**organization_dict, creation_time=datetime.now())
+        #modified_organization = Organization(**organization_dict, creation_time=datetime.now())
         json_data['organization'] = { k: v for k, v in json_data['organization'].items() if k not in ['id', 'creation_time'] }
-        modified_organization.modify_from_dict(json_data['organization'])
+        #modified_organization.modify_from_dict(json_data['organization'])
+        organization.modify_from_dict(json_data['organization'])
         sports_list = []
         for sports in json_data['sports']:
-            sports_list.append(Sports(**sports, organization_id=modified_organization.id))
+            sports_list.append(Sports(**sports, organization_id=organization.id))
         
         event_list = []
         for event in json_data['events']:
@@ -116,9 +117,9 @@ def edit_report(request):
                                     date=datetime.strptime(event['date'], '%d.%m.%Y'),
                                     official_regulations=base64.b64decode(event['official_regulations']) if event['is_official'] else None,
                                     #document=base64.b64decode(event['document']),
-                                    organization_id=modified_organization.id))
+                                    organization_id=organization.id))
 
-        session.add_all([modified_organization, *sports_list, *event_list])
+        session.add_all([*sports_list, *event_list])
         session.commit()        
         return JsonResponse({
             'message': 'Информация отправлена'
