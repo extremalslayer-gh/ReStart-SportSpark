@@ -15,9 +15,10 @@
             <ul class="menu">
                 <li><a href="{% url 'block_student' %}">Заполнить отчет</a></li>
                 <li><a href="{% url 'recentrep' %}">Посмотреть отчеты</a></li>
+                <li><a href="{% url 'achievements' %}">Достижения школьного спортивного клуба</a></li>
             </ul>
             <div class="profile">
-                <img src="{% static 'settingurl/img/profile-icon.png' %}" alt="Профиль" class="profile-icon">
+                <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon">
                 <a href="{% url 'personalmanage' %}">Профиль</a>
             </div>
         </nav>
@@ -94,7 +95,7 @@
         </div>
         <footer>
             <a href="{% url 'block_student' %}"><button type="button" class="button-back">Назад</button></a>
-            <a href="{% url 'block1_3' %}" class="button"><button type="button" class="button-next" onclick="saveData()">Далее</button></a>
+            <a href="{% url 'block1_2' %}" class="button"><button type="button" class="button-next" onclick="saveData()">Далее</button></a>
         </footer>
       </form>
     </main>

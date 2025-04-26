@@ -76,3 +76,11 @@ def block_russian2(request):
 
 def registration(request):
     return render(request, 'settingurl/registration.html')
+
+
+def achievements(request):
+    return render(request, 'settingurl/achievements.html')
+
+
+def treasonreport(request):
+    return render(request, 'settingurl/treasonreport.html')

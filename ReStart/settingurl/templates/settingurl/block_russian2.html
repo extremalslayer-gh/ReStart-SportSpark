@@ -15,9 +15,10 @@
             <ul class="menu">
                 <li><a href="{% url 'block_student' %}">Заполнить отчет</a></li>
                 <li><a href="{% url 'recentrep' %}">Посмотреть отчеты</a></li>
+                <li><a href="{% url 'achievements' %}">Достижения школьного спортивного клуба</a></li>
             </ul>
             <div class="profile">
-                <img src="{% static 'settingurl/img/profile-icon.png' %}" alt="Профиль" class="profile-icon">
+                <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon">
                 <a href="{% url 'personalmanage' %}">Профиль</a>
             </div>
         </nav>
@@ -43,13 +44,10 @@
 
                                 <input type="text" placeholder="12" id="number1">
                             </label>
-                            <label>
+                            <!--<label>
                                 Дата
                                 <input type="text" placeholder="31.02.2024" id="date1">
-
-
-
-                            </label>
+                            </label>-->
                         </div>
                     </div>
                     <div class="form-item">
