@@ -37,7 +37,7 @@ def create_report(request):
         for event in json_data['events']:
             event_without_document = {k: event[k] for k in event if k not in ('document', 'official_regulations', 'date')}
             event_list.append(Event(**event_without_document, 
-                                    date=datetime.strptime(event['date'], '%d.%m.%Y'),
+                                    #date=datetime.strptime(event['date'], '%d.%m.%Y'),
                                     official_regulations=base64.b64decode(event['official_regulations']) if event['is_official'] else None,
                                     #document=base64.b64decode(event['document']),
                                     organization_id=organization.id))
@@ -78,7 +78,8 @@ def get_report(request):
             'sports': [convert_to_dict(el) for el in sports],
             'events': [convert_to_dict(el) for el in events],
         }, status=200)
-    except:
+    except Exception as e:
+        print(e)
         return JsonResponse({
             'message': 'Ошибка сервера'
         }, status=503)
