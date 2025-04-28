@@ -128,3 +128,150 @@ body {
   border: 1px solid #ccc;
   text-align: center;
 }
+
+
+
+/* Стиль для первой таблицы (Расписание) */
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.schedule-table th,
+.schedule-table td {
+  border: 1px solid #000;
+  padding: 8px;
+  text-align: center;
+  font-size: 16px;
+}
+
+/* Подзаголовок между таблицами */
+.section-subtitle {
+  font-size: 18px;
+  color: #2A3B7E;
+  text-align: left;
+  margin: 30px 0 15px;
+  font-weight: normal;
+}
+
+/* Стиль для второй таблицы (Мероприятия) */
+.event-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.event-table thead {
+  background-color: #2A3B7E;
+  color: white;
+}
+
+.event-table th,
+.event-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
+}
+
+
+
+/* Таблица инвентаря */
+.inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  margin-bottom: 20px;
+}
+
+.inventory-table th,
+.inventory-table td {
+  padding: 8px;
+  border: 1px solid #ccc;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Ссылка на файл */
+.file-link {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.file-link a {
+  color: #2A3B7E;
+  text-decoration: underline;
+}
+
+/* Блок двух таблиц рядом */
+.students-tables {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+/* Таблица классов и секций */
+.students-table, .activity-table {
+  width: 48%;
+  border-collapse: collapse;
+}
+
+.students-table th,
+.students-table td,
+.activity-table th,
+.activity-table td {
+  padding: 8px;
+  border: 1px solid #ccc;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Шапка таблицы с синей заливкой */
+.students-table thead,
+.activity-table thead {
+  background-color: #2A3B7E;
+  color: white;
+}
+
+
+/* Маленькие таблицы мероприятий (Блок 4, 5) */
+.small-event-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.small-event-table thead {
+  background-color: #2A3B7E;
+  color: white;
+}
+
+.small-event-table th,
+.small-event-table td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Большая таблица мероприятий (Блок 6) */
+.full-event-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.full-event-table thead {
+  background-color: #2A3B7E;
+  color: white;
+}
+
+.full-event-table th,
+.full-event-table td {
+  padding: 8px;
+  border: 1px solid #ccc;
+  text-align: center;
+  font-size: 13px;
+}

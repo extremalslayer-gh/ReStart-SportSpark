@@ -30,71 +30,152 @@
       <p class="report-date" id="report-date"></p>
 
       <!-- Блок 1 -->
-      <section class="report-section">
-        <div class="section-header">
-          <span class="section-number">1</span>
-          <h2>Расписание занятий ШСК</h2>
-        </div>
+    <section class="report-section">
+      <div class="section-header">
+        <span class="section-number">1</span>
+        <h2>Расписание занятий ШСК</h2>
+      </div>
 
-        <table class="table" id="schedule-table">
-          <thead>
-            <tr>
-              <th>День</th>
-              <th>Часы</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Данные подставятся -->
-          </tbody>
-        </table>
-      </section>
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>Понедельник</th>
+            <th>Вторник</th>
+            <th>Среда</th>
+            <th>Четверг</th>
+            <th>Пятница</th>
+            <th>Суббота</th>
+            <th>Воскресенье</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
 
-      <!-- Блок 2 -->
-      <section class="report-section">
-        <div class="section-header">
-          <span class="section-number">2</span>
-          <h2>Материально-техническое обеспечение</h2>
-        </div>
+      <h3 class="section-subtitle">Физкультурные мероприятия и спортивные мероприятия, которые проходили в рамках деятельности школьного спортивного клуба.</h3>
 
-        <p>Место проведения занятий: <span class="badge" id="place"></span></p>
+      <table class="event-table">
+        <thead>
+          <tr>
+            <th>Название</th>
+            <th>Количество участников общеобразовательной организации</th>
+            <th>Дата проведения</th>
+            <th>Количество участников Школьного спортивного клуба</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </section>
 
-        <table class="table" id="inventory-table">
-          <thead>
-            <tr>
-              <th>Инвентарь</th>
-              <th>Количество</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Данные подставятся -->
-          </tbody>
-        </table>
-      </section>
 
-      <!-- Блок 3 -->
-      <section class="report-section">
-        <div class="section-header">
-          <span class="section-number">3</span>
-          <h2>Численность обучающихся</h2>
-        </div>
+    <!-- Блок 2 -->
+    <section class="report-section">
+      <div class="section-header">
+        <span class="section-number">2</span>
+        <h2>Достижения Школьного Спортивного Клуба</h2>
+      </div>
+      <p class="file-link">Достижения работы ШСК: <a href="#">Файл</a></p>
+    </section>
 
-        <p>Количество обучающихся: <span class="badge" id="students-total"></span></p>
+    <!-- Блок 3 -->
+    <section class="report-section">
+      <div class="section-header">
+        <span class="section-number">3</span>
+        <h2>Численность обучающихся.</h2>
+      </div>
 
-        <table class="table" id="classes-table">
+      <p>Количество обучающихся в общеобразовательной организации: <span class="students-organization badge">0</span></p>
+      <p>Количество занимающихся на базе ШСК: <span class="students-total badge">0</span></p>
+
+      <div class="students-tables">
+        <table class="students-table">
           <thead>
             <tr>
               <th>Класс</th>
-              <th>Количество учеников</th>
+              <th>Количество учащихся</th>
             </tr>
           </thead>
           <tbody>
-            <!-- Данные подставятся -->
           </tbody>
         </table>
-      </section>
-    </div>
-  </main>
 
-  <script src="sentreport.js"></script>
+        <table class="activity-table">
+          <thead>
+            <tr>
+              <th>Название</th>
+              <th>Количество учащихся</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </section>
+          <!-- Блок 4 -->
+    <section class="report-section">
+      <div class="section-header">
+        <span class="section-number">4</span>
+        <h2>Участие школьного спортивного клуба в официальных всероссийских физкультурных мероприятиях и спортивных мероприятиях</h2>
+      </div>
+
+      <table class="small-event-table event-table-all">
+        <thead>
+          <tr>
+            <th>Название</th>
+            <th>Количество участников</th>
+            <th>Дата проведения</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Блок 5 -->
+    <section class="report-section">
+      <div class="section-header">
+        <span class="section-number">5</span>
+        <h2>Участие школьного спортивного клуба в официальных региональных физкультурных мероприятиях и спортивных мероприятиях</h2>
+      </div>
+
+      <table class="small-event-table event-table-reg">
+        <thead>
+          <tr>
+            <th>Название</th>
+            <th>Количество участников</th>
+            <th>Дата проведения</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Блок 6 -->
+    <section class="report-section">
+      <div class="section-header">
+        <span class="section-number">6</span>
+        <h2>Участие школьного спортивного клуба в официальных физкультурных мероприятиях и спортивных мероприятиях, внесенных в муниципальный календарный план</h2>
+      </div>
+
+      <table class="full-event-table">
+        <thead>
+          <tr>
+            <th>№</th>
+            <th>Название</th>
+            <th>Количество участников</th>
+            <th>Дата проведения</th>
+            <th>Место проведения</th>
+            <th>Организатор</th>
+            <th>Положение</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </section>
+  </main>
+<script src="{% static 'settingurl/js/sentreport.js' %}"></script>
 </body>
 </html>
