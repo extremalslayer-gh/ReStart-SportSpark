@@ -22,5 +22,6 @@ urlpatterns = [
     path('block_russian2', views.block_russian2, name='block_russian2'),
     path('registration', views.registration, name='registration'),
     path('achievements', views.achievements, name='achievements'),
-    path('treasonreport', views.treasonreport, name='treasonreport')
+    path('treasonreport', views.treasonreport, name='treasonreport'),
+    path('sentreport', views.sentreport, name='sentreport')
 ]

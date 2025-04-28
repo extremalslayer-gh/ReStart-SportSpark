@@ -34,7 +34,7 @@
             <img src="{% static 'settingurl/img/Eye.png' %}">
           </div>
           <span class="report-date">29.12.24</span>
-            <a href="{% url 'block_student' %}"><button class="edit-btn">✎</button></a>
+            <a href="{% url 'sentreport' %}"><button class="edit-btn">✎</button></a>
         </div>
 
         <div class="report-card">
@@ -63,5 +63,16 @@
       </div>
     </main>
   </div>
+<!-- Модальное окно для предварительного просмотра -->
+<div id="report-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h3>Предварительный просмотр отчета</h3>
+        <div id="modal-report-content">
+          Здесь будет текст вашего отчета...
+        </div>
+        <button class="close-btn" onclick="closeModal()">Закрыть</button>
+    </div>
+</div>
+<script src="{% static 'settingurl/js/recentrep.js' %}"></script>
 </body>
 </html>
