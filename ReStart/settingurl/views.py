@@ -84,3 +84,7 @@ def achievements(request):
 
 def treasonreport(request):
     return render(request, 'settingurl/treasonreport.html')
+
+
+def sentreport(request):
+    return render(request, 'settingurl/sentreport.html')

@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма Входа</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'settingurl/css/sentreport.css' %}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <ul class="menu">
+                <li><a href="{% url 'block_student' %}">Заполнить отчет</a></li>
+                <li><a href="{% url 'recentrep' %}">Посмотреть отчеты</a></li>
+                <li><a href="{% url 'achievements' %}">Достижения школьного спортивного клуба</a></li>
+            </ul>
+            <div class="profile">
+                <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon">
+                <a href="{% url 'personalmanage' %}">Профиль</a>
+            </div>
+        </nav>
+    </header>
+
+  <main class="main-content">
+    <div class="report-card">
+      <h1 class="report-title">Отчет</h1>
+      <p class="report-date" id="report-date"></p>
+
+      <!-- Блок 1 -->
+      <section class="report-section">
+        <div class="section-header">
+          <span class="section-number">1</span>
+          <h2>Расписание занятий ШСК</h2>
+        </div>
+
+        <table class="table" id="schedule-table">
+          <thead>
+            <tr>
+              <th>День</th>
+              <th>Часы</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Данные подставятся -->
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Блок 2 -->
+      <section class="report-section">
+        <div class="section-header">
+          <span class="section-number">2</span>
+          <h2>Материально-техническое обеспечение</h2>
+        </div>
+
+        <p>Место проведения занятий: <span class="badge" id="place"></span></p>
+
+        <table class="table" id="inventory-table">
+          <thead>
+            <tr>
+              <th>Инвентарь</th>
+              <th>Количество</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Данные подставятся -->
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Блок 3 -->
+      <section class="report-section">
+        <div class="section-header">
+          <span class="section-number">3</span>
+          <h2>Численность обучающихся</h2>
+        </div>
+
+        <p>Количество обучающихся: <span class="badge" id="students-total"></span></p>
+
+        <table class="table" id="classes-table">
+          <thead>
+            <tr>
+              <th>Класс</th>
+              <th>Количество учеников</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Данные подставятся -->
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+
+  <script src="sentreport.js"></script>
+</body>
+</html>

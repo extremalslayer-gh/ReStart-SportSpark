@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const events = [];
 
         // Функция для добавления данных мероприятия в массив
-        function addEvent(name, studentCount, eventDate) {
+        function addEvent(name, studentCount) {
             events.push({
                 "name": name,
                 "student_count_all": parseInt(studentCount), // Получаем количество участников
@@ -87,7 +87,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 "official_location": "Официальное мероприятие", // только "Официальное мероприятие"
                 "official_organizer": "Официальное мероприятие", // только "Официальное мероприятие"
                 "official_regulations": "LQ==", // только "LQ=="
-                "date": eventDate // Дата с поля
             });
         }
 
@@ -98,40 +97,34 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Для каждого отмеченного мероприятия, собираем данные
                 let name = '';
                 let studentCount = '';
-                let eventDate = '';
 
                 // В зависимости от мероприятия получаем данные
                 switch (index) {
                     case 0:
                         name = 'Всероссийские соревнования по баскетболу среди команд общеобразовательных организаций';
                         studentCount = document.getElementById('number1').value;
-                        eventDate = document.getElementById('date1').value;
                         break;
                     case 1:
                         name = 'Всероссийские соревнования по волейболу «Серебряный мяч»';
                         studentCount = document.getElementById('number2').value;
-                        eventDate = document.getElementById('date2').value;
                         break;
                     case 2:
                         name = 'Всероссийские соревнования по легкоатлетическому четырехборью «Шиповка юных»';
                         studentCount = document.getElementById('number3').value;
-                        eventDate = document.getElementById('date3').value;
                         break;
                     case 3:
                         name = 'Всероссийские соревнования по лыжным гонкам';
                         studentCount = document.getElementById('number4').value;
-                        eventDate = document.getElementById('date4').value;
                         break;
                     case 4:
                         name = document.getElementById('name5').value || 'Другое';
                         studentCount = document.getElementById('number5').value;
-                        eventDate = document.getElementById('date5').value;
                         break;
                 }
 
                 // Добавляем в массив, если есть название мероприятия
                 if (name) {
-                    addEvent(name, studentCount, eventDate);
+                    addEvent(name, studentCount);
                 }
             }
         });
