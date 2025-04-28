@@ -94,12 +94,19 @@ def export_reports(request):
         for sheet_name in writer.sheets.keys():
             writer.sheets[sheet_name].autofit()
 
-        apply_basic_styles(writer, 'Общий', df_common)
-        apply_basic_styles(writer, 'Расписание занятий', df_schedule)
-        apply_basic_styles(writer, 'Численность обучающихся', df_student_count)
-        apply_basic_styles(writer, 'Виды спорта ШСК', df_sports)
-        apply_basic_styles(writer, 'Соревнования', df_events_official)
-        apply_basic_styles(writer, 'Мероприятия в рамках ШСК', df_events)
+        common_sheet = apply_basic_styles(writer, 'Общий', df_common)
+        schedule_sheet = apply_basic_styles(writer, 'Расписание занятий', df_schedule)
+        student_count_sheet = apply_basic_styles(writer, 'Численность обучающихся', df_student_count)
+        sports_sheet = apply_basic_styles(writer, 'Виды спорта ШСК', df_sports)
+        events_official_sheet = apply_basic_styles(writer, 'Соревнования', df_events_official)
+        events_sheet = apply_basic_styles(writer, 'Мероприятия в рамках ШСК', df_events)
+
+        apply_common_styles(df_common, common_sheet)
+        apply_schedule_styles(df_schedule, schedule_sheet)
+        apply_student_count_styles(df_student_count, student_count_sheet)
+        apply_sports_styles(df_sports, sports_sheet)
+        apply_events_official_styles(df_events_official, events_official_sheet)
+        apply_events_styles(df_events, events_sheet)
 
         writer.close()
 

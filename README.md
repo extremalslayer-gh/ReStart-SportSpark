@@ -7,6 +7,7 @@
 ```console
 cd ReStart
 pip install -r requirements.txt
+pip install "XlsxPandasFormatter @ git+https://github.com/webermarcolivier/xlsxpandasformatter.git"
 python manage.py migrate
 python manage.py runserver
 ```
@@ -294,10 +295,81 @@ P.S. В ответе приходит cookie `sessionid`, она регулир�
 
 ---
 
+### Получение всех своих отчетов
+**POST** `/reports/get_my_reports/`
+
+#### Ответ сервера
+
+```json
+{
+  "reports": [
+    {
+      "organization": {
+        "id": "...",
+        "organization_id": "...",
+        "name": "...",
+        "students_grade_1": "...",
+        "students_grade_2": "...",
+        "students_grade_3": "...",
+        "students_grade_4": "...",
+        "students_grade_5": "...",
+        "students_grade_6": "...",
+        "students_grade_7": "...",
+        "students_grade_8": "...",
+        "students_grade_9": "...",
+        "students_grade_10": "...",
+        "students_grade_11": "...",
+        "students_total": "...",
+        "students_organization": "...",
+        "creation_time": "...",
+        "hours_mon": "...",
+        "hours_tue": "...",
+        "hours_wed": "...",
+        "hours_thu": "...",
+        "hours_fri": "...",
+        "hours_sat": "...",
+        "hours_sun": "...",
+        "achievements": "..."
+      },
+      "sports": [
+        {
+          "id": "...",
+          "name": "...",
+          "student_count": "...",
+          "organization_id": "..."
+        }
+      ],
+      "events": [
+        {
+          "id": "...",
+          "name": "...",
+          "student_count_all": "...",
+          "student_count_organization": "...",
+          "organization_id": "...",
+          "is_official": "...",
+          "official_type": "...",
+          "official_location": "...",
+          "official_organizer": "...",
+          "date": "..."
+        }
+      ]
+    },
+    ...
+  ]
+}
+```
+
+---
+
 ### Получение своего отчета
 
 **POST** `/reports/get_report/`
-
+### Параметры
+```json
+{
+    "id": "id отчета"
+}
+```
 #### Ответ сервера
 
 ```json
@@ -374,6 +446,7 @@ P.S. В ответе приходит cookie `sessionid`, она регулир�
 
 ```json
 {
+    "id": "id отчета(можно получить из /reports/get_my_reports/)",
     "organization": {
         "students_grade_1": "...",
         "students_grade_2": "...",
