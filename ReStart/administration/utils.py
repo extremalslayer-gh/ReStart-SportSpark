@@ -199,14 +199,15 @@ def apply_basic_styles(writer, sheet_name, df):
             'align': 'center', 
             'valign': 'vcenter'
         } for _ in range(len(df.columns))])
-    sheet.format_row(df.shape[0] - 1, rowFormat={ 'bottom': 1 })
+    if df.shape[0] > 0:
+        sheet.format_row(df.shape[0] - 1, rowFormat={ 'bottom': 1 })
     sheet.format_index(indexFormat=header_format, colWidth=20)
     return sheet
 
-def apply_conditional_style(df, sheet, cols_alt, style_alt, style):
+def apply_conditional_style(df, sheet, cols_a, style_a, cols_b, style_b, style_other):
     sheet.format_cols(
         colWidthList=[ 20 for _ in range(len(df.columns)) ], 
-        colFormatList=[ style if i not in cols_alt else style_alt for i in range(len(df.columns)) ]
+        colFormatList=[ style_a if i in cols_a else (style_b if i in cols_b else style_other) for i in range(len(df.columns)) ]
     )
 
 FORMAT_MAIN = {
@@ -216,6 +217,16 @@ FORMAT_MAIN = {
     'text_wrap': 1, 
     'align': 'center', 
     'valign': 'vcenter'
+}
+
+FORMAT_DATE = {
+    'font_name': 'Roboto', 
+    'font_size': 11, 
+    'right': 1, 
+    'text_wrap': 1, 
+    'align': 'center', 
+    'valign': 'vcenter',
+    'num_format':'yyyy-mm-dd hh:mm:ss'
 }
 
 FORMAT_LEFT = {
@@ -228,31 +239,34 @@ FORMAT_LEFT = {
 }
 
 def apply_common_styles(df, sheet):
-    left_align_cols = [ 0, 1, 2, 5, 28, 32, 34, 35, 36, 37 ]
-    apply_conditional_style(df, sheet, left_align_cols, FORMAT_LEFT, FORMAT_MAIN)
+    left_align_cols = [ 0, 1, 2, 5, 28, 32, 35, 36, 37 ]
+    date_cols = [ 3, 4, 30, 34]
+    apply_conditional_style(df, sheet, left_align_cols, FORMAT_LEFT, date_cols, FORMAT_DATE, FORMAT_MAIN)
     sheet.apply_format_table()
 
 def apply_schedule_styles(df, sheet):
     left_align_cols = [ 0, 1, 2 ]
-    apply_conditional_style(df, sheet, left_align_cols, FORMAT_LEFT, FORMAT_MAIN)
+    apply_conditional_style(df, sheet, left_align_cols, FORMAT_LEFT, [], FORMAT_DATE, FORMAT_MAIN)
     sheet.apply_format_table()
 
 def apply_student_count_styles(df, sheet):
     left_align_cols = [ 0, 1, 2 ]
-    apply_conditional_style(df, sheet, left_align_cols, FORMAT_LEFT, FORMAT_MAIN)
+    apply_conditional_style(df, sheet, left_align_cols, FORMAT_LEFT, [], FORMAT_DATE, FORMAT_MAIN)
     sheet.apply_format_table()
 
 def apply_sports_styles(df, sheet):
     left_align_cols = [ 0, 1, 2, 3 ]
-    apply_conditional_style(df, sheet, left_align_cols, FORMAT_LEFT, FORMAT_MAIN)
+    apply_conditional_style(df, sheet, left_align_cols, FORMAT_LEFT, [], FORMAT_DATE, FORMAT_MAIN)
     sheet.apply_format_table()
 
 def apply_events_official_styles(df, sheet):
-    left_align_cols = [ 0, 1, 2, 3, 5, 6, 7, 8 ]
-    apply_conditional_style(df, sheet, left_align_cols, FORMAT_LEFT, FORMAT_MAIN)
+    left_align_cols = [ 0, 1, 2, 3, 6, 7, 8 ]
+    date_cols = [ 5 ]
+    apply_conditional_style(df, sheet, left_align_cols, FORMAT_LEFT, date_cols, FORMAT_DATE, FORMAT_MAIN)
     sheet.apply_format_table()
 
 def apply_events_styles(df, sheet):
-    left_align_cols = [ 0, 1, 2, 3, 5 ]
-    apply_conditional_style(df, sheet, left_align_cols, FORMAT_LEFT, FORMAT_MAIN)
+    left_align_cols = [ 0, 1, 2, 3 ]
+    date_cols = [ 5 ]
+    apply_conditional_style(df, sheet, left_align_cols, FORMAT_LEFT, date_cols, FORMAT_DATE, FORMAT_MAIN)
     sheet.apply_format_table()
