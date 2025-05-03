@@ -6,7 +6,7 @@ body {
     align-items: center;
     height: 100vh;
     font-family: Arial, sans-serif;
-    background: linear-gradient(180deg, #B0B0C3, #7E7E99);
+    background: radial-gradient(circle at center, #00B1EB 20%, #2A3B7E 80%);
 }
 
 .login-container {
@@ -65,9 +65,10 @@ body {
 }
 
 .login-button {
-    width: 100%;
+    width: 350px;
     padding: 12px;
-    background: #665287;
+    margin: 50px;
+    background: #2A3B7E;
     color: #ffffff;
     border: none;
     border-radius: 5px;
