@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from user.utils import is_logged_in
 from sqlalchemy import func
 import pandas as pd
+import pandas.io.formats.excel
 import uuid
 import os
 from administration.utils import *
@@ -81,14 +82,32 @@ def export_reports(request):
         filename = f'report_{uuid.uuid4()}.xlsx'
         filepath = f'{TEMP_FOLDER}\\{filename}'
         writer = pd.ExcelWriter(filepath, engine='xlsxwriter')
-        export_to_excel_common(session, writer)
-        export_to_excel_schedule(session, writer)
-        export_to_excel_student_count(session, writer)
-        export_to_excel_sports(session, writer)
-        export_to_excel_events_official(session, writer)
-        export_to_excel_events(session, writer)
+        
+        pandas.io.formats.excel.ExcelFormatter.header_style = None
+
+        df_common = export_to_excel_common(session, writer)
+        df_schedule = export_to_excel_schedule(session, writer)
+        df_student_count = export_to_excel_student_count(session, writer)
+        df_sports = export_to_excel_sports(session, writer)
+        df_events_official = export_to_excel_events_official(session, writer)
+        df_events = export_to_excel_events(session, writer)
         for sheet_name in writer.sheets.keys():
             writer.sheets[sheet_name].autofit()
+
+        common_sheet = apply_basic_styles(writer, 'Общий', df_common)
+        schedule_sheet = apply_basic_styles(writer, 'Расписание занятий', df_schedule)
+        student_count_sheet = apply_basic_styles(writer, 'Численность обучающихся', df_student_count)
+        sports_sheet = apply_basic_styles(writer, 'Виды спорта ШСК', df_sports)
+        events_official_sheet = apply_basic_styles(writer, 'Соревнования', df_events_official)
+        events_sheet = apply_basic_styles(writer, 'Мероприятия в рамках ШСК', df_events)
+
+        apply_common_styles(df_common, common_sheet)
+        apply_schedule_styles(df_schedule, schedule_sheet)
+        apply_student_count_styles(df_student_count, student_count_sheet)
+        apply_sports_styles(df_sports, sports_sheet)
+        apply_events_official_styles(df_events_official, events_official_sheet)
+        apply_events_styles(df_events, events_sheet)
+
         writer.close()
 
         with open(filepath, 'rb') as f:
