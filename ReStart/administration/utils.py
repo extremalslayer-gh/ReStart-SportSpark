@@ -1,16 +1,53 @@
 import pandas as pd
 from reports.models import Organization, Sports, Event
 from user.models import User
+import datetime
 # Пакет не обновлен в pip, ставить с гитхаба
 # pip install "XlsxPandasFormatter @ git+https://github.com/webermarcolivier/xlsxpandasformatter.git"
 from xlsxpandasformatter import FormattedWorksheet
 
-def export_to_excel_common(session, writer):
+
+def filter_reports(query, json_data):    
+    if 'filters' in json_data:
+        filter_params_simple = ['students_total', 'students_organization', 'name']
+        for i in range(1, 12):
+            filter_params_simple.append(f'students_grade_{i}')
+
+        for param in filter_params_simple:
+            if param in json_data['filters']:
+                query = query.filter(Organization.__table__.c[param].in_(json_data['filters'][param]))
+        
+        if 'creation_time' in json_data['filters']:
+            creation_time_allowed = list(map(lambda x: datetime.datetime.strptime(x, '%d.%m.%Y'), json_data['filters']['creation_time']))
+            query = query.filter(Organization.__table__.c['creation_time'].in_(creation_time_allowed))
+
+    query = query.all()
+    return query
+
+def filter_user(user, json_data):
+    name = f'{user.second_name} {user.first_name} {user.last_name}'
+    if 'filters' in json_data:
+        if 'municipality_name' in json_data['filters']:
+            if user.municipality_name not in json_data['filters']['municipality_name']:
+                return False
+        if 'name' in json_data['filters']:
+            if name not in json_data['filters']['name']:
+                return False
+    return True
+
+def export_to_excel_common(session, writer, json_data):
     result = []
     users = session.query(User).filter(User.is_admin==False).all()
     for user in users:
-        user_reports = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
-                                                    .order_by(Organization.creation_time.desc()).all()
+        if not filter_user(user, json_data):
+            continue
+        #user_reports = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
+        #                                            .order_by(Organization.creation_time.desc()).all()
+        user_reports = (session.query(Organization).filter(Organization.organization_id==user.organization_id)
+                                                  .order_by(Organization.creation_time.desc()))
+        
+        user_reports = filter_reports(user_reports, json_data)
+        
         for report in user_reports:
             latest_unofficial_event =  session.query(Event).filter(Event.organization_id.like(report.id), Event.is_official.is_(False))\
                                                         .order_by(Event.date.desc()).first()
@@ -52,13 +89,19 @@ def export_to_excel_common(session, writer):
     df.to_excel(writer, sheet_name='Общий', index=False)
     return df
 
-def export_to_excel_schedule(session, writer):
+def export_to_excel_schedule(session, writer, json_data):
     result = []
     users = session.query(User).filter(User.is_admin==False).all()
     for user in users:
+        if not filter_user(user, json_data):
+            continue
         name = f'{user.second_name} {user.first_name} {user.last_name}' if user is not None else 'Не определено'
-        user_reports = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
-                                                    .order_by(Organization.creation_time.desc()).all()
+        #user_reports = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
+        #                                            .order_by(Organization.creation_time.desc()).all()
+        user_reports = (session.query(Organization).filter(Organization.organization_id==user.organization_id)
+                                                  .order_by(Organization.creation_time.desc()))
+        
+        user_reports = filter_reports(user_reports, json_data)
         for report in user_reports:
             result.append([
                 user.municipality_name, report.name, name, 
@@ -75,13 +118,20 @@ def export_to_excel_schedule(session, writer):
     df.to_excel(writer, sheet_name='Расписание занятий', index=False)
     return df
 
-def export_to_excel_student_count(session, writer):
+def export_to_excel_student_count(session, writer, json_data):
     result = []
     users = session.query(User).filter(User.is_admin==False).all()
     for user in users:
+        if not filter_user(user, json_data):
+            continue
         name = f'{user.second_name} {user.first_name} {user.last_name}' if user is not None else 'Не определено'
-        user_reports = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
-                                                    .order_by(Organization.creation_time.desc()).all()
+        #user_reports = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
+        #                                            .order_by(Organization.creation_time.desc()).all()
+        user_reports = (session.query(Organization).filter(Organization.organization_id==user.organization_id)
+                                                  .order_by(Organization.creation_time.desc()))
+        
+        user_reports = filter_reports(user_reports, json_data)
+
         for report in user_reports:
             result.append([
                 user.municipality_name, report.name, name,
@@ -101,13 +151,20 @@ def export_to_excel_student_count(session, writer):
     df.to_excel(writer, sheet_name='Численность обучающихся', index=False)
     return df
 
-def export_to_excel_sports(session, writer):
+def export_to_excel_sports(session, writer, json_data):
     result = []
     users = session.query(User).filter(User.is_admin==False).all()
     for user in users:
+        if not filter_user(user, json_data):
+            continue
         name = f'{user.second_name} {user.first_name} {user.last_name}' if user is not None else 'Не определено'
-        user_reports = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
-                                                    .order_by(Organization.creation_time.desc()).all()
+        #user_reports = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
+        #                                            .order_by(Organization.creation_time.desc()).all()
+        user_reports = (session.query(Organization).filter(Organization.organization_id==user.organization_id)
+                                                  .order_by(Organization.creation_time.desc()))
+        
+        user_reports = filter_reports(user_reports, json_data)
+        
         for report in user_reports:
             sports_list = session.query(Sports).filter(Sports.organization_id==report.id).all()
             for sports in sports_list:
@@ -123,13 +180,20 @@ def export_to_excel_sports(session, writer):
     df.to_excel(writer, sheet_name='Виды спорта ШСК', index=False)
     return df
 
-def export_to_excel_events_official(session, writer):
+def export_to_excel_events_official(session, writer, json_data):
     result = []
     users = session.query(User).filter(User.is_admin==False).all()
     for user in users:
+        if not filter_user(user, json_data):
+            continue
         name = f'{user.second_name} {user.first_name} {user.last_name}' if user is not None else 'Не определено'
-        user_reports = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
-                                                    .order_by(Organization.creation_time.desc()).all()
+        #user_reports = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
+        #                                            .order_by(Organization.creation_time.desc()).all()
+        user_reports = (session.query(Organization).filter(Organization.organization_id==user.organization_id)
+                                                  .order_by(Organization.creation_time.desc()))
+        
+        user_reports = filter_reports(user_reports, json_data)
+
         for report in user_reports:
             events =  session.query(Event).filter(Event.organization_id.like(report.id), Event.is_official.is_(True))
             for event in events:
@@ -149,13 +213,20 @@ def export_to_excel_events_official(session, writer):
     df.to_excel(writer, sheet_name='Соревнования', index=False)
     return df
 
-def export_to_excel_events(session, writer):
+def export_to_excel_events(session, writer, json_data):
     result = []
     users = session.query(User).filter(User.is_admin==False).all()
     for user in users:
+        if not filter_user(user, json_data):
+            continue
         name = f'{user.second_name} {user.first_name} {user.last_name}' if user is not None else 'Не определено'
-        user_reports = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
-                                                    .order_by(Organization.creation_time.desc()).all()
+        #user_reports = session.query(Organization).filter(Organization.organization_id==user.organization_id)\
+        #                                            .order_by(Organization.creation_time.desc()).all()
+        user_reports = (session.query(Organization).filter(Organization.organization_id==user.organization_id)
+                                                  .order_by(Organization.creation_time.desc()))
+        
+        user_reports = filter_reports(user_reports, json_data)
+
         for report in user_reports:
             events =  session.query(Event).filter(Event.organization_id.like(report.id), Event.is_official.is_(False))
             for event in events:

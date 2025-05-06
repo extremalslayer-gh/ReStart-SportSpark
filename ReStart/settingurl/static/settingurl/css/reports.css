@@ -1,0 +1,139 @@
+/* Сброс стандартных стилей */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: radial-gradient(circle at center, #00B1EB 20%, #2A3B7E 90%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Шапка */
+.header {
+    background-color: transparent;
+    padding: 10px 20px;
+}
+
+
+/* Стили для кнопок */
+.navbar .menu li a {
+    text-decoration: none; /* Убираем стандартное подчеркивание ссылок */
+    padding-bottom: 5px; /* Добавляем пространство для подчеркивания */
+    transition: border-bottom 0.3s ease; /* Плавный переход */
+}
+
+/* Подчеркивание активной кнопки */
+.navbar .menu li a.active {
+    border-bottom: 2px solid #000; /* Подчеркивание для активной кнопки */
+}
+
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.menu li a {
+    text-decoration: none;
+    color: white;
+    font-size: 14px;
+}
+
+.profile a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.profile-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+    color: white;
+}
+
+/* Фильтры */
+.filters {
+    background-color: transparent;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    color: white;
+}
+
+.filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.filter-item label {
+    font-size: 14px;
+    color: white;
+}
+
+.filter-item select {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Таблица */
+.table-container {
+    background-color: transparent;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    overflow-x: auto;
+}
+
+.reports-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.reports-table thead th {
+    font-size: 14px;
+    color: white;
+    padding: 10px;
+    border-bottom: 2px solid #ddd;
+}
+
+.reports-table tbody td {
+    font-size: 14px;
+    color: white;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.reports-table tbody tr:hover {
+    background-color: #808080;
+}
+
+.reports-table tbody td a {
+    color: #6a5acd;
+    text-decoration: none;
+}
+
+.reports-table tbody td a:hover {
+    text-decoration: underline;
+}
