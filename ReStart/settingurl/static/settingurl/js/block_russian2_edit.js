@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Создание JSON объекта для отправки
         const data = {
-            // 'id': localStorage.getItem('report_id'), для редактирования
+            'id': localStorage.getItem('report_id'), //для редактирования
             events: reportData.events || [],
             organization: reportData.organization,
             sports: reportData.sports || []// Передаем только массив событий
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         console.log(data);
         // Отправка POST-запроса
-        fetch('/reports/create_report/', { // для редактирования вместо /reports/create_report/ будет /reports/edit_report/
+        fetch('/reports/edit_report/', { // для редактирования вместо /reports/create_report/ будет /reports/edit_report/
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Указываем, что отправляем JSON

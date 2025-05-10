@@ -57,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'ReStart.middleware.ExceptionCatchMiddleware'
 ]
 
 ROOT_URLCONF = 'ReStart.urls'
@@ -165,3 +166,7 @@ PAGE_ENTRY_COUNT = 30
 
 # Полный путь до директории для временного сохранения экспортируемых отчетов
 TEMP_FOLDER = ''
+
+# Логгирование ошибок
+ENABLE_LOGGING = True
+LOGGING_FILE = 'exception.log'

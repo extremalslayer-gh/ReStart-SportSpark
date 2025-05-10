@@ -25,54 +25,12 @@
     </header>
   <div class="container">
     <!-- Основной блок -->
-    <main class="main-content">
+    <main class="main-content" data-edit-url="{% url 'block_student_edit' %}">
       <h2 class="section-title">Недавние отчеты</h2>
-      <div class="reports-grid">
-        <!-- Карточки отчетов -->
-        <div class="report-card">
-          <div class="report-icon">
-            <img src="{% static 'settingurl/img/Eye.png' %}">
-          </div>
-          <span class="report-date">29.12.24</span>
-            <a href="{% url 'sentreport' %}"><button class="edit-btn">✎</button></a>
+        <div class="reports-grid" id="reportsGrid">
+            <!-- Карточки будут добавляться через JS -->
         </div>
-
-        <div class="report-card">
-          <div class="report-icon">
-            <img src="{% static 'settingurl/img/Eye.png' %}">
-          </div>
-          <span class="report-date">29.08.24</span>
-            <a href="{% url 'block_student' %}"><button class="edit-btn">✎</button></a>
-        </div>
-
-        <div class="report-card">
-          <div class="report-icon">
-            <img src="{% static 'settingurl/img/Eye.png' %}">
-          </div>
-          <span class="report-date">29.04.24</span>
-            <a href="{% url 'block_student' %}"><button class="edit-btn">✎</button></a>
-        </div>
-
-        <div class="report-card">
-          <div class="report-icon">
-            <img src="{% static 'settingurl/img/Eye.png' %}">
-          </div>
-          <span class="report-date">29.01.24</span>
-            <a href="{% url 'block_student' %}"><button class="edit-btn">✎</button></a>
-        </div>
-      </div>
     </main>
-  </div>
-<!-- Модальное окно для предварительного просмотра -->
-<div id="report-modal" class="modal-overlay">
-    <div class="modal-content">
-        <h3>Предварительный просмотр отчета</h3>
-        <div id="modal-report-content">
-          Здесь будет текст вашего отчета...
-        </div>
-        <button class="close-btn" onclick="closeModal()">Закрыть</button>
-    </div>
-</div>
 <script src="{% static 'settingurl/js/recentrep.js' %}"></script>
 </body>
 </html>

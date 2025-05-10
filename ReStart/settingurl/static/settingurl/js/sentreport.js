@@ -4,7 +4,7 @@ fetch('/reports/get_report/', {
   headers: {
     'Content-Type': 'application/json',
   },
-  body: JSON.stringify({ /* Здесь можешь передать данные, если нужно */ })
+  body: JSON.stringify({'id': localStorage.getItem('report_id')})
 })
   .then(response => response.json())
   .then(data => {
@@ -43,8 +43,8 @@ scheduleTable.appendChild(hoursRow);
 
 
     // Число обучающихся
-    document.querySelector('.students-organization').textContent = data.organization.students_organization || '1300';
-    document.querySelector('.students-total').textContent = data.organization.students_total || '1300';
+    document.querySelector('.students-organization').textContent = data.organization.students_organization || '';
+    document.querySelector('.students-total').textContent = data.organization.students_total || '';
 
     // Таблица по классам
     const classesData = [
