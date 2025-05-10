@@ -7,27 +7,22 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def authenticate(request):
-    try:
-        json_data = json.loads(request.body.decode())
-        session = Session()
+    json_data = json.loads(request.body.decode())
+    session = Session()
 
-        user = session.query(User).filter_by(email=json_data['email']).first()
-        if user is None or not user.verify_password(json_data['password']):
-            return JsonResponse({
-                'message': 'Неверный email или пароль'
-            }, status=403)
-        
-        if user.is_banned:
-            return JsonResponse({
-                'message': 'Доступ запрещен'
-            }, status=403)
-
-        request.session['user_id'] = user.id
-
+    user = session.query(User).filter_by(email=json_data['email']).first()
+    if user is None or not user.verify_password(json_data['password']):
         return JsonResponse({
-            'message': 'Успешный вход'
-        }, status=200)
-    except:
+            'message': 'Неверный email или пароль'
+        }, status=403)
+    
+    if user.is_banned:
         return JsonResponse({
-            'message': 'Вы должны отправить JSON с полями "email" и "password"'
-        }, status=422)
+            'message': 'Доступ запрещен'
+        }, status=403)
+
+    request.session['user_id'] = user.id
+
+    return JsonResponse({
+        'message': 'Успешный вход'
+    }, status=200)

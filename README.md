@@ -4,7 +4,8 @@
 - Веб-сервис будет иметь удобный интерфейс для ввода информации о работе ШСК
 
 # Стек
-![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white) ![SQLAlchemy](https://img.shields.io/badge/sqlalchemy-%23CB3032.svg?style=for-the-badge&logo=sqlalchemy&logoColor=white)
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white) ![SQLAlchemy](https://img.shields.io/badge/sqlalchemy-%23CB3032.svg?style=for-the-badge&logo=sqlalchemy&logoColor=white) [![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=fff)](#)
+
 
 # Структура проекта
 
@@ -85,12 +86,17 @@ ReStart/
 - ReStart/ReStart/settings.py - общие настройки
 
 # Установка и запуск
+### Запуск напрямую через python
 ```console
 cd ReStart
 pip install -r requirements.txt
-pip install "XlsxPandasFormatter @ git+https://github.com/webermarcolivier/xlsxpandasformatter.git"
 python manage.py migrate
 python manage.py runserver
+```
+### Запуск в docker контейнере
+```console
+docker build -t restart_web .
+docker run -d -p 80:8000 restart_web
 ```
 
 # Деплой продукта
@@ -111,6 +117,26 @@ https://restartdev.pythonanywhere.com/
 #### Параметры
 
 - `page` (обязательный, число) - номер запрашиваемой страницы, стандартно отчеты разбиваются по 30 штук на страницу. Отсчет страниц начинается с нуля
+- `filters` (необязательный, объект) - применяемые фильтры
+
+#### Пример
+
+Получить все отчеты, в которых (12 или 16 учеников в 7 классе) и дата создания 06.02.2025
+
+***Примечания*** 
+
+- Структура filters должна содержать только массивы, каждый элемент массива выполняет логическую функцию ИЛИ
+- Названия фильтров такие же, как и названия полей структур, приходящих от сервера, исключение - поле `name`, оно принимает массив с допустимыми ФИО
+
+```json
+{
+    "page": 0,
+    "filters": {
+        "students_grade_7": [12, 16],
+        "creation_time": ["06.02.2025"]
+    }
+}
+```
 
 #### Ответ сервера
 
@@ -152,6 +178,28 @@ https://restartdev.pythonanywhere.com/
 ### Экспорт отчетов
 
 **GET** `/admin/export_reports/`
+
+#### Параметры
+
+- `filters` (необязательный, объект) - применяемые фильтры
+
+#### Пример
+
+Получить все отчеты, в которых (12 или 16 учеников в 7 классе) и дата создания 06.02.2025
+
+***Примечания*** 
+
+- Структура filters должна содержать только массивы, каждый элемент массива выполняет логическую функцию ИЛИ
+- Названия фильтров такие же, как и названия полей структур, приходящих от сервера, исключение - поле `name`, оно принимает массив с допустимыми ФИО
+
+```json
+{
+    "filters": {
+        "students_grade_7": [12, 16],
+        "creation_time": ["06.02.2025"]
+    }
+}
+```
 
 #### Ответ сервера
 
