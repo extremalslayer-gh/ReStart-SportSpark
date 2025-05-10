@@ -30,44 +30,34 @@
         <label for="city">Название Муниципального образования (город)</label>
         <select id="city">
             <option>Все</option>
-            <option>Каменск-Уральский</option>
-            <option>Екатеринбург</option>
         </select>
     </div>
     <div class="filter-item">
         <label for="organization">Общеобразовательная организация</label>
         <select id="organization">
             <option>Все</option>
-            <option>Школа №34</option>
-            <option>Лицей №1</option>
         </select>
     </div>
     <div class="filter-item">
         <label for="leader">ФИО руководителя Школьного спортивного клуба</label>
         <select id="leader">
             <option>Все</option>
-            <option>Иванов Иван</option>
-            <option>Петров Петр</option>
         </select>
     </div>
     <div class="filter-item">
         <label for="date">Дата</label>
         <select id="date">
             <option>Все</option>
-            <option>29.10.24</option>
-            <option>30.10.24</option>
         </select>
     </div>
     <div class="filter-item">
         <label for="edits">Правки</label>
         <select id="edits">
             <option>Все</option>
-            <option>Обновлено</option>
-            <option>Не обновлено</option>
         </select>
     </div>
 </section>
-<a href="/admin/export_reports/"><button class="download-btn">Скачать таблицу</button></a>
+<button class="download-btn" id="downloadExcel">Скачать таблицу</button>
 <div class="table-container">
     <!-- Контейнер для прокрутки -->
     <table class="styled-table">
@@ -95,77 +85,6 @@
         </tbody>
     </table>
 </div>
-<script>
-    function fetchReports() {
-        const pageNumber = 0;  // Номер страницы, это можно изменить в зависимости от нужд
-
-        // Отправка POST-запроса с данными
-        fetch('/admin/get_reports/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}'  // Важно для защиты от CSRF-атак
-            },
-            body: JSON.stringify({ "page": pageNumber })
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Ошибка: ' + response.status);
-            }
-            return response.json();
-        })
-        .then(data => {
-            // Проверка наличия поля reports
-            if (!data.reports) {
-                throw new Error('Нет данных о отчетах');
-            }
-
-            // Обработка данных и отображение в таблице
-            const reportData = document.getElementById('reportData');
-            reportData.innerHTML = '';  // Очистить старые данные
-
-            data.reports.forEach(report => {
-                const row = document.createElement('tr');
-
-                // Создаем ячейки для каждого столбца
-                const userNameCell = document.createElement('td');
-                userNameCell.textContent = report.user_name;
-                row.appendChild(userNameCell);
-
-                const studentsTotalCell = document.createElement('td');
-                studentsTotalCell.textContent = report.organization.students_total;
-                row.appendChild(studentsTotalCell);
-
-                const studentsCountCell = document.createElement('td');
-                const totalStudents = report.organization.students_grade_1 +
-                                      report.organization.students_grade_2 +
-                                      report.organization.students_grade_3 +
-                                      report.organization.students_grade_4 +
-                                      report.organization.students_grade_5 +
-                                      report.organization.students_grade_6 +
-                                      report.organization.students_grade_7 +
-                                      report.organization.students_grade_8 +
-                                      report.organization.students_grade_9 +
-                                      report.organization.students_grade_10 +
-                                      report.organization.students_grade_11;
-                studentsCountCell.textContent = totalStudents;
-                row.appendChild(studentsCountCell);
-
-                for (let i = 1; i <= 11; i++) {
-                    const gradeCell = document.createElement('td');
-                    gradeCell.textContent = report.organization[`students_grade_${i}`];
-                    row.appendChild(gradeCell);
-                }
-
-                reportData.appendChild(row);
-            });
-        })
-        .catch(error => {
-            alert('Ошибка при получении данных: ' + error.message);
-        });
-    }
-    fetchReports()
-</script>
 <script src="{% static 'settingurl/js/tables.js' %}"></script>
 </body>
 </html>

@@ -30,8 +30,8 @@ def filter_user(user, json_data):
         if 'municipality_name' in json_data['filters']:
             if user.municipality_name not in json_data['filters']['municipality_name']:
                 return False
-        if 'name' in json_data['filters']:
-            if name not in json_data['filters']['name']:
+        if 'user_name' in json_data['filters']:
+            if name not in json_data['filters']['user_name']:
                 return False
     return True
 

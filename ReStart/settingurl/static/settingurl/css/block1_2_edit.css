@@ -1,0 +1,207 @@
+/* Сброс стандартных стилей */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Фон страницы */
+body {
+    background: radial-gradient(circle at center, #00B1EB 0%, #48c0a2 40%, #2A3B7E 100%);
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Эффект размытого пятна для живости */
+body::before {
+    content: "";
+    position: absolute;
+    top: -100px;
+    left: -300px;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0, 177, 235, 0.4) 0%, rgba(42, 59, 126, 0.4) 70%);
+    filter: blur(120px);
+    z-index: 0;
+    animation: moveGlow 20s ease-in-out infinite;
+}
+
+/* Анимация живого движения света */
+@keyframes moveGlow {
+    0% {
+        transform: translate(0, 0);
+    }
+    50% {
+        transform: translate(20px, 20px);
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+/* Шапка и карточка поверх фона */
+.header, .card {
+    position: relative;
+    z-index: 1;
+}
+
+/* Header */
+.header {
+    padding: 10px 20px;
+    position: absolute; /* Фиксация шапки сверху */
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.menu li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 14px;
+}
+
+.profile a {
+    text-decoration: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+}
+
+.profile-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+
+.card {
+    width: 750px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative;
+    margin-top: 100px;
+}
+
+.title {
+    font-size: 28px;
+    text-align: center;
+    color: #4a4a4a;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 16px;
+    text-align: center;
+    color: #6a6a6a;
+    margin-bottom: 30px;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.step {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background-color: #6a4ccf;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.step-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.step-description {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #4a4a4a;
+}
+
+.form-input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.button-add {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #6a4ccf;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.button-add:hover {
+    background-color: #5a3bbf;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button-back, .button-next {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.button-back {
+    background-color: #9a9a9a;
+}
+
+.button-next {
+    background-color: #6a4ccf;
+}
+
+.button-back:hover {
+    background-color: #8a8a8a;
+}
+
+.button-next:hover {
+    background-color: #5a3bbf;
+}

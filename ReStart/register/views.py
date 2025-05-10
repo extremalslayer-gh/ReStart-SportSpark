@@ -66,4 +66,3 @@ def create_account(request):
     return JsonResponse({
         'message': 'Пользователь создан'
     }, status=200)
-
