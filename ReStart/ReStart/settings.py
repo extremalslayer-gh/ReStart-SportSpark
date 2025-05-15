@@ -170,3 +170,9 @@ TEMP_FOLDER = ''
 # Логгирование ошибок
 ENABLE_LOGGING = True
 LOGGING_FILE = 'exception.log'
+
+# Принудительная очистка сессии при logout
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+LOGIN_URL = 'authorization'
+LOGIN_REDIRECT_URL = 'personalmanage'
