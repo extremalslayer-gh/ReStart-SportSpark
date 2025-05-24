@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 import json
 from ReStart.db_config import Session
+from ReStart.settings import REPORT_CREATED_NOTIFICATION_TEXT, REPORT_EDITED_NOTIFICATION_TEXT, NOTIFIER
 from user.models import User
 from reports.models import Organization, Sports, Event, convert_to_dict
 from django.views.decorators.csrf import csrf_exempt
@@ -57,7 +58,9 @@ def create_report(request):
                                 organization_id=organization.id))
 
     session.add_all([*sports_list, *event_list])
-    session.commit()        
+    session.commit()
+
+    NOTIFIER.send_notification(user.email, REPORT_CREATED_NOTIFICATION_TEXT.format(datetime.strftime(now, '%d.%m.%Y')))
     return JsonResponse({
         'message': 'Информация отправлена'
     }, status=200)
@@ -173,7 +176,9 @@ def edit_report(request):
                                 organization_id=organization.id))
 
     session.add_all([*sports_list, *event_list])
-    session.commit()        
+    session.commit()
+
+    NOTIFIER.send_notification(user.email, REPORT_EDITED_NOTIFICATION_TEXT.format(datetime.strftime(organization.creation_time, '%d.%m.%Y')))
     return JsonResponse({
         'message': 'Информация отправлена'
     }, status=200)
