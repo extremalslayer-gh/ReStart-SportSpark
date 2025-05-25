@@ -89,7 +89,7 @@ def get_reports(request):
             result['reports'].append({
                 'user_name': user_name,
                 'municipality_name': user.municipality_name,
-                'organization': organization_dict
+                'organization': { k: v for k, v in organization_dict.items() if k != 'achievements' }
             })
 
     return JsonResponse(result, status=200)
@@ -278,7 +278,6 @@ def download_official_regulations(request):
     
     session = Session()
     event_id = request.GET.get('id', None)
-    print(event_id)
     
     if event_id is None:
         return JsonResponse({
@@ -286,9 +285,6 @@ def download_official_regulations(request):
         }, status=200)
     
     event_id = int(event_id)
-    print(event_id)
-    
-
     event = session.query(Event).filter(Event.id==event_id).first()
 
     if event is None:
@@ -297,3 +293,27 @@ def download_official_regulations(request):
         }, status=200)
 
     return HttpResponse(event.official_regulations, content_type='application/msword')
+
+@csrf_exempt
+def download_achievements(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+    
+    session = Session()
+    org_id = request.GET.get('id', None)
+    if org_id is None:
+        return JsonResponse({
+            'message': 'Неверный параметр "id"'
+        }, status=200)
+    
+    org_id = int(org_id)
+    organization = session.query(Organization).filter(Organization.id==org_id).first()
+
+    if organization is None:
+        return JsonResponse({
+            'message': 'Неверный параметр "id"'
+        }, status=200)
+
+    return HttpResponse(organization.achievements, content_type='application/x-zip-compressed')

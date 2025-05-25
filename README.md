@@ -306,6 +306,20 @@ Excel файл, Content-type=application/vnd.ms-excel
 
 MS Word файл, Content-type=application/msword
 
+---
+
+### Загрузка достижений ШСК
+
+**GET** `/admin/download_achievements/`
+
+### Параметры
+
+- `id` (обязательный, число) - id отчета
+
+#### Ответ сервера
+
+MS Word файл, Content-type=application/x-zip-compressed
+
 ## /login/
 
 ### Аутентификация
@@ -389,7 +403,7 @@ P.S. В ответе приходит cookie `sessionid`, она регулир�
     "hours_fri": "...",
     "hours_sat": "...",
     "hours_sun": "...",
-    "achievements": "..."
+    "achievements": "base64 архива с достижениями"
   },
   "sports": [
     {,

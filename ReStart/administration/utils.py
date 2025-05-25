@@ -62,6 +62,7 @@ def export_to_excel_common(session, writer, json_data):
                                 report.hours_sun])
 
                 link = f'http://localhost:8000/admin/download_official_regulations/?id={latest_official_event.id}' if latest_official_event is not None else '-'
+                achievements_link = f'http://localhost:8000/admin/download_achievements/?id={report.id}' if report.achievements is not None else '-'
                 result.append([
                     user.municipality_name, report.name, name,
                     report.creation_time, report.creation_time, sports.name, sports.student_count,
@@ -71,7 +72,7 @@ def export_to_excel_common(session, writer, json_data):
                     latest_unofficial_event.name if latest_unofficial_event is not None else '-', latest_unofficial_event.student_count_all if latest_unofficial_event is not None else '-', latest_unofficial_event.date if latest_unofficial_event is not None else '-',
                     latest_unofficial_event.student_count_organization if latest_unofficial_event is not None else '-', latest_official_event.name if latest_official_event is not None else '-',
                     latest_official_event.student_count_all if latest_official_event is not None else '-', latest_official_event.date if latest_official_event is not None else '-', latest_official_event.official_type if latest_official_event is not None else '-',
-                    latest_official_event.official_location if latest_official_event is not None else '-', latest_official_event.official_organizer if latest_official_event is not None else '-', link, '-'
+                    latest_official_event.official_location if latest_official_event is not None else '-', latest_official_event.official_organizer if latest_official_event is not None else '-', link, achievements_link
                 ])
             
     df = pd.DataFrame(result, columns=[
@@ -202,7 +203,8 @@ def export_to_excel_events_official(session, writer, json_data):
                     user.municipality_name, report.name, name, event.name, 
                     event.student_count_all, event.date,
                     event.official_type, event.official_location, event.official_organizer, 
-                    f'http://localhost:8000/admin/download_official_regulations/?id={event.id}', '-'
+                    f'http://localhost:8000/admin/download_official_regulations/?id={event.id}',
+                    f'http://localhost:8000/admin/download_achievements/?id={report.id}' if report.achievements is not None else '-'
                 ])
 
     df = pd.DataFrame(result, columns=[

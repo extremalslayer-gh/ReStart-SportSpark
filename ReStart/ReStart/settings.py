@@ -181,3 +181,4 @@ TEMP_FOLDER = ''
 # Логгирование ошибок
 ENABLE_LOGGING = True
 LOGGING_FILE = 'exception.log'
+DATA_UPLOAD_MAX_MEMORY_SIZE = 128 * 10 ** 6 # ~128 MB
