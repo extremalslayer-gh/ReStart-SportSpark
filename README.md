@@ -100,7 +100,7 @@ docker run -d -p 80:8000 restart_web
 
 # Деплой продукта
 ### Продукт на этапе разработки размещен по следующему адресу:
-https://restartdev.pythonanywhere.com/
+https://urfu-restart.ru/
 
 
 # API
