@@ -318,7 +318,7 @@ MS Word файл, Content-type=application/msword
 
 #### Ответ сервера
 
-MS Word файл, Content-type=application/x-zip-compressed
+ZIP архив, Content-type=application/x-zip-compressed
 
 ## /login/
 
