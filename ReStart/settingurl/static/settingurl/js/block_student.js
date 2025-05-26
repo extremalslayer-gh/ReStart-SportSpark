@@ -61,3 +61,92 @@
         localStorage.setItem('reportData', JSON.stringify(data));
     }
 
+
+
+// --- Сохранение текущих данных всех полей в localStorage ---
+function saveFormFields() {
+    const formFields = {
+        totalStudents: document.getElementById('total-students')?.value || '',
+        clubStudents: document.getElementById('club-students')?.value || '',
+        grades: {},
+        sports: []
+    };
+
+    for (let i = 1; i <= 11; i++) {
+        formFields.grades[`class-${i}`] = document.getElementById(`class-${i}`)?.value || '';
+    }
+
+    const sportItems = document.querySelectorAll('.sports > div');
+    sportItems.forEach((item, index) => {
+        const checkbox = item.querySelector("input[type='checkbox']");
+        const input = item.querySelector("input[type='text']");
+        formFields.sports.push({
+            checked: checkbox.checked,
+            value: input.value || ''
+        });
+    });
+
+    localStorage.setItem('formFields_sports', JSON.stringify(formFields));
+}
+
+// --- Загрузка сохранённых данных из localStorage ---
+function loadFormFields() {
+    const data = JSON.parse(localStorage.getItem('formFields_sports'));
+    if (!data) return;
+
+    document.getElementById('total-students').value = data.totalStudents || '';
+    document.getElementById('club-students').value = data.clubStudents || '';
+
+    for (let i = 1; i <= 11; i++) {
+        document.getElementById(`class-${i}`).value = data.grades[`class-${i}`] || '';
+    }
+
+    const sportItems = document.querySelectorAll('.sports > div');
+    sportItems.forEach((item, index) => {
+        const checkbox = item.querySelector("input[type='checkbox']");
+        const input = item.querySelector("input[type='text']");
+        if (data.sports[index]) {
+            checkbox.checked = data.sports[index].checked;
+            input.value = data.sports[index].value;
+            input.style.display = checkbox.checked ? 'inline-block' : 'none';
+        }
+    });
+}
+
+// --- Отслеживание изменений ---
+document.addEventListener("DOMContentLoaded", () => {
+    loadFormFields();
+
+    document.getElementById('total-students').addEventListener('input', saveFormFields);
+    document.getElementById('club-students').addEventListener('input', saveFormFields);
+    for (let i = 1; i <= 11; i++) {
+        document.getElementById(`class-${i}`).addEventListener('input', saveFormFields);
+    }
+});
+
+// --- Предупреждение при выходе ---
+let isFormEdited = true;
+
+window.addEventListener('beforeunload', function (e) {
+    if (isFormEdited) {
+        localStorage.removeItem('formFields_sports');
+        e.preventDefault();
+        e.returnValue = 'Вы действительно хотите уйти со страницы?';
+        return 'Вы действительно хотите уйти со страницы?';
+    }
+});
+
+// --- Сброс флага при "далее" или "назад" ---
+document.addEventListener('DOMContentLoaded', function() {
+    const nextButton = document.querySelector('.button-next');
+    const backButton = document.querySelector('.button-back');
+
+    const saveAndReset = () => {
+        saveData();
+        isFormEdited = false;
+        window.removeEventListener('beforeunload');
+    };
+
+    if (nextButton) nextButton.addEventListener('click', saveAndReset);
+    if (backButton) backButton.addEventListener('click', saveAndReset);
+});

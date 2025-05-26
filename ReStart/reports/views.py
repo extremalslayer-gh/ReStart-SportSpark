@@ -90,9 +90,11 @@ def get_report(request):
 
     sports = session.query(Sports).filter(Sports.organization_id==organization.id).all()
     events = session.query(Event).filter(Event.organization_id==organization.id).all()
-    
+
+    organization_dict = { k: v for k, v  in convert_to_dict(organization).items() if k != 'achievements' }
+    organization_dict['achievements'] = f'/admin/download_achievements/?id={organization_dict["id"]}'
     return JsonResponse({
-        'organization': convert_to_dict(organization),
+        'organization': organization_dict,
         'sports': [convert_to_dict(el) for el in sports],
         'events': [convert_to_dict(el) for el in events],
     }, status=200)
@@ -120,7 +122,7 @@ def get_my_reports(request):
         events = session.query(Event).filter(Event.organization_id==organization.id).all()
 
         result.append({
-            'organization': convert_to_dict(organization),
+            'organization': { k: v for k, v in convert_to_dict(organization).items() if k != 'achievements' },
             'sports': [convert_to_dict(el) for el in sports],
             'events': [convert_to_dict(el) for el in events]
         })

@@ -57,3 +57,71 @@ document.querySelectorAll('.day-checkbox').forEach((checkbox) => {
     document.querySelector('.button-next').addEventListener('click', saveData);
 
 
+
+
+// --- Сохраняем текущие данные формы расписания ---
+function saveFormFields() {
+    const formFields = {};
+    document.querySelectorAll('.day-checkbox').forEach((checkbox) => {
+        const day = checkbox.dataset.day;
+        const hoursInput = document.querySelector(`#hours-${day} .hours-input`);
+        formFields[day] = {
+            checked: checkbox.checked,
+            hours: hoursInput ? hoursInput.value : ''
+        };
+    });
+    localStorage.setItem('formFields_schedule', JSON.stringify(formFields));
+}
+
+// --- Загружаем данные формы расписания ---
+function loadFormFields() {
+    const saved = JSON.parse(localStorage.getItem('formFields_schedule'));
+    if (!saved) return;
+
+    Object.entries(saved).forEach(([day, { checked, hours }]) => {
+        const checkbox = document.querySelector(`.day-checkbox[data-day="${day}"]`);
+        const hoursContainer = document.getElementById(`hours-${day}`);
+        const hoursInput = hoursContainer?.querySelector('.hours-input');
+
+        if (checkbox) checkbox.checked = checked;
+        if (hoursContainer) {
+            if (checked) hoursContainer.classList.remove('hidden');
+            else hoursContainer.classList.add('hidden');
+        }
+        if (hoursInput) hoursInput.value = hours;
+    });
+}
+
+// --- Флаг редактирования и предупреждение при уходе ---
+let isFormEdited = true;
+
+window.addEventListener('beforeunload', function (e) {
+    if (isFormEdited) {
+        localStorage.removeItem('formFields_schedule');
+        e.preventDefault();
+        e.returnValue = 'Вы действительно хотите уйти со страницы?';
+        return 'Вы действительно хотите уйти со страницы?';
+    }
+});
+
+// --- Навешиваем обработчики сохранения при вводе ---
+document.addEventListener('DOMContentLoaded', function () {
+    loadFormFields();
+
+    document.querySelectorAll('.day-checkbox').forEach((checkbox) => {
+        checkbox.addEventListener('change', saveFormFields);
+    });
+
+    document.querySelectorAll('.hours-input').forEach((input) => {
+        input.addEventListener('input', saveFormFields);
+    });
+
+    const nextButton = document.querySelector('.button-next');
+    if (nextButton) {
+        nextButton.addEventListener('click', () => {
+            saveData();
+            isFormEdited = false;
+            window.removeEventListener('beforeunload');
+        });
+    }
+});
