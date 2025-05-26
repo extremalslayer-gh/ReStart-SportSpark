@@ -8,4 +8,6 @@ urlpatterns = [
     path('set_user_ban/', views.set_user_ban),
     path('edit_user/', views.edit_user),
     path('verify_password/', views.verify_password),
+    path('download_official_regulations/', views.download_official_regulations),
+    path('download_achievements/', views.download_achievements)
 ]

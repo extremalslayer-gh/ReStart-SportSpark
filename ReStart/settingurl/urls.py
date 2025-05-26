@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.authorization, name='authorization'),
@@ -29,5 +30,6 @@ urlpatterns = [
     path('block_student_edit', views.block_student_edit, name='block_student_edit'),
     path('block_russian_edit', views.block_russian_edit, name='block_russian_edit'),
     path('block_35_edit', views.block_35_edit, name='block_35_edit'),
-    path('block_russian2_edit', views.block_russian2_edit, name='block_russian2_edit')
+    path('block_russian2_edit', views.block_russian2_edit, name='block_russian2_edit'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='authorization'), name='logout')
 ]

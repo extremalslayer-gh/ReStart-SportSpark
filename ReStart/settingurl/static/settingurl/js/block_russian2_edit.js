@@ -64,10 +64,10 @@ document.addEventListener("DOMContentLoaded", function () {
             console.log('Данные успешно отправлены:', result);
             alert('Данные успешно отправлены на сервер!');
         })
-        .catch(error => {
-            console.error('Ошибка:', error);
-            alert('Произошла ошибка при отправке данных.');
-        });
+        //.catch(error => {
+        //    console.error('Ошибка:', error);
+        //    alert('Произошла ошибка при отправке данных.');
+        //});
     }
 
 

@@ -15,11 +15,14 @@
             <ul class="menu">
                 <li><a href="{% url 'block_student' %}">Заполнить отчет</a></li>
                 <li><a href="{% url 'recentrep' %}">Посмотреть отчеты</a></li>
-                <li><a href="{% url 'achievements' %}">Достижения школьного спортивного клуба</a></li>
             </ul>
             <div class="profile">
                 <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon">
                 <a href="{% url 'personalmanage' %}">Профиль</a>
+                <form action="{% url 'logout' %}" method="post" style="display:inline; margin-left: 10px;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-light btn-sm">Выйти</button>
+                </form>
             </div>
         </nav>
     </header>

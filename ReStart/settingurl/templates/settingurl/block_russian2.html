@@ -15,7 +15,6 @@
             <ul class="menu">
                 <li><a href="{% url 'block_student' %}">Заполнить отчет</a></li>
                 <li><a href="{% url 'recentrep' %}">Посмотреть отчеты</a></li>
-                <li><a href="{% url 'achievements' %}">Достижения школьного спортивного клуба</a></li>
             </ul>
             <div class="profile">
                 <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon">
@@ -63,13 +62,13 @@
 
                                 <input type="text" placeholder="12" id="number2">
                             </label>
-                            <label>
+                            <!--<label>
                                 Дата
                                 <input type="text" placeholder="31.02.2024" id="date2">
 
 
 
-                            </label>
+                            </label>-->
                     </div>
                     <div class="form-item">
                         <label>
@@ -84,13 +83,13 @@
 
                                 <input type="text" placeholder="12" id="number3">
                             </label>
-                            <label>
+                            <!--<label>
                                 Дата
                                 <input type="text" placeholder="31.02.2024" id="date3">
 
 
 
-                            </label>
+                            </label>-->
                     </div>
                     <div class="form-item">
                         <label>
@@ -105,13 +104,13 @@
 
                                 <input type="text" placeholder="12" id="number4">
                             </label>
-                            <label>
+                            <!--<label>
                                 Дата
                                 <input type="text" placeholder="31.02.2024" id="date4">
 
 
 
-                            </label>
+                            </label>-->
                     </div>
                     <div class="form-item">
                         <label>
@@ -130,20 +129,20 @@
                                 Количество участников
                                 <input type="text" placeholder="Введите количество" id="number5">
                             </label>
-                            <label>
+                            <!--<label>
                                 Дата
                                 <input type="date" id="date5">
 
 
 
-                            </label>
+                            </label>-->
                         </div>
                     </div>
                 </div>
             </section>
         </main>
         <footer>
-            <a href="{% url 'block_35' %}"><button type="button" class="button-back">Назад</button></a>
+            <a href="{% url 'achievements' %}"><button type="button" class="button-back">Назад</button></a>
             <a href="{% url 'block_russian' %}"><button type="button" class="button-next" onclick="saveData()">Далее</button></a>
 
 

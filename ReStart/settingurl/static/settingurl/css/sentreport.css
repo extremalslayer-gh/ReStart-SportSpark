@@ -275,3 +275,23 @@ body {
   text-align: center;
   font-size: 13px;
 }
+
+
+.achievement-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.achievement-table th,
+.achievement-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.achievement-table th {
+  background-color: #2A3B7E;
+  color: white;
+}
+

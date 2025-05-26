@@ -1,14 +1,50 @@
-/* Сбрасываем стандартные отступы браузера, задаем шрифт и цвет фона */
+/* Фон страницы */
 body {
-  margin: 0; /* Убирает отступы по краям страницы */
-  font-family: Arial, sans-serif; /* Устанавливает основной шрифт для текста */
-  background-color: #e0e0e0; /* Задает цвет фона страницы */
-  color: #333; /* Цвет текста */
+    background: radial-gradient(circle at center, #00B1EB 0%, #48c0a2 40%, #2A3B7E 100%);
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
 }
 
+/* Эффект размытого пятна для живости */
+body::before {
+    content: "";
+    position: absolute;
+    top: -100px;
+    left: -300px;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0, 177, 235, 0.4) 0%, rgba(42, 59, 126, 0.4) 70%);
+    filter: blur(120px);
+    z-index: 0;
+    animation: moveGlow 20s ease-in-out infinite;
+}
+
+/* Анимация живого движения света */
+@keyframes moveGlow {
+    0% {
+        transform: translate(0, 0);
+    }
+    50% {
+        transform: translate(20px, 20px);
+    }
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+/* Шапка и карточка поверх фона */
+.header, .card {
+    position: relative;
+    z-index: 1;
+}
+
+
 .header {
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 10px 20px;
 }
 
@@ -26,13 +62,13 @@ body {
 
 .menu li a {
     text-decoration: none;
-    color: #333;
+    color: #fff;
     font-size: 14px;
 }
 
 .profile a {
     text-decoration: none;
-    color: #333;
+    color: #fff;
     display: flex;
     align-items: center;
 }

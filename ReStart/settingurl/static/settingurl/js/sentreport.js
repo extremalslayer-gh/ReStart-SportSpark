@@ -132,6 +132,17 @@ scheduleTable.appendChild(hoursRow);
       }
     }
   });
+    // === Новый блок: Таблица достижений (Блок 2) ===
+    const achievementTable = document.querySelector('.achievement-table tbody');
+     const row = `
+        <tr>
+          <td>'Достижение'</td>
+          <td><a href="${data.organization.achievements}" target="_blank">Скачать</a></td>
+        </tr>
+      `;
+      achievementTable.insertAdjacentHTML('beforeend', row);
 
 })
 .catch(error => console.error('Ошибка:', error));
+
+
