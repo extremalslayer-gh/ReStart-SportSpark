@@ -73,7 +73,7 @@ def get_reports(request):
     for organization in organizations:
         organization_dict = convert_to_dict(organization)
         user = session.query(User).filter(User.organization_id==organization.organization_id).first()
-        name = f'{user.second_name} {user.first_name} {user.last_name}' if user is not None else 'Не определено'
+        user_name = f'{user.second_name} {user.first_name} {user.last_name}' if user is not None else 'Не определено'
 
         postfilter_passed = True
 
@@ -82,14 +82,14 @@ def get_reports(request):
                 if user.municipality_name not in json_data['filters']['municipality_name']:
                     postfilter_passed = False
             if 'user_name' in json_data['filters']:
-                if name not in json_data['filters']['user_name']:
+                if user_name not in json_data['filters']['user_name']:
                     postfilter_passed = False
 
         if postfilter_passed:
             result['reports'].append({
-                'user_name': name,
+                'user_name': user_name,
                 'municipality_name': user.municipality_name,
-                'organization': organization_dict
+                'organization': { k: v for k, v in organization_dict.items() if k != 'achievements' }
             })
 
     return JsonResponse(result, status=200)
@@ -100,6 +100,7 @@ def export_reports(request):
         return HttpResponse(status=403)
 
     session = Session()
+    #json_data = json.loads(request.body.decode())
     json_data = json.loads(request.GET.get('filters', '{}'))
     json_data = {'filters': json_data}
     caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
@@ -267,3 +268,52 @@ def verify_password(request):
     return JsonResponse({
         'message': 'Доступ разрешен'
     }, status=200)
+
+@csrf_exempt
+def download_official_regulations(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+    
+    session = Session()
+    event_id = request.GET.get('id', None)
+    
+    if event_id is None:
+        return JsonResponse({
+            'message': 'Неверный параметр "id"'
+        }, status=200)
+    
+    event_id = int(event_id)
+    event = session.query(Event).filter(Event.id==event_id).first()
+
+    if event is None:
+        return JsonResponse({
+            'message': 'Неверный параметр "id"'
+        }, status=200)
+
+    return HttpResponse(event.official_regulations, content_type='application/msword')
+
+@csrf_exempt
+def download_achievements(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+    
+    session = Session()
+    org_id = request.GET.get('id', None)
+    if org_id is None:
+        return JsonResponse({
+            'message': 'Неверный параметр "id"'
+        }, status=200)
+    
+    org_id = int(org_id)
+    organization = session.query(Organization).filter(Organization.id==org_id).first()
+
+    if organization is None:
+        return JsonResponse({
+            'message': 'Неверный параметр "id"'
+        }, status=200)
+
+    return HttpResponse(organization.achievements, content_type='application/x-zip-compressed')
