@@ -1,3 +1,5 @@
+
+
 document.addEventListener("DOMContentLoaded", function () {
     // Получаем все чекбоксы
     const checkboxes = document.querySelectorAll('.form-item input[type="checkbox"]');
@@ -229,5 +231,4 @@ document.addEventListener('DOMContentLoaded', function () {
         originalSendData(); // вызов оригинальной функции
     };*/
 });
-
 

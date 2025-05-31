@@ -16,10 +16,20 @@
                 <li><a href="{% url 'block_student' %}">Заполнить отчет</a></li>
                 <li><a href="{% url 'recentrep' %}">Посмотреть отчеты</a></li>
             </ul>
-            <div class="profile">
-                <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon">
-                <a href="{% url 'personalmanage' %}">Профиль</a>
-            </div>
+                <div class="profile" style="position: relative;">
+                    <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon" id="profile-icon" style="cursor: pointer;">
+                    <div id="profile-menu" class="hidden">
+                        <ul>
+                            <li><a href="{% url 'personalmanage' %}">Личный кабинет</a></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+                                    {% csrf_token %}
+                                    <button type="submit">Выйти</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
         </nav>
     </header>
   <div class="card">

@@ -274,3 +274,102 @@ function getPlaceholder(i) {
 
 
 
+document.addEventListener('DOMContentLoaded', () => {
+    const profileIcon = document.getElementById('profile-icon');
+    const profileMenu = document.getElementById('profile-menu');
+
+    profileIcon.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileMenu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', () => {
+        if (!profileMenu.classList.contains('hidden')) {
+            profileMenu.classList.add('hidden');
+        }
+    });
+});
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    loadFormFields(); // Загружаем ранее сохраненные данные
+
+    // Сохраняем данные при изменении полей
+    document.getElementById('event-name').addEventListener('input', saveFormFields);
+
+    // Получаем кнопку "Прикрепить положение" и скрытый input для выбора файла
+    const attachPositionButton = document.getElementById('attach-position');
+    const fileInputPosition = document.getElementById('fileInputPosition');
+
+    // Обработчик для кнопки "Прикрепить положение"
+    attachPositionButton.addEventListener('click', function () {
+        fileInputPosition.click(); // Открываем проводник для выбора файла
+    });
+
+    // Обработчик для выбора файла
+    fileInputPosition.addEventListener('change', async function () {
+        const file = fileInputPosition.files[0];
+
+        if (file) {
+            alert(`Вы выбрали файл: ${file.name}`); // Показываем имя файла
+            const fileBase64 = await readFileAsBase64(file); // Кодируем файл в base64
+
+            // Сохраняем файл в localStorage
+            const reportData = JSON.parse(localStorage.getItem('reportData')) || {};
+            reportData.position = fileBase64;  // Сохраняем положение
+            localStorage.setItem('reportData', JSON.stringify(reportData));
+        }
+    });
+
+    const nextButton = document.querySelector('.button-next');
+    const backButton = document.querySelector('.button-back');
+
+    const saveAndReset = async () => {
+        await saveData();
+        isFormEdited = false;
+        window.removeEventListener('beforeunload', beforeUnloadHandler);
+    };
+
+    if (nextButton) nextButton.addEventListener('click', saveAndReset);
+    if (backButton) backButton.addEventListener('click', saveAndReset);
+});
+
+// Функция для кодирования файла в base64
+function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const base64 = reader.result.split(',')[1]; // Убираем data:...
+            resolve(base64);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+// Функция для сохранения данных в localStorage
+function saveFormFields() {
+    const formFields = {
+        eventName: document.getElementById('event-name')?.value || '',
+        fileName: document.getElementById('fileInputPosition')?.files?.[0]?.name || ''
+    };
+    localStorage.setItem('formFields_position', JSON.stringify(formFields));
+}
+
+// Функция для загрузки данных из localStorage
+function loadFormFields() {
+    const formFields = JSON.parse(localStorage.getItem('formFields_position'));
+    if (!formFields) return;
+
+    document.getElementById('event-name').value = formFields.eventName || '';
+    if (formFields.fileName) {
+        const label = document.createElement('div');
+        label.textContent = `Ранее выбран файл: ${formFields.fileName}`;
+        label.style.fontSize = '14px';
+        label.style.marginTop = '6px';
+        label.style.color = 'gray';
+        document.getElementById('fileInputPosition').insertAdjacentElement('afterend', label);
+    }
+}

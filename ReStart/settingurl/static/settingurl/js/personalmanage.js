@@ -45,3 +45,21 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Ошибка загрузки профиля:", error);
         });
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const profileIcon = document.getElementById('profile-icon');
+    const profileMenu = document.getElementById('profile-menu');
+
+    profileIcon.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileMenu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', () => {
+        if (!profileMenu.classList.contains('hidden')) {
+            profileMenu.classList.add('hidden');
+        }
+    });
+});
+

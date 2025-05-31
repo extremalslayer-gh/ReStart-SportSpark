@@ -203,3 +203,20 @@ document.getElementById("downloadExcel").addEventListener("click", () => {
     window.location.href = `/admin/export_reports/?${query}`;
 });
 
+
+
+     document.addEventListener('DOMContentLoaded', () => {
+    const profileIcon = document.getElementById('profile-icon');
+    const profileMenu = document.getElementById('profile-menu');
+
+    profileIcon.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileMenu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', () => {
+        if (!profileMenu.classList.contains('hidden')) {
+            profileMenu.classList.add('hidden');
+        }
+    });
+});
