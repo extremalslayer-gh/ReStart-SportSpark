@@ -11,12 +11,14 @@
 <body>
     <div class="container">
         <div class="form-container">
-            <a href="#" class="back-link">&#8592;</a>
             <h2>Проверьте свою почту</h2>
-            <div class="input-group">
-                <input type="text" placeholder="123" required>
-                <a href="{% url 'renamepass' %}"><button type="login-button">Подтвердить</button></a>
-            </div>
+                <div class="input-group">
+                    <input type="text" placeholder="123" required>
+                </div>
+
+                <a href="{% url 'renamepass' %}">
+                    <button class="login-button">Подтвердить</button>
+                </a>
             <p class="resend-info">
                 Не получили письмо? <a href="#">Отправить заново</a>
             </p>

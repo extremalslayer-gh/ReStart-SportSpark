@@ -17,12 +17,37 @@
                 <li><a href="{% url 'reports' %}">Посмотреть отчеты</a></li>
                 <li><a href="{% url 'treasonreport' %}">Редактировать отчёт</a></li>
             </ul>
-            <div class="profile">
-                <a href="{% url 'personal' %}">
-                    <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon">
-                    Профиль
-                </a>
-            </div>
+                <div class="profile" style="position: relative;">
+                    <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon" id="profile-icon" style="cursor: pointer;">
+                    <div id="profile-menu" class="hidden">
+                        <ul>
+                            <li><a href="{% url 'personalmanage' %}">Личный кабинет</a></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+                                    {% csrf_token %}
+                                    <button type="submit">Выйти</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                    <script>
+                            document.addEventListener('DOMContentLoaded', () => {
+                            const profileIcon = document.getElementById('profile-icon');
+                            const profileMenu = document.getElementById('profile-menu');
+
+                            profileIcon.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                profileMenu.classList.toggle('hidden');
+                            });
+
+                            document.addEventListener('click', () => {
+                                if (!profileMenu.classList.contains('hidden')) {
+                                    profileMenu.classList.add('hidden');
+                                }
+                            });
+                        });
+                    </script>
+                </div>
         </nav>
     </header>
     <main>

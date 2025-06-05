@@ -12,6 +12,7 @@ function fetchReports() {
     })
     .then(response => response.json())
     .then(data => {
+    console.log(JSON.stringify(data))
         const reports = data.reports;
         const grid = document.getElementById("reportsGrid");
         grid.innerHTML = ""; // очистка на случай повторной загрузки
@@ -31,9 +32,7 @@ function fetchReports() {
                     <img src="/static/settingurl/img/Eye.png" onclick="setReportId('${reportId}')">
                 </div></a>
                 <span class="report-date">${date}</span>
-                <a href='block_student_edit'>
-                    <button class="edit-btn" onclick="setReportId('${reportId}')">✎</button>
-                </a>
+                <button class="edit-btn" data-id="${reportId}">✎</button>
             `;
 
             grid.appendChild(card);
@@ -57,9 +56,74 @@ document.getElementById("reportsGrid").addEventListener('click', function (event
         const reportId = event.target.getAttribute('data-id');
         const editUrl = document.querySelector('.main-content').dataset.editUrl;
 
-        //localStorage.setItem('report_id', reportId);
-        window.location.href = editUrl;
+        localStorage.setItem('report_id', reportId);
+        /*window.location.href = editUrl;*/
     }
 });
 
 
+// Функция для загрузки отчёта по ID и сохранения в localStorage
+function loadReportToLocalStorage(reportId) {
+    fetch("/reports/get_report/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: reportId }),
+    })
+    .then(response => response.json())
+    .then(data => {
+    console.log(data)
+        // Сохраняем нужные данные из отчёта в localStorage
+        localStorage.setItem("reportData", JSON.stringify(data));
+
+
+        // Сохраняем сам ID отчёта тоже
+        localStorage.setItem("report_id", reportId);
+
+        // После успешной загрузки идём на страницу редактирования
+        window.location.href = "/block_student_edit"; // или нужный тебе URL
+    })
+    .catch(error => {
+        console.error("Ошибка при загрузке отчёта:", error);
+        alert("Не удалось загрузить отчёт. Попробуйте позже.");
+    });
+}
+
+// Изменяем обработчик кнопки редактирования, чтобы вызывать эту функцию
+document.getElementById("reportsGrid").addEventListener('click', function (event) {
+    if (event.target.classList.contains('edit-btn')) {
+        const card = event.target.closest('.report-card');
+        const reportId = card.querySelector(".edit-btn").getAttribute("data-id");
+        console.log(reportId)
+        // Если data-id не установлен в HTML, то лучше брать ID из другого атрибута или из dataset
+        // Например, в твоём коде setReportId записывает reportId в localStorage,
+        // но лучше явно передавать reportId тут через data-атрибут
+
+        if (!reportId) {
+            alert("ID отчёта не найден");
+            return;
+        }
+
+        loadReportToLocalStorage(reportId);
+    }
+});
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const profileIcon = document.getElementById('profile-icon');
+    const profileMenu = document.getElementById('profile-menu');
+
+    profileIcon.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileMenu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', () => {
+        if (!profileMenu.classList.contains('hidden')) {
+            profileMenu.classList.add('hidden');
+        }
+    });
+});
