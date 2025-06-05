@@ -10,54 +10,46 @@ document.querySelectorAll('.day-checkbox').forEach((checkbox) => {
   });
 });
 
+// Функция для сохранения данных в localStorage
+function saveData() {
+    const data = JSON.parse(localStorage.getItem('reportData')) || {};
 
+    // Сохраняем расписание по дням
+    const dayCheckboxes = document.querySelectorAll('.day-checkbox');
+    const dayMapping = {
+        monday: 'mon',
+        tuesday: 'tue',
+        wednesday: 'wed',
+        thursday: 'thu',
+        friday: 'fri',
+        saturday: 'sat',
+        sunday: 'sun',
+    };
 
-    // Функция для сохранения данных в localStorage
-    function saveData() {
-        const data = JSON.parse(localStorage.getItem('reportData')) || {};
+    const hoursData = {};
 
-        // Сохраняем расписание по дням
-        const dayCheckboxes = document.querySelectorAll('.day-checkbox');
-        const dayMapping = {
-            monday: 'mon',
-            tuesday: 'tue',
-            wednesday: 'wed',
-            thursday: 'thu',
-            friday: 'fri',
-            saturday: 'sat',
-            sunday: 'sun',
-        };
+    dayCheckboxes.forEach((checkbox) => {
+        const day = checkbox.dataset.day;
+        const dayKey = dayMapping[day];
+        const hoursContainer = document.getElementById(`hours-${day}`);
+        const hoursInput = hoursContainer.querySelector('.hours-input');
 
-        const hoursData = {};
+        if (checkbox.checked) {
+            hoursData[`hours_${dayKey}`] = parseInt(hoursInput.value) || 0;
+        } else {
+            hoursData[`hours_${dayKey}`] = 0;
+        }
+    });
 
-        dayCheckboxes.forEach((checkbox) => {
-            const day = checkbox.dataset.day; // Получаем ключ дня недели (например, "monday")
-            const dayKey = dayMapping[day]; // Преобразуем в нужный формат ("mon", "tue", и т.д.)
-            const hoursContainer = document.getElementById(`hours-${day}`);
-            const hoursInput = hoursContainer.querySelector('.hours-input');
+    data.organization = {
+        ...data.organization,
+        ...hoursData,
+    };
 
-            // Сохраняем количество часов для выбранного дня
-            if (checkbox.checked) {
-                hoursData[`hours_${dayKey}`] = parseInt(hoursInput.value) || 0;
-            } else {
-                hoursData[`hours_${dayKey}`] = 0; // Если не отмечен, значение по умолчанию — 0
-            }
-        });
+    localStorage.setItem('reportData', JSON.stringify(data));
+}
 
-        // Обновляем данные в localStorage
-        data.organization = {
-            ...data.organization,
-            ...hoursData,
-        };
-
-        localStorage.setItem('reportData', JSON.stringify(data));
-    }
-
-    // Добавляем обработчики событий на кнопку "Далее"
-    document.querySelector('.button-next').addEventListener('click', saveData);
-
-
-
+document.querySelector('.button-next').addEventListener('click', saveData);
 
 // --- Сохраняем текущие данные формы расписания ---
 function saveFormFields() {
@@ -126,8 +118,6 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
-
-
 document.addEventListener('DOMContentLoaded', () => {
     const profileIcon = document.getElementById('profile-icon');
     const profileMenu = document.getElementById('profile-menu');
@@ -142,4 +132,80 @@ document.addEventListener('DOMContentLoaded', () => {
             profileMenu.classList.add('hidden');
         }
     });
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const dayCheckboxes = document.querySelectorAll('.day-checkbox');
+
+  // Функция для отображения или скрытия поля с часами по состоянию чекбокса
+  function toggleHoursInput(checkbox) {
+    const day = checkbox.dataset.day;
+    const hoursContainer = document.getElementById(`hours-${day}`);
+    if (checkbox.checked) {
+      hoursContainer.classList.remove('hidden');
+    } else {
+      hoursContainer.classList.add('hidden');
+      // Можно сбросить значение часов при скрытии, если нужно:
+      // const input = hoursContainer.querySelector('.hours-input');
+      // if (input) input.value = 0;
+    }
+  }
+
+  // Загрузка данных из localStorage и заполнение формы
+  function loadData() {
+    const reportData = JSON.parse(localStorage.getItem('reportData'));
+    if (!reportData || !reportData.generalData) return;
+
+    const generalData = reportData.generalData;
+
+    dayCheckboxes.forEach(checkbox => {
+      const day = checkbox.dataset.day;
+      // Данные по чекбоксу и часам из generalData
+      const checked = !!generalData[`${day}_checked`];
+      const hours = generalData[`${day}_hours`] || 0;
+
+      checkbox.checked = checked;
+
+      const hoursContainer = document.getElementById(`hours-${day}`);
+      const input = hoursContainer.querySelector('.hours-input');
+      if (input) {
+        input.value = hours;
+      }
+
+      // Отобразить или скрыть поле
+      toggleHoursInput(checkbox);
+    });
+  }
+
+  // Сохранение данных из формы в localStorage
+  function saveData() {
+    let reportData = JSON.parse(localStorage.getItem('reportData')) || {};
+    reportData.generalData = reportData.generalData || {};
+
+    dayCheckboxes.forEach(checkbox => {
+      const day = checkbox.dataset.day;
+      const hoursContainer = document.getElementById(`hours-${day}`);
+      const input = hoursContainer.querySelector('.hours-input');
+
+      reportData.generalData[`${day}_checked`] = checkbox.checked;
+      reportData.generalData[`${day}_hours`] = input ? parseInt(input.value) || 0 : 0;
+    });
+
+    localStorage.setItem('reportData', JSON.stringify(reportData));
+    alert('Данные сохранены!');
+  }
+
+  // Инициализация — навешиваем обработчики
+  dayCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      toggleHoursInput(checkbox);
+    });
+  });
+
+  // Загружаем данные при загрузке страницы
+  loadData();
+
+  // Кнопка "Далее" вызывается из HTML через onclick="saveData()"
+  window.saveData = saveData; // чтобы функция была глобально доступна из HTML
 });

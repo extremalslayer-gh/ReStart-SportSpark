@@ -13,7 +13,7 @@ body {
     align-items: center;
     height: 100vh;
     font-family: Arial, sans-serif;
-    background: linear-gradient(180deg, #B0B0C3, #7E7E99);
+    background: radial-gradient(circle at center, #00B1EB 20%, #2A3B7E 80%);
 }
 
 /* Контейнер */
@@ -89,7 +89,7 @@ button {
     width: 440px;
     padding: 12px;
     margin: 200px;
-    background: #665287;
+    background: #2A3B7E;
     color: #ffffff;
     border: none;
     border-radius: 5px;
@@ -99,5 +99,5 @@ button {
 }
 
 button:hover {
-    background-color: #5c43b1;
+    background-color: #5a4876;
 }
