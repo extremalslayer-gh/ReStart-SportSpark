@@ -110,5 +110,18 @@ class Event(Base):
         self.official_regulations = get_nullable_data(data, 'official_regulations', self.official_regulations)
         self.date = get_nullable_data(data, 'date', self.date)
 
+class CustomSports(Base):
+    __tablename__ = 'custom_sports'
+    __table_args__ = { 'extend_existing': True }
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(64), nullable=False)
+
+class CustomEvent(Base):
+    __tablename__ = 'custom_event'
+    __table_args__ = { 'extend_existing': True }
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(64), nullable=False)
 
 Base.metadata.create_all(bind=engine)

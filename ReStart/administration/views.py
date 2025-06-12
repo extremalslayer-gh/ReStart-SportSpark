@@ -1,9 +1,11 @@
 from django.http import JsonResponse, HttpResponse
 import json
+
+from sqlalchemy.event.base import Events
 from ReStart.db_config import Session
 from ReStart.settings import PAGE_ENTRY_COUNT, TEMP_FOLDER
 from user.models import User
-from reports.models import Organization, convert_to_dict
+from reports.models import Organization, convert_to_dict, CustomSports, CustomEvent
 from django.views.decorators.csrf import csrf_exempt
 from user.utils import is_logged_in
 from sqlalchemy import func
@@ -317,3 +319,159 @@ def download_achievements(request):
         }, status=200)
 
     return HttpResponse(organization.achievements, content_type='application/x-zip-compressed')
+
+@csrf_exempt
+def add_custom_sports(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+    
+    session = Session()
+    json_data = json.loads(request.body.decode())
+    
+    caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+    if not caller_user.is_admin:
+        return JsonResponse({
+            'message': 'Неавторизованный доступ'
+        }, status=403)
+    
+    sports = CustomSports(name=json_data['name'])
+    session.add(sports)
+    session.commit()
+
+    return JsonResponse({
+        'message': 'Вид спорта успешно добавлен'
+    }, status=200)
+
+@csrf_exempt
+def delete_custom_sports(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+    
+    session = Session()
+    json_data = json.loads(request.body.decode())
+    
+    caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+    if not caller_user.is_admin:
+        return JsonResponse({
+            'message': 'Неавторизованный доступ'
+        }, status=403)
+    
+    sports = session.query(CustomSports).filter(CustomSports.id==json_data['id']).first()
+    if sports is None:
+        return JsonResponse({
+            'message': 'Объект не найден'
+        }, status=404)
+    session.delete(sports)
+    session.commit()
+
+    return JsonResponse({
+        'message': 'Данные отправлены'
+    }, status=200)
+
+@csrf_exempt
+def get_custom_sports(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+    
+    session = Session()
+    
+    caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+    if not caller_user.is_admin:
+        return JsonResponse({
+            'message': 'Неавторизованный доступ'
+        }, status=403)
+    
+    sports = session.query(CustomSports).all()
+
+    result = {'sports': []}
+    for el in sports:
+        result['sports'].append({
+            'id': el.id,
+            'name': el.name
+        })
+
+    return JsonResponse(result, status=200)
+
+@csrf_exempt
+def add_custom_event(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+    
+    session = Session()
+    json_data = json.loads(request.body.decode())
+    
+    caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+    if not caller_user.is_admin:
+        return JsonResponse({
+            'message': 'Неавторизованный доступ'
+        }, status=403)
+    
+    event = CustomEvent(name=json_data['name'])
+    session.add(event)
+    session.commit()
+
+    return JsonResponse({
+        'message': 'Мероприятие успешно добавлено'
+    }, status=200)
+
+@csrf_exempt
+def delete_custom_event(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+    
+    session = Session()
+    json_data = json.loads(request.body.decode())
+    
+    caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+    if not caller_user.is_admin:
+        return JsonResponse({
+            'message': 'Неавторизованный доступ'
+        }, status=403)
+    
+    event = session.query(CustomEvent).filter(CustomEvent.id==json_data['id']).first()
+    if event is None:
+        return JsonResponse({
+            'message': 'Объект не найден'
+        }, status=404)
+    session.delete(event)
+    session.commit()
+
+    return JsonResponse({
+        'message': 'Данные отправлены'
+    }, status=200)
+
+@csrf_exempt
+def get_custom_events(request):
+    if not is_logged_in(request):
+        return JsonResponse({
+            'message': 'Доступ запрещен'
+        }, status=403)
+    
+    session = Session()
+    
+    caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+    if not caller_user.is_admin:
+        return JsonResponse({
+            'message': 'Неавторизованный доступ'
+        }, status=403)
+    
+    events = session.query(CustomEvent).all()
+
+    result = {'events': []}
+    for el in events:
+        result['events'].append({
+            'id': el.id,
+            'name': el.name
+        })
+
+    return JsonResponse(result, status=200)
