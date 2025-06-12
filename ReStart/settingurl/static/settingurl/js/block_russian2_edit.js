@@ -140,16 +140,15 @@ document.addEventListener("DOMContentLoaded", function () {
             else {
                 reportData['events'] = events;
             }
-
+            reportData.id = parseInt(reportData.id)
         // Сохраняем обновленные данные обратно в localStorage
         localStorage.setItem('reportData', JSON.stringify(reportData));
 
         sendDataToServer();
 
         localStorage.clear();
+
+        window.location = '/personalmanage'
     }
-
-
-
 
 

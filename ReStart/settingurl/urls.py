@@ -31,5 +31,8 @@ urlpatterns = [
     path('block_russian_edit', views.block_russian_edit, name='block_russian_edit'),
     path('block_35_edit', views.block_35_edit, name='block_35_edit'),
     path('block_russian2_edit', views.block_russian2_edit, name='block_russian2_edit'),
+    path('sportdisc', views.sportdisc, name='sportdisc'),
+    path('russian2', views.russian2, name='russian2'),
+    path('russian', views.russian, name='russian'),
     path('logout/', auth_views.LogoutView.as_view(next_page='authorization'), name='logout')
 ]

@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const event = {
             name: eventName,
-            student_count_all: parseInt(studentCountAll),
+            student_count_all: parseInt(studentCountAll) || 0,
             student_count_organization: 0,
             is_official: true,
             official_type: "Муниципальное",
@@ -41,7 +41,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const reportData = JSON.parse(localStorage.getItem('reportData')) || {};
         if (!Array.isArray(reportData.events)) reportData.events = [];
-        reportData.events.push(event);
+
+        // Ищем индекс существующего официального события, чтобы заменить
+        const idx = reportData.events.findIndex(e => e.is_official === true);
+        if (idx !== -1) {
+            reportData.events[idx] = event;
+        } else {
+            reportData.events.push(event);
+        }
+
         localStorage.setItem('reportData', JSON.stringify(reportData));
     }
 
@@ -60,22 +68,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // === Загрузка полей ===
     function loadFormFields() {
-        const fields = JSON.parse(localStorage.getItem('block35_fields'));
-        if (!fields) return;
+        // Загружаем из reportData.events официальный event
+        var reportData = JSON.parse(localStorage.getItem('reportData'));
+        if (!reportData || !Array.isArray(reportData.events) || reportData.events.length == 0) {
+            reportData = { events: JSON.parse(localStorage.getItem('oldEvents')) };
+            if (!Array.isArray(reportData.events)) return;
+        }
+
+        const officialEvent = reportData.events.find(e => e.is_official === true);
+        if (!officialEvent) return;
 
         const name = document.getElementById('event-name');
-        const count = document.getElementById('student-count-all');
+        const countAll = document.getElementById('student-count-all');
         const date = document.getElementById('event-date');
-        const loc = document.getElementById('event-location');
-        const org = document.getElementById('event-organizer');
+        const location = document.getElementById('event-location');
+        const organizer = document.getElementById('event-organizer');
 
-        if (name) name.value = fields.eventName || '';
-        if (count) count.value = fields.studentCountAll || '';
-        if (date) date.value = fields.eventDate || '';
-        if (loc) loc.value = fields.eventLocation || '';
-        if (org) org.value = fields.eventOrganizer || '';
+        if (name) name.value = officialEvent.name || '';
+        if (countAll) countAll.value = officialEvent.student_count_all || '';
+        if (date) date.value = officialEvent.date ? officialEvent.date.split('T')[0] : '';
+        if (location) location.value = officialEvent.official_location || '';
+        if (organizer) organizer.value = officialEvent.official_organizer || '';
 
-        if (fields.fileName) {
+        // Отобразить имя файла, если есть в block35_fields
+        const fields = JSON.parse(localStorage.getItem('block35_fields'));
+        if (fields && fields.fileName) {
             const label = document.createElement('div');
             label.textContent = `Ранее выбран файл: ${fields.fileName}`;
             label.style.fontSize = '14px';

@@ -157,8 +157,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function loadDataForBlockStudentEdit() {
-  const reportData = JSON.parse(localStorage.getItem('reportData'));
+  var reportData = JSON.parse(localStorage.getItem('reportData'));
   if (!reportData || !reportData.organization) return;
+  localStorage.setItem('oldEvents', JSON.stringify(reportData.events));
+    reportData.events = [];
+    localStorage.setItem('reportData', JSON.stringify(reportData));
 
   // Заполняем общие поля
   document.getElementById('total-students').value = reportData.organization.students_total || '';

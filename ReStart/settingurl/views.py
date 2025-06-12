@@ -112,3 +112,15 @@ def block_35_edit(request):
 
 def block_russian2_edit(request):
     return render(request, 'settingurl/block_russian2_edit.html')
+
+
+def sportdisc(request):
+    return render(request, 'settingurl/sportdisc.html')
+
+
+def russian2(request):
+    return render(request, 'settingurl/russian2.html')
+
+
+def russian(request):
+    return render(request, 'settingurl/russian.html')

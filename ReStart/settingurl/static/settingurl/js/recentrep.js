@@ -28,9 +28,9 @@ function fetchReports() {
             card.className = "report-card";
 
             card.innerHTML = `
-                <a href='/sentreport'><div class="report-icon">
+                <div class="report-icon">
                     <img src="/static/settingurl/img/Eye.png" onclick="setReportId('${reportId}')">
-                </div></a>
+                </div>
                 <span class="report-date">${date}</span>
                 <button class="edit-btn" data-id="${reportId}">✎</button>
             `;
@@ -46,7 +46,7 @@ function fetchReports() {
 function setReportId(reportId) {
     localStorage.setItem("report_id", reportId);
     // Можно добавить переход или другое действие, например:
-    // window.location.href = "/report/edit/";
+    window.location.href = "/sentreport";
 }
 
 
