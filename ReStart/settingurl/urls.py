@@ -34,5 +34,6 @@ urlpatterns = [
     path('sportdisc', views.sportdisc, name='sportdisc'),
     path('russian2', views.russian2, name='russian2'),
     path('russian', views.russian, name='russian'),
+    path('managers_edit', views.managers_edit, name='managers_edit'),
     path('logout/', auth_views.LogoutView.as_view(next_page='authorization'), name='logout')
 ]

@@ -124,3 +124,7 @@ def russian2(request):
 
 def russian(request):
     return render(request, 'settingurl/russian.html')
+
+
+def managers_edit(request):
+    return render(request, 'settingurl/managers_edit.html')

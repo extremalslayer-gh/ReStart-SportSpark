@@ -140,6 +140,7 @@
                      <td>${user.organization_name}</td>
                      <td>${user.email}</td>
                      <td><input type="checkbox" class="access-checkbox" ${user.is_banned ? '' : 'checked'} id="${user.id}"></td>
+                     <td><button class="edit-btns" onclick="setManagerId('${user.id}')">✎</button></td>
                  `;
 
                  tableBody.appendChild(row);  // Добавляем строку в таблицу
@@ -160,7 +161,11 @@
      // Вызываем функцию для загрузки пользователей при загрузке страницы
      window.onload = fetchUsers;
 
-
+    function setManagerId(managerId) {
+        localStorage.setItem("user.id", managerId);
+        // Можно добавить переход или другое действие, например:
+        window.location.href = "/managers_edit";
+    }
 
 
      document.addEventListener('DOMContentLoaded', () => {
