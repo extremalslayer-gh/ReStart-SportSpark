@@ -1,57 +1,104 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Получаем все чекбоксы
     const checkboxes = document.querySelectorAll('.form-item input[type="checkbox"]');
 
-    // Функция для обновления видимости полей
     function updateFields() {
         checkboxes.forEach(checkbox => {
             const formFields = checkbox.closest('.form-item').querySelector('.form-fields');
             if (checkbox.checked) {
-                formFields.style.display = 'block'; // Показываем поля ввода
+                formFields.style.display = 'block';
             } else {
-                formFields.style.display = 'none'; // Скрываем поля ввода
+                formFields.style.display = 'none';
             }
         });
     }
 
-    // Инициализация видимости полей при загрузке страницы
     updateFields();
 
-    // Добавляем обработчик события для каждого чекбокса
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', updateFields);
     });
-});
 
+    // --- Загрузка сохраненных данных ---
+    function loadFormFields() {
+        const reportData = JSON.parse(localStorage.getItem('reportData'));
+        if (!reportData || !Array.isArray(reportData.events)) return;
 
-    // Эта функция собирает данные о выбранных мероприятиях и сохраняет их в localStorage
+        // Отфильтровать официальные мероприятия с типом "Региональное"
+        const officialEvents = reportData.events.filter(e => e.is_official === true && e.official_type === "Региональное");
+
+        officialEvents.forEach(event => {
+            // Сопоставляем название с индексом чекбокса
+            let idx = -1;
+            switch (event.name) {
+                case 'Региональные соревнования по баскетболу среди команд общеобразовательных организаций':
+                    idx = 0;
+                    break;
+                case 'Региональные соревнования по волейболу «Серебряный мяч»':
+                    idx = 1;
+                    break;
+                case 'Региональные соревнования по легкоатлетическому четырехборью «Шиповка юных»':
+                    idx = 2;
+                    break;
+                case 'Региональные соревнования по лыжным гонкам':
+                    idx = 3;
+                    break;
+                default:
+                    idx = 4; // "Другое"
+            }
+
+            if (idx !== -1) {
+                const checkbox = checkboxes[idx];
+                if (checkbox) {
+                    checkbox.checked = true;
+                    const formFields = checkbox.closest('.form-item').querySelector('.form-fields');
+                    formFields.style.display = 'block';
+
+                    // Заполнить количество участников
+                    switch (idx) {
+                        case 0:
+                            document.getElementById('number1').value = event.student_count_all || '';
+                            break;
+                        case 1:
+                            document.getElementById('number2').value = event.student_count_all || '';
+                            break;
+                        case 2:
+                            document.getElementById('number3').value = event.student_count_all || '';
+                            break;
+                        case 3:
+                            document.getElementById('number4').value = event.student_count_all || '';
+                            break;
+                        case 4:
+                            document.getElementById('name5').value = event.name !== 'Другое' ? event.name : '';
+                            document.getElementById('number5').value = event.student_count_all || '';
+                            break;
+                    }
+                }
+            }
+        });
+    }
+
+    // --- Сохранение данных ---
     function saveData() {
-        // Массив для хранения данных о мероприятиях
         const events = [];
 
-        // Функция для добавления данных мероприятия в массив
         function addEvent(name, studentCount) {
             events.push({
                 "name": name,
-                "student_count_all": parseInt(studentCount), // Получаем количество участников
-                "student_count_organization": 0, // строго 0
-                "is_official": true, // только true
-                "official_type": "Региональное", // Значение передается как аргумент
-                "official_location": "Официальное мероприятие", // только "Официальное мероприятие"
-                "official_organizer": "Официальное мероприятие", // только "Официальное мероприятие"
-                "official_regulations": "LQ==", // только "LQ=="
+                "student_count_all": parseInt(studentCount) || 0,
+                "student_count_organization": 0,
+                "is_official": true,
+                "official_type": "Региональное",
+                "official_location": "Официальное мероприятие",
+                "official_organizer": "Официальное мероприятие",
+                "official_regulations": "LQ=="
             });
         }
 
-        // Проверка всех мероприятий, которые отмечены галочкой
-        const checkboxes = document.querySelectorAll('.form-item input[type="checkbox"]');
         checkboxes.forEach((checkbox, index) => {
             if (checkbox.checked) {
-                // Для каждого отмеченного мероприятия, собираем данные
                 let name = '';
                 let studentCount = '';
 
-                // В зависимости от мероприятия получаем данные
                 switch (index) {
                     case 0:
                         name = 'Региональные соревнования по баскетболу среди команд общеобразовательных организаций';
@@ -75,24 +122,35 @@ document.addEventListener("DOMContentLoaded", function () {
                         break;
                 }
 
-                // Добавляем в массив, если есть название мероприятия
                 if (name) {
                     addEvent(name, studentCount);
                 }
             }
         });
 
-        // Получаем текущие данные из localStorage
         let reportData = JSON.parse(localStorage.getItem('reportData')) || {};
-        if (reportData.hasOwnProperty('events'))
-        {
-               reportData['events'] = reportData['events'].concat(events);
-            }
-            else {
-                reportData['events'] = events;
-            }
 
-        // Сохраняем обновленные данные обратно в localStorage
+        // Удаляем из существующих событий региональные официальные, чтобы заменить
+        if (Array.isArray(reportData.events)) {
+            reportData.events = reportData.events.filter(e => !(e.is_official === true && e.official_type === "Региональное"));
+        } else {
+            reportData.events = [];
+        }
+
+        // Добавляем новые отмеченные
+        reportData.events = reportData.events.concat(events);
+
         localStorage.setItem('reportData', JSON.stringify(reportData));
     }
 
+    // Навесить обработчик на кнопку "Далее"
+    const nextBtn = document.querySelector('.button-next');
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            saveData();
+        });
+    }
+
+    // Загрузить данные при старте
+    loadFormFields();
+});

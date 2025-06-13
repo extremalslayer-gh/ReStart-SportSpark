@@ -110,18 +110,22 @@ body::before {
 }
 
 .form-container button {
-    background-color: #4b0082;
+    background-color: #2A3B7E;
     color: #fff;
     font-size: 18px; /* Увеличиваем размер текста кнопки */
     padding: 15px 20px; /* Увеличиваем внутренние отступы кнопки */
     border: none;
-    border-radius: 5px;
+    border-radius: 30px;
     cursor: pointer;
     width: 100%;
+    transition: background 0.3s, color 0.3s;
 }
 
 .form-container button:hover {
-    background-color: #370062;
+    color: #2A3B7E;
+    border: 2px solid #2A3B7E;
+    background-color: #ffffff;
+    transition: background 0.3s, color 0.3s;
 }
 
 
