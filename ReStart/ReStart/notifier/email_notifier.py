@@ -4,15 +4,19 @@ import smtplib
 
 class EmailNotifier(BaseNotifier):
     def __init__(self, smtp_server, port, email, password, use_tls=True):
-        self._server = smtplib.SMTP(smtp_server, port)
-        if use_tls:
-            self._server.starttls()
+        self._smtp_server = smtp_server
+        self._port = port
+        self._use_tls = use_tls
         self._email = email
         self._password = password
-        self._server.login(self._email, self._password)
     
     def send_notification(self, receiver, message, **kwargs):
-        self._server.sendmail(
+        server = smtplib.SMTP(self._smtp_server, self._port)
+        if self._use_tls:
+            server.starttls()
+        server.login(self._email, self._password)
+        server.sendmail(
             self._email, receiver, 
             bytes(message, encoding='utf-8')
         )
+        server.quit()
