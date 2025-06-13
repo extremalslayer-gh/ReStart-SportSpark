@@ -1,3 +1,5 @@
+
+
 document.addEventListener("DOMContentLoaded", function () {
     // Получаем все чекбоксы
     const checkboxes = document.querySelectorAll('.form-item input[type="checkbox"]');
@@ -37,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Создание JSON объекта для отправки
         const data = {
+            // 'id': localStorage.getItem('report_id'), для редактирования
             events: reportData.events || [],
             organization: reportData.organization,
             sports: reportData.sports || []// Передаем только массив событий
@@ -45,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         console.log(data);
         // Отправка POST-запроса
-        fetch('/reports/create_report/', {
+        fetch('/reports/create_report/', { // для редактирования вместо /reports/create_report/ будет /reports/edit_report/
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // Указываем, что отправляем JSON
@@ -150,5 +153,82 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+// --- Сохраняем состояние формы (чекбоксы и инпуты) ---
+function saveFormFields() {
+    const formState = {
+        checkboxes: [],
+        inputs: {}
+    };
 
+    document.querySelectorAll('.form-item input[type="checkbox"]').forEach((checkbox, index) => {
+        formState.checkboxes[index] = checkbox.checked;
+    });
+
+    // Сохраняем все поля с количеством участников
+    formState.inputs.number1 = document.getElementById('number1')?.value || '';
+    formState.inputs.number2 = document.getElementById('number2')?.value || '';
+    formState.inputs.number3 = document.getElementById('number3')?.value || '';
+    formState.inputs.number4 = document.getElementById('number4')?.value || '';
+    formState.inputs.number5 = document.getElementById('number5')?.value || '';
+    formState.inputs.name5 = document.getElementById('name5')?.value || '';
+
+    localStorage.setItem('formFields_vs_events', JSON.stringify(formState));
+}
+
+// --- Восстанавливаем данные из localStorage ---
+function loadFormFields() {
+    const formState = JSON.parse(localStorage.getItem('formFields_vs_events'));
+    if (!formState) return;
+
+    document.querySelectorAll('.form-item input[type="checkbox"]').forEach((checkbox, index) => {
+        checkbox.checked = formState.checkboxes[index];
+    });
+
+    if (document.getElementById('number1')) document.getElementById('number1').value = formState.inputs.number1;
+    if (document.getElementById('number2')) document.getElementById('number2').value = formState.inputs.number2;
+    if (document.getElementById('number3')) document.getElementById('number3').value = formState.inputs.number3;
+    if (document.getElementById('number4')) document.getElementById('number4').value = formState.inputs.number4;
+    if (document.getElementById('number5')) document.getElementById('number5').value = formState.inputs.number5;
+    if (document.getElementById('name5'))   document.getElementById('name5').value   = formState.inputs.name5;
+
+    // Обновляем отображение полей
+    const event = new Event('change');
+    document.querySelectorAll('.form-item input[type="checkbox"]').forEach(cb => cb.dispatchEvent(event));
+}
+
+// --- Удаляем сохранённые поля только после отправки ---
+let isFormEdited = true;
+window.addEventListener('beforeunload', function (e) {
+    if (isFormEdited) {
+        localStorage.removeItem('formFields_vs_events');
+        e.preventDefault();
+        e.returnValue = 'Вы действительно хотите уйти со страницы?';
+        return 'Вы действительно хотите уйти со страницы?';
+    }
+});
+
+// --- Инициализация событий и обработчиков ---
+document.addEventListener('DOMContentLoaded', function () {
+    loadFormFields();
+
+    // Слушатели на чекбоксы
+    document.querySelectorAll('.form-item input[type="checkbox"]').forEach((checkbox) => {
+        checkbox.addEventListener('change', saveFormFields);
+    });
+
+    // Слушатели на поля
+    ['number1', 'number2', 'number3', 'number4', 'number5', 'name5'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', saveFormFields);
+    });
+
+    // Подменяем функцию отправки, чтобы снять блокировку и очистить localStorage
+    /*const originalSendData = sendDataToServer;
+    sendDataToServer = function () {
+        isFormEdited = false;
+        window.removeEventListener('beforeunload');
+        localStorage.removeItem('formFields_vs_events');
+        originalSendData(); // вызов оригинальной функции
+    };*/
+});
 

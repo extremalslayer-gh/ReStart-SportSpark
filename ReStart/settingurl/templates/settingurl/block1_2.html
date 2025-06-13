@@ -15,12 +15,21 @@
             <ul class="menu">
                 <li><a href="{% url 'block_student' %}">Заполнить отчет</a></li>
                 <li><a href="{% url 'recentrep' %}">Посмотреть отчеты</a></li>
-                <li><a href="{% url 'achievements' %}">Достижения школьного спортивного клуба</a></li>
             </ul>
-            <div class="profile">
-                <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon">
-                <a href="{% url 'personalmanage' %}">Профиль</a>
-            </div>
+                <div class="profile" style="position: relative;">
+                    <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon" id="profile-icon" style="cursor: pointer;">
+                    <div id="profile-menu" class="hidden">
+                        <ul>
+                            <li><a href="{% url 'personalmanage' %}">Личный кабинет</a></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+                                    {% csrf_token %}
+                                    <button type="submit">Выйти</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
         </nav>
     </header>
     <div class="card">
@@ -56,8 +65,10 @@
                         <input type="number" class="form-input" placeholder="Введите число" id="student-count-organization">
                     </div>
                 </div>
+                <div id="extra-events-container"></div>
                 <button type="button" class="button-add">Добавить мероприятие</button>
-                <button type="button" class="button-add">Прикрепить положение</button>
+                <button type="button" class="button-add" id="attach-position">Прикрепить положение</button>
+                <input type="file" id="fileInputPosition" style="display: none;" accept=".pdf,.doc,.docx,.txt">
                 <div class="form-buttons">
                     <a href="{% url 'block1general' %}"><button type="button" class="button-back">Назад</button></a>
                     <a href="{% url 'block_35' %}"><button type="button" class="button-next" onclick="saveData()">Далее</button></a>

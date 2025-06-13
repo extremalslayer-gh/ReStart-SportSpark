@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.authorization, name='authorization'),
@@ -23,5 +24,16 @@ urlpatterns = [
     path('registration', views.registration, name='registration'),
     path('achievements', views.achievements, name='achievements'),
     path('treasonreport', views.treasonreport, name='treasonreport'),
-    path('sentreport', views.sentreport, name='sentreport')
+    path('sentreport', views.sentreport, name='sentreport'),
+    path('block1general_edit', views.block1general_edit, name='block1general_edit'),
+    path('block1_2_edit', views.block1_2_edit, name='block1_2_edit'),
+    path('block_student_edit', views.block_student_edit, name='block_student_edit'),
+    path('block_russian_edit', views.block_russian_edit, name='block_russian_edit'),
+    path('block_35_edit', views.block_35_edit, name='block_35_edit'),
+    path('block_russian2_edit', views.block_russian2_edit, name='block_russian2_edit'),
+    path('sportdisc', views.sportdisc, name='sportdisc'),
+    path('russian2', views.russian2, name='russian2'),
+    path('russian', views.russian, name='russian'),
+    path('managers_edit', views.managers_edit, name='managers_edit'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='authorization'), name='logout')
 ]

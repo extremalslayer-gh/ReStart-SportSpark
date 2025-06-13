@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
+from django.contrib.auth.decorators import login_required
 
 def authorization(request):
     return render(request, 'settingurl/authorization.html')
@@ -88,3 +88,43 @@ def treasonreport(request):
 
 def sentreport(request):
     return render(request, 'settingurl/sentreport.html')
+
+
+def block1general_edit(request):
+    return render(request, 'settingurl/block1general_edit.html')
+
+
+def block1_2_edit(request):
+    return render(request, 'settingurl/block1_2_edit.html')
+
+
+def block_student_edit(request):
+    return render(request, 'settingurl/block_student_edit.html')
+
+
+def block_russian_edit(request):
+    return render(request, 'settingurl/block_russian_edit.html')
+
+
+def block_35_edit(request):
+    return render(request, 'settingurl/block_35_edit.html')
+
+
+def block_russian2_edit(request):
+    return render(request, 'settingurl/block_russian2_edit.html')
+
+
+def sportdisc(request):
+    return render(request, 'settingurl/sportdisc.html')
+
+
+def russian2(request):
+    return render(request, 'settingurl/russian2.html')
+
+
+def russian(request):
+    return render(request, 'settingurl/russian.html')
+
+
+def managers_edit(request):
+    return render(request, 'settingurl/managers_edit.html')

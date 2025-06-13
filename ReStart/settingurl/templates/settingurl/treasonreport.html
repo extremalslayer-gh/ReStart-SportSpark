@@ -17,41 +17,66 @@
                 <li><a href="{% url 'reports' %}">Посмотреть отчеты</a></li>
                 <li><a href="{% url 'treasonreport' %}">Редактировать отчёт</a></li>
             </ul>
-            <div class="profile">
-                <a href="{% url 'personal' %}">
-                    <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon">
-                    Профиль
-                </a>
-            </div>
+                <div class="profile" style="position: relative;">
+                    <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon" id="profile-icon" style="cursor: pointer;">
+                    <div id="profile-menu" class="hidden">
+                        <ul>
+                            <li><a href="{% url 'personalmanage' %}">Личный кабинет</a></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+                                    {% csrf_token %}
+                                    <button type="submit">Выйти</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                    <script>
+                            document.addEventListener('DOMContentLoaded', () => {
+                            const profileIcon = document.getElementById('profile-icon');
+                            const profileMenu = document.getElementById('profile-menu');
+
+                            profileIcon.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                profileMenu.classList.toggle('hidden');
+                            });
+
+                            document.addEventListener('click', () => {
+                                if (!profileMenu.classList.contains('hidden')) {
+                                    profileMenu.classList.add('hidden');
+                                }
+                            });
+                        });
+                    </script>
+                </div>
         </nav>
     </header>
     <main>
         <h1>Разделы</h1>
         <div class="cards">
             <div class="card">
-                <h2>Всероссийские физкультурные мероприятия и спортивные мероприятия</h2>
-                <a href="{% url 'block_russian' %}">Редактировать →</a>
-            </div>
-            <div class="card">
-                <h2>Расписание занятий ШСК</h2>
-                <a href="{% url 'block1general' %}">Редактировать →</a>
+                <h2>Спортивные дисциплины и виды спорта</h2>
+                <a href="{% url 'sportdisc' %}">Редактировать →</a>
             </div>
             <div class="card">
                 <h2>Региональные физкультурные мероприятия и спортивные мероприятия</h2>
-                <a href="{% url 'block_russian2' %}">Редактировать →</a>
+                <a href="{% url 'russian2' %}">Редактировать →</a>
             </div>
             <div class="card">
+                <h2>Всероссийские физкультурные мероприятия и спортивные мероприятия</h2>
+                <a href="{% url 'russian' %}">Редактировать →</a>
+            </div>
+            <!--<div class="card">
+                <h2>Расписание занятий ШСК</h2>
+                <a href="{% url 'block1general' %}">Редактировать →</a>
+            </div>-->
+            <!--<div class="card">
                 <h2>Материально-техническое обеспечение деятельности ШСК</h2>
                 <a href="#">Редактировать →</a>
-            </div>
-            <div class="card">
-                <h2>Численность обучающихся</h2>
-                <a href="{% url 'block_student' %}">Редактировать →</a>
-            </div>
-            <div class="card">
+            </div>-->
+            <!--<div class="card">
                 <h2>Официальные физкультурные мероприятия и спортивные мероприятия, внесённые в муниципальный календарный план</h2>
                 <a href="{% url 'block_35' %}">Редактировать →</a>
-            </div>
+            </div>-->
         </div>
     </main>
 </body>

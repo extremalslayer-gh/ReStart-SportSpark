@@ -15,64 +15,31 @@
             <ul class="menu">
                 <li><a href="{% url 'block_student' %}">Заполнить отчет</a></li>
                 <li><a href="{% url 'recentrep' %}">Посмотреть отчеты</a></li>
-                <li><a href="{% url 'achievements' %}">Достижения школьного спортивного клуба</a></li>
             </ul>
-            <div class="profile">
-                <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon">
-                <a href="{% url 'personalmanage' %}">Профиль</a>
-            </div>
+                <div class="profile" style="position: relative;">
+                    <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon" id="profile-icon" style="cursor: pointer;">
+                    <div id="profile-menu" class="hidden">
+                        <ul>
+                            <li><a href="{% url 'personalmanage' %}">Личный кабинет</a></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+                                    {% csrf_token %}
+                                    <button type="submit">Выйти</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
         </nav>
     </header>
   <div class="container">
     <!-- Основной блок -->
-    <main class="main-content">
+    <main class="main-content" data-edit-url="{% url 'block_student_edit' %}">
       <h2 class="section-title">Недавние отчеты</h2>
-      <div class="reports-grid">
-        <!-- Карточки отчетов -->
-        <div class="report-card">
-          <div class="report-icon">
-            <img src="{% static 'settingurl/img/Eye.png' %}">
-          </div>
-          <span class="report-date">29.12.24</span>
-            <a href="{% url 'sentreport' %}"><button class="edit-btn">✎</button></a>
+        <div class="reports-grid" id="reportsGrid">
+            <!-- Карточки будут добавляться через JS -->
         </div>
-
-        <div class="report-card">
-          <div class="report-icon">
-            <img src="{% static 'settingurl/img/Eye.png' %}">
-          </div>
-          <span class="report-date">29.08.24</span>
-            <a href="{% url 'block_student' %}"><button class="edit-btn">✎</button></a>
-        </div>
-
-        <div class="report-card">
-          <div class="report-icon">
-            <img src="{% static 'settingurl/img/Eye.png' %}">
-          </div>
-          <span class="report-date">29.04.24</span>
-            <a href="{% url 'block_student' %}"><button class="edit-btn">✎</button></a>
-        </div>
-
-        <div class="report-card">
-          <div class="report-icon">
-            <img src="{% static 'settingurl/img/Eye.png' %}">
-          </div>
-          <span class="report-date">29.01.24</span>
-            <a href="{% url 'block_student' %}"><button class="edit-btn">✎</button></a>
-        </div>
-      </div>
     </main>
-  </div>
-<!-- Модальное окно для предварительного просмотра -->
-<div id="report-modal" class="modal-overlay">
-    <div class="modal-content">
-        <h3>Предварительный просмотр отчета</h3>
-        <div id="modal-report-content">
-          Здесь будет текст вашего отчета...
-        </div>
-        <button class="close-btn" onclick="closeModal()">Закрыть</button>
-    </div>
-</div>
 <script src="{% static 'settingurl/js/recentrep.js' %}"></script>
 </body>
 </html>

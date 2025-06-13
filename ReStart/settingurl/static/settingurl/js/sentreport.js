@@ -4,7 +4,7 @@ fetch('/reports/get_report/', {
   headers: {
     'Content-Type': 'application/json',
   },
-  body: JSON.stringify({ /* Здесь можешь передать данные, если нужно */ })
+  body: JSON.stringify({'id': localStorage.getItem('report_id')})
 })
   .then(response => response.json())
   .then(data => {
@@ -43,8 +43,8 @@ scheduleTable.appendChild(hoursRow);
 
 
     // Число обучающихся
-    document.querySelector('.students-organization').textContent = data.organization.students_organization || '1300';
-    document.querySelector('.students-total').textContent = data.organization.students_total || '1300';
+    document.querySelector('.students-organization').textContent = data.organization.students_organization || '';
+    document.querySelector('.students-total').textContent = data.organization.students_total || '';
 
     // Таблица по классам
     const classesData = [
@@ -132,6 +132,35 @@ scheduleTable.appendChild(hoursRow);
       }
     }
   });
+    // === Новый блок: Таблица достижений (Блок 2) ===
+    const achievementTable = document.querySelector('.achievement-table tbody');
+     const row = `
+        <tr>
+          <td>'Достижение'</td>
+          <td><a href="${data.organization.achievements}" target="_blank">Скачать</a></td>
+        </tr>
+      `;
+      achievementTable.insertAdjacentHTML('beforeend', row);
 
 })
 .catch(error => console.error('Ошибка:', error));
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const profileIcon = document.getElementById('profile-icon');
+    const profileMenu = document.getElementById('profile-menu');
+
+    profileIcon.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileMenu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', () => {
+        if (!profileMenu.classList.contains('hidden')) {
+            profileMenu.classList.add('hidden');
+        }
+    });
+});
