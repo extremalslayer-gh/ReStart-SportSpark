@@ -180,30 +180,40 @@ body::before {
     justify-content: space-between;
 }
 
-.button-back, .button-next {
+.button-next {
     padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
     border: none;
-    border-radius: 8px;
+    background-color: #2A3B7E;
+    color: #fff;
     cursor: pointer;
+    border-radius: 30px;
+    transition: background 0.3s, color 0.3s;
 }
 
 .button-back {
+    padding: 10px 20px;
+    border: none;
     background-color: #9a9a9a;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: background 0.3s, color 0.3s;
 }
 
-.button-next {
-    background-color: #6a4ccf;
+.button-back:hover  {
+    color: #9a9a9a;
+    border: 2px solid #9a9a9a;
+    background-color: #ffffff;
+    transition: background 0.3s, color 0.3s;
 }
 
-.button-back:hover {
-    background-color: #8a8a8a;
+.button-next:hover  {
+    color: #2A3B7E;
+    border: 2px solid #2A3B7E;
+    background-color: #ffffff;
+    transition: background 0.3s, color 0.3s;
 }
 
-.button-next:hover {
-    background-color: #5a3bbf;
-}
 
 
 .upload-wrapper {

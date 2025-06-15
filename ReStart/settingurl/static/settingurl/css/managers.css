@@ -118,11 +118,12 @@ body {
   justify-content: center;
   padding: 10px 20px;
   font-size: 16px;
-  color: #ffffff;
-  background-color: #6c5ce7;
+    background-color: #2A3B7E;
+    color: #fff;
   border: none;
-  border-radius: 25px;
+      border-radius: 30px;
   cursor: pointer;
+      transition: background 0.3s, color 0.3s;
 }
 
 .add-button .plus-icon {
@@ -131,7 +132,10 @@ body {
 }
 
 .add-button:hover {
-  background-color: #5a4bbd;
+    color: #2A3B7E;
+    border: 2px solid #2A3B7E;
+    background-color: #ffffff;
+    transition: background 0.3s, color 0.3s;
 }
 
 /* Стили для модального окна */

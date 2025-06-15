@@ -206,14 +206,19 @@ body::before {
 .button-next {
     padding: 10px 20px;
     border: none;
+    background-color: #2A3B7E;
     color: #fff;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 30px;
+    transition: background 0.3s, color 0.3s;
 }
 
 
-.button-next {
-    background-color: #6a4ccf;
+.button-next:hover  {
+    color: #2A3B7E;
+    border: 2px solid #2A3B7E;
+    background-color: #ffffff;
+    transition: background 0.3s, color 0.3s;
 }
 
 
