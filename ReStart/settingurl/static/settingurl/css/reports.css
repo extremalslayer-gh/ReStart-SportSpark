@@ -98,39 +98,57 @@ body {
     border-radius: 4px;
 }
 
-/* Таблица */
+/* Контейнер таблицы */
 .table-container {
-    background-color: transparent;
+    background-color: #ffffff;
     margin: 20px;
     padding: 20px;
-    border-radius: 12px;
+    border-radius: 10px;
     overflow-x: auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Сама таблица */
 .reports-table {
     width: 100%;
     border-collapse: collapse;
-    text-align: left;
+    background-color: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Заголовки */
+.reports-table thead {
+    background-color: #e0e0e0;
 }
 
 .reports-table thead th {
     font-size: 14px;
-    color: white;
-    padding: 10px;
-    border-bottom: 2px solid #ddd;
-}
-
-.reports-table tbody td {
-    font-size: 14px;
-    color: white;
-    padding: 10px;
+    color: #000000;
+    font-weight: bold;
+    padding: 15px;
     border-bottom: 1px solid #ddd;
 }
 
-.reports-table tbody tr:hover {
-    background-color: #808080;
+/* Ячейки тела */
+.reports-table tbody td {
+    font-size: 14px;
+    color: #000000;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
 }
 
+/* Последняя строка — без границы */
+.reports-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Hover-эффект строки */
+.reports-table tbody tr:hover {
+    background-color: #f2f2f2;
+}
+
+/* Ссылки в ячейках */
 .reports-table tbody td a {
     color: #6a5acd;
     text-decoration: none;
@@ -139,6 +157,7 @@ body {
 .reports-table tbody td a:hover {
     text-decoration: underline;
 }
+
 
 
 
