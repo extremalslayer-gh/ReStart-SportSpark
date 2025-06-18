@@ -226,7 +226,8 @@ Excel файл, Content-type=application/vnd.ms-excel
             "is_admin": "Является ли админом",
             "is_banned": "Оключен ли пользователю доступ",
             "occupation": "Должность",
-            "temp_password_changed": "Изменен ли временный пароль"
+            "temp_password_changed": "Изменен ли временный пароль",
+            "organization_name": "Название учреждения"
         },
         "..."
     ]
