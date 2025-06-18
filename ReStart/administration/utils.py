@@ -61,7 +61,7 @@ def export_to_excel_common(session, writer, json_data):
                                 report.hours_fri, report.hours_sat, 
                                 report.hours_sun])
 
-                link = f'http://localhost:8000/admin/download_official_regulations/?id={latest_official_event.id}' if latest_official_event is not None else '-'
+                link = f'http://localhost:8000/admin/download_official_regulations/?id={latest_official_event.id}' if (latest_official_event is not None) and (latest_official_event.official_regulations != '-') else '-'
                 achievements_link = f'http://localhost:8000/admin/download_achievements/?id={report.id}' if report.achievements is not None else '-'
                 result.append([
                     user.municipality_name, report.name, name,
@@ -203,7 +203,7 @@ def export_to_excel_events_official(session, writer, json_data):
                     user.municipality_name, report.name, name, event.name, 
                     event.student_count_all, event.date,
                     event.official_type, event.official_location, event.official_organizer, 
-                    f'http://localhost:8000/admin/download_official_regulations/?id={event.id}',
+                    f'http://localhost:8000/admin/download_official_regulations/?id={event.id}' if event.official_regulations != '-' else '-',
                     f'http://localhost:8000/admin/download_achievements/?id={report.id}' if report.achievements is not None else '-'
                 ])
 

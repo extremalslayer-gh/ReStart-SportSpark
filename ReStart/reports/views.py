@@ -120,7 +120,7 @@ def get_my_reports(request):
         events = session.query(Event).filter(Event.organization_id==organization.id).all()
 
         result.append({
-            'organization': { k: v for k, v in convert_to_dict(organization) if k != 'achievements' },
+            'organization': { k: v for k, v in convert_to_dict(organization).items() if k != 'achievements' },
             'sports': [convert_to_dict(el) for el in sports],
             'events': [convert_to_dict(el) for el in events]
         })

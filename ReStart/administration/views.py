@@ -109,7 +109,9 @@ def export_reports(request):
     if not caller_user.is_admin:
         return HttpResponse(status=403)
 
-    filename = f'report_{uuid.uuid4()}.xlsx'
+    now = datetime.datetime.now()
+    formatted_date = now.strftime('%d.%m.%Y')
+    filename = f'Report_{formatted_date}.xlsx'
     filepath = f'{TEMP_FOLDER}\\{filename}'
     writer = pd.ExcelWriter(filepath, engine='xlsxwriter')
     
