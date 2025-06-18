@@ -383,11 +383,10 @@ def get_custom_sports(request):
     
     session = Session()
     
-    caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
-    if not caller_user.is_admin:
-        return JsonResponse({
-            'message': 'Неавторизованный доступ'
-        }, status=403)
+    #caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+    #if not caller_user.is_admin:
+    #    return JsonResponse({
+    #        'message': 'Неавторизованный доступ'
     
     sports = session.query(CustomSports).all()
 
@@ -461,11 +460,11 @@ def get_custom_events(request):
     
     session = Session()
     
-    caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
-    if not caller_user.is_admin:
-        return JsonResponse({
-            'message': 'Неавторизованный доступ'
-        }, status=403)
+    #caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+    #if not caller_user.is_admin:
+    #    return JsonResponse({
+    #        'message': 'Неавторизованный доступ'
+    #    }, status=403)
     
     events = session.query(CustomEvent).all()
 
