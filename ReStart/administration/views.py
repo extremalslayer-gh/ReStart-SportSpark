@@ -1,6 +1,5 @@
 from django.http import JsonResponse, HttpResponse
 import json
-
 from sqlalchemy.event.base import Events
 from ReStart.db_config import Session
 from ReStart.settings import PAGE_ENTRY_COUNT, TEMP_FOLDER
@@ -109,7 +108,9 @@ def export_reports(request):
     if not caller_user.is_admin:
         return HttpResponse(status=403)
 
-    filename = f'report_{uuid.uuid4()}.xlsx'
+    now = datetime.datetime.now()
+    formatted_date = now.strftime('%d.%m.%Y')
+    filename = f'Report_{formatted_date}.xlsx'
     filepath = f'{TEMP_FOLDER}\\{filename}'
     writer = pd.ExcelWriter(filepath, engine='xlsxwriter')
     
@@ -238,6 +239,13 @@ def edit_user(request):
         user.occupation = json_data['occupation']
     if 'profile_image' in json_data.keys():
         user.profile_image = json_data['profile_image']
+    if 'municipality_name' in json_data.keys():
+        user.municipality_name = json_data['municipality_name']
+    if 'organization_name' in json_data.keys():
+        user_reports = session.query(Organization).order_by(Organization.organization_id.desc()).all()
+        for report in user_reports:
+            report.name = json_data['organization_name']
+
 
     session.commit()
 
@@ -381,11 +389,10 @@ def get_custom_sports(request):
     
     session = Session()
     
-    caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
-    if not caller_user.is_admin:
-        return JsonResponse({
-            'message': 'Неавторизованный доступ'
-        }, status=403)
+    #caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+    #if not caller_user.is_admin:
+    #    return JsonResponse({
+    #        'message': 'Неавторизованный доступ'
     
     sports = session.query(CustomSports).all()
 
@@ -459,11 +466,11 @@ def get_custom_events(request):
     
     session = Session()
     
-    caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
-    if not caller_user.is_admin:
-        return JsonResponse({
-            'message': 'Неавторизованный доступ'
-        }, status=403)
+    #caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
+    #if not caller_user.is_admin:
+    #    return JsonResponse({
+    #        'message': 'Неавторизованный доступ'
+    #    }, status=403)
     
     events = session.query(CustomEvent).all()
 

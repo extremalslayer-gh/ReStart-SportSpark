@@ -266,6 +266,8 @@ Excel файл, Content-type=application/vnd.ms-excel
  - *`last_name` - Новое отчество пользователя
  - *`occupation` - Новая должность пользователя
  - *`profile_image` - Новая аватарка пользователя
+ - *`municipality_name` - Новое название муниципального образования
+ - *`organization_name` - Новое название организации
 
 #### Ответ сервера
 

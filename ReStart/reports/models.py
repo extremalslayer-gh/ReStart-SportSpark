@@ -2,8 +2,11 @@ from datetime import datetime
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.types import LargeBinary
-from ReStart.db_config import engine
+from ReStart.db_config import engine, Session
 from ReStart.models import Base
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
+
 
 
 def convert_to_dict(obj):
@@ -125,3 +128,32 @@ class CustomEvent(Base):
     name: Mapped[str] = mapped_column(String(64), nullable=False)
 
 Base.metadata.create_all(bind=engine)
+
+@receiver(post_migrate)
+def create_default_sports(sender, **kwargs):
+    session = Session()
+    DEFAULT_SPORTS = [
+        'Баскетбол',
+        'Бокс',
+        'Волейбол',
+        'Дартс',
+        'Лыжные гонки',
+        'Настольный теннис',
+        'Самбо',
+        'Легкая атлетика',
+        'Шахматы',
+        'Футбол'
+    ]
+    first_sports = session.query(CustomSports).filter(CustomSports.name==DEFAULT_SPORTS[0]).exists()
+    if session.query(first_sports).scalar():
+        return
+
+    result = []
+    for sports_name in DEFAULT_SPORTS:
+        sports = CustomSports(name=sports_name)
+        result.append(sports)
+
+    print('Виды спорта добавлены')
+
+    session.add_all(result)
+    session.commit()
