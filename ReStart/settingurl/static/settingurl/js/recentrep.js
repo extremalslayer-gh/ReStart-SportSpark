@@ -96,9 +96,6 @@ document.getElementById("reportsGrid").addEventListener('click', function (event
         const card = event.target.closest('.report-card');
         const reportId = card.querySelector(".edit-btn").getAttribute("data-id");
         console.log(reportId)
-        // Если data-id не установлен в HTML, то лучше брать ID из другого атрибута или из dataset
-        // Например, в твоём коде setReportId записывает reportId в localStorage,
-        // но лучше явно передавать reportId тут через data-атрибут
 
         if (!reportId) {
             alert("ID отчёта не найден");

@@ -196,16 +196,7 @@ function loadFormFields() {
     document.querySelectorAll('.form-item input[type="checkbox"]').forEach(cb => cb.dispatchEvent(event));
 }
 
-// --- Удаляем сохранённые поля только после отправки ---
-let isFormEdited = true;
-window.addEventListener('beforeunload', function (e) {
-    if (isFormEdited) {
-        localStorage.removeItem('formFields_vs_events');
-        e.preventDefault();
-        e.returnValue = 'Вы действительно хотите уйти со страницы?';
-        return 'Вы действительно хотите уйти со страницы?';
-    }
-});
+window.onbeforeunload = null;
 
 // --- Инициализация событий и обработчиков ---
 document.addEventListener('DOMContentLoaded', function () {

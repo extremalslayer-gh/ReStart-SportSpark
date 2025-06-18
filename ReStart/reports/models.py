@@ -2,8 +2,11 @@ from datetime import datetime
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.types import LargeBinary
-from ReStart.db_config import engine
+from ReStart.db_config import engine, Session
 from ReStart.models import Base
+from django.db.models.signals import post_migrate
+from django.dispatch import receiver
+
 
 
 def convert_to_dict(obj):
@@ -110,5 +113,47 @@ class Event(Base):
         self.official_regulations = get_nullable_data(data, 'official_regulations', self.official_regulations)
         self.date = get_nullable_data(data, 'date', self.date)
 
+class CustomSports(Base):
+    __tablename__ = 'custom_sports'
+    __table_args__ = { 'extend_existing': True }
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(64), nullable=False)
+
+class CustomEvent(Base):
+    __tablename__ = 'custom_event'
+    __table_args__ = { 'extend_existing': True }
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(64), nullable=False)
 
 Base.metadata.create_all(bind=engine)
+
+@receiver(post_migrate)
+def create_default_sports(sender, **kwargs):
+    session = Session()
+    DEFAULT_SPORTS = [
+        'Баскетбол',
+        'Бокс',
+        'Волейбол',
+        'Дартс',
+        'Лыжные гонки',
+        'Настольный теннис',
+        'Самбо',
+        'Легкая атлетика',
+        'Шахматы',
+        'Футбол'
+    ]
+    first_sports = session.query(CustomSports).filter(CustomSports.name==DEFAULT_SPORTS[0]).exists()
+    if session.query(first_sports).scalar():
+        return
+
+    result = []
+    for sports_name in DEFAULT_SPORTS:
+        sports = CustomSports(name=sports_name)
+        result.append(sports)
+
+    print('Виды спорта добавлены')
+
+    session.add_all(result)
+    session.commit()
