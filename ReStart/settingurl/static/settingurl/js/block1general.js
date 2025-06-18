@@ -95,14 +95,7 @@ function loadFormFields() {
 // --- Флаг редактирования и предупреждение при уходе ---
 let isFormEdited = true;
 
-window.addEventListener('beforeunload', function (e) {
-    if (isFormEdited) {
-        localStorage.removeItem('formFields_schedule');
-        e.preventDefault();
-        e.returnValue = 'Вы действительно хотите уйти со страницы?';
-        return 'Вы действительно хотите уйти со страницы?';
-    }
-});
+window.onbeforeunload = null;
 
 // --- Навешиваем обработчики сохранения при вводе ---
 document.addEventListener('DOMContentLoaded', function () {
@@ -183,3 +176,6 @@ function loadDataFromLocalStorage() {
 
 // Вызови эту функцию после загрузки DOM:
 document.addEventListener('DOMContentLoaded', loadDataFromLocalStorage);
+
+
+

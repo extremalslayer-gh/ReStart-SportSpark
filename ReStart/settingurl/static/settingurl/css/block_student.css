@@ -46,7 +46,7 @@ body::before {
 }
 
 /* Шапка и карточка поверх фона */
-.header, .card {
+.card {
     position: relative;
     z-index: 1;
 }
@@ -58,7 +58,7 @@ body::before {
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1000;
+    z-index: 2;
 }
 
 .navbar {
@@ -206,14 +206,19 @@ body::before {
 .button-next {
     padding: 10px 20px;
     border: none;
+    background-color: #2A3B7E;
     color: #fff;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 30px;
+    transition: background 0.3s, color 0.3s;
 }
 
 
-.button-next {
-    background-color: #6a4ccf;
+.button-next:hover  {
+    color: #2A3B7E;
+    border: 2px solid #2A3B7E;
+    background-color: #ffffff;
+    transition: background 0.3s, color 0.3s;
 }
 
 
@@ -232,7 +237,7 @@ body::before {
     border-radius: 5px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     width: 150px;
-    z-index: -9999999999999;
+    z-index: -30;
 }
 
 #profile-menu ul {
@@ -264,5 +269,4 @@ body::before {
 #profile-menu ul li button:hover {
     background-color: #f0f0f0;
 }
-
 

@@ -1,95 +1,161 @@
 document.addEventListener('DOMContentLoaded', () => {
     const deleteSportBtn = document.getElementById('delete-sport');
     const confirmDeletionBtn = document.getElementById('confirm-deletion');
+    const cancelDeleteBtn = document.getElementById('cancel-delete');
     const addSportBtn = document.getElementById('add-sport');
+    const cancelAddBtn = document.getElementById('cancel-add');
     const newSportInput = document.getElementById('new-sport-input');
     const newSportName = document.getElementById('new-sport-name');
     const confirmSportBtn = document.getElementById('confirm-sport');
+    const sportsContainer = document.getElementById('sports-container');
+    const container = document.querySelector('.container');
 
-    // Функция для обновления коллекции чекбоксов
-    function updateCheckboxes() {
-        return document.querySelectorAll('.sports .sport-item .checkbox');
+    // Утилита отправки данных
+    async function postData(url = '', data = {}) {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        return response.json();
     }
 
-    // Изначально собираем все чекбоксы
-    let checkboxes = updateCheckboxes();
-
-    // Показать чекбоксы для удаления и кнопку подтверждения
-    deleteSportBtn.addEventListener('click', () => {
-        checkboxes = updateCheckboxes(); // Обновляем коллекцию чекбоксов
-        checkboxes.forEach(checkbox => {
-            checkbox.style.display = 'inline-block';  // Показываем чекбоксы
-        });
-        confirmDeletionBtn.style.display = 'inline-block';  // Показываем кнопку подтверждения
-    });
-
-    // Подтверждение удаления выбранных видов спорта
-    confirmDeletionBtn.addEventListener('click', () => {
-        checkboxes = updateCheckboxes(); // Обновляем коллекцию чекбоксов при удалении
-        checkboxes.forEach((checkbox, index) => {
-            if (checkbox.checked) {
-                // Удаляем выбранные виды спорта
-                checkbox.closest('.sport-item').remove(); // Удаляем элемент вместе с чекбоксом
-            }
-        });
-
-        // Скрываем кнопку подтверждения и блокируем чекбоксы
-        confirmDeletionBtn.style.display = 'none';
-        checkboxes.forEach(checkbox => {
-            checkbox.style.display = 'none';  // Скрываем чекбоксы после удаления
-        });
-    });
-
-    // Обработчик изменения состояния чекбоксов
-    document.querySelector('.sports').addEventListener('change', (e) => {
-        if (e.target.classList.contains('checkbox')) {
-            const item = e.target.closest('.sport-item');
-            if (e.target.checked) {
-                item.classList.add('checked');  // Добавляем зачеркивание
-            } else {
-                item.classList.remove('checked');  // Убираем зачеркивание
-            }
-        }
-    });
-
-    // Обработчик для добавления нового вида спорта
-    addSportBtn.addEventListener('click', () => {
-        newSportInput.style.display = 'block';  // Показываем поле для ввода
-    });
-
-    // Подтверждение нового вида спорта
-    confirmSportBtn.addEventListener('click', () => {
-        const sportName = newSportName.value.trim();  // Получаем название нового вида спорта
-
-        if (sportName) {
-            // Создаем новый элемент для выбранного вида спорта
-            const newSportDiv = document.createElement('div');
-            newSportDiv.classList.add('sport-item');
-            newSportDiv.innerHTML = `
-                <input type="checkbox" class="checkbox" style="display: none;"> ${sportName}
-            `;
-            document.querySelector('.sports').appendChild(newSportDiv);  // Добавляем новый вид спорта в блок отображения
-
-            // Очистим поле ввода и скрываем его
-            newSportName.value = '';
-            newSportInput.style.display = 'none';
-
-            // Обновляем коллекцию чекбоксов
-            checkboxes = updateCheckboxes();
-
-            // Добавляем обработчик для нового чекбокса
-            const newCheckbox = newSportDiv.querySelector('.checkbox');
-            newCheckbox.addEventListener('change', () => {
-                updateDeleteButtonVisibility();
+    // Загрузка видов спорта с сервера
+    async function loadSports() {
+        try {
+            const data = await postData('/admin/get_custom_sports/', {});
+            sportsContainer.innerHTML = '';
+            data.sports.forEach(sport => {
+                const sportDiv = document.createElement('div');
+                sportDiv.classList.add('sport-item');
+                sportDiv.setAttribute('data-id', sport.id);
+                sportDiv.innerHTML = `
+                    <label>
+                        <input type="checkbox" class="main-checkbox">
+                        <span class="sport-title">${sport.name}</span>
+                    </label>
+                `;
+                sportsContainer.appendChild(sportDiv);
             });
+        } catch (err) {
+            console.error('Ошибка загрузки видов спорта:', err);
+        }
+    }
+
+    // Инициализация
+    loadSports();
+
+    // Активация режима удаления
+    function activateDeleteMode() {
+        container.classList.add('delete-mode');
+        container.classList.remove('add-mode');
+        document.querySelectorAll('.sport-item .main-checkbox').forEach(cb => {
+            cb.style.display = 'inline-block';
+        });
+        confirmDeletionBtn.style.display = 'inline-block';
+        cancelDeleteBtn.style.display = 'inline-block';
+        deleteSportBtn.classList.remove('active');
+    }
+
+    // Деактивация режима удаления
+    function deactivateDeleteMode() {
+        container.classList.remove('delete-mode');
+        document.querySelectorAll('.sport-item .main-checkbox').forEach(cb => {
+            cb.style.display = 'none';
+            cb.checked = false;
+            cb.closest('.sport-item').classList.remove('checked');
+        });
+        confirmDeletionBtn.style.display = 'none';
+        cancelDeleteBtn.style.display = 'none';
+        deleteSportBtn.classList.add('active');
+    }
+
+    // Активация режима добавления
+    function activateAddMode() {
+        container.classList.add('add-mode');
+        container.classList.remove('delete-mode');
+        newSportInput.style.display = 'block';
+        addSportBtn.classList.remove('active');
+    }
+
+    // Деактивация режима добавления
+    function deactivateAddMode() {
+        container.classList.remove('add-mode');
+        newSportInput.style.display = 'none';
+        newSportName.value = '';
+        addSportBtn.classList.add('active');
+    }
+
+    // Добавление нового вида спорта
+    confirmSportBtn.addEventListener('click', async () => {
+        const sportName = newSportName.value.trim();
+        if (sportName) {
+            try {
+                const response = await postData('/admin/add_custom_sports/', { name: sportName });
+                alert(response.message);
+                deactivateAddMode();
+                await loadSports();
+            } catch (err) {
+                console.error('Ошибка при добавлении:', err);
+            }
         } else {
-            alert('Пожалуйста, введите название вида спорта!');
+            alert('Введите название вида спорта');
         }
     });
 
-    // Функция для обновления видимости кнопки удаления
-    function updateDeleteButtonVisibility() {
-        const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-        deleteSportBtn.disabled = !anyChecked;
-    }
+    // Удаление выбранных видов спорта
+    confirmDeletionBtn.addEventListener('click', async () => {
+        const checkboxes = document.querySelectorAll('.sport-item .main-checkbox:checked');
+        for (const checkbox of checkboxes) {
+            const item = checkbox.closest('.sport-item');
+            const id = item.getAttribute('data-id');
+            if (id) {
+                try {
+                    const response = await postData('/admin/delete_custom_sports/', { id: Number(id) });
+                    console.log(response.message);
+                } catch (err) {
+                    console.error(`Ошибка при удалении ID ${id}:`, err);
+                }
+            }
+        }
+        deactivateDeleteMode();
+        await loadSports();
+    });
+
+    // Обработка чекбоксов при удалении
+    document.addEventListener('change', (e) => {
+        if (e.target.classList.contains('main-checkbox') && container.classList.contains('delete-mode')) {
+            e.target.closest('.sport-item').classList.toggle('checked', e.target.checked);
+        }
+    });
+
+    // Кнопки управления режимами
+    deleteSportBtn.addEventListener('click', activateDeleteMode);
+    cancelDeleteBtn.addEventListener('click', deactivateDeleteMode);
+    addSportBtn.addEventListener('click', activateAddMode);
+    cancelAddBtn.addEventListener('click', deactivateAddMode);
+
+    // Скрытие меню профиля
+    const profileIcon = document.getElementById('profile-icon');
+    const profileMenu = document.getElementById('profile-menu');
+    profileIcon.addEventListener('click', (e) => {
+        e.stopPropagation();
+        profileMenu.classList.toggle('hidden');
+    });
+    document.addEventListener('click', () => {
+        if (!profileMenu.classList.contains('hidden')) {
+            profileMenu.classList.add('hidden');
+        }
+    });
+
+    // Заглушка сохранения
+    window.saveData = function () {
+        const sports = [];
+        document.querySelectorAll('#sports-container .sport-item').forEach(item => {
+            const title = item.querySelector('.sport-title').textContent;
+            const id = item.getAttribute('data-id') || null;
+            sports.push({ id, title });
+        });
+        console.log('Сохранённые данные:', sports);
+    };
 });

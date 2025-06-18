@@ -103,44 +103,60 @@ body {
   color: white;
 }
 
-/* Общие стили для таблицы */
+.table-container {
+  background-color: #ffffff;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+/* Основной стиль таблицы */
 .styled-table {
-  width: 100%; /* Таблица занимает всю ширину контейнера */
-  border-collapse: collapse; /* Убирает промежутки между границами ячеек */
-  font-family: Arial, sans-serif; /* Шрифт таблицы */
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
+/* Заголовок */
+.styled-table thead {
+  background-color: #e0e0e0;
+}
 
-
-/* Заголовок таблицы */
 .styled-table thead th {
-  background-color: transparent; /* Светло-серый фон заголовка */
-  text-align: center; /* Текст выравнивается по центру */
-  padding: 10px; /* Внутренние отступы */
-  border: 1px solid #ccc; /* Границы между ячейками */
-  font-size: 14px; /* Размер шрифта */
-  font-weight: bold; /* Жирный текст */
-  white-space: nowrap; /* Предотвращает перенос текста на новую строку */
+  text-align: center;
+  padding: 15px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #000000;
+  border: none; /* Убираем рамки */
+  white-space: nowrap;
 }
 
-/* Тело таблицы */
+/* Ячейки тела таблицы */
 .styled-table tbody td {
-  text-align: center; /* Выравнивание текста по центру */
-  padding: 8px; /* Внутренние отступы */
-  border: 1px solid #ccc; /* Границы ячеек */
-  font-size: 13px; /* Размер шрифта */
-  white-space: nowrap; /* Предотвращает перенос текста */
+  text-align: center;
+  padding: 15px;
+  font-size: 13px;
+  color: #000000;
+  border: none; /* Убираем рамки */
+  white-space: nowrap;
 }
 
-/* Зебра для строк (необязательно) */
+/* Зебра для строк — по желанию */
 .styled-table tbody tr:nth-child(even) {
-  background-color: #808080; /* Светло-серый фон для четных строк */
+  background-color: #f9f9f9;
 }
 
-/* Добавляет выделение строки при наведении */
+/* Hover-эффект строки */
 .styled-table tbody tr:hover {
-  background-color: #808080; /* Темно-серый фон при наведении */
+  background-color: #f2f2f2;
 }
+
 
 /* Вертикальные и горизонтальные границы */
 .styled-table th, .styled-table td {

@@ -48,16 +48,13 @@ async function saveData() {
     const fileInput = document.getElementById('fileInput');
     const file = fileInput?.files?.[0];
 
-    // Кодируем название
     const achievementNameBase64 = encodeBase64(eventName || 'Без названия');
 
-    // Кодируем файл (если выбран)
-    let fileBase64 = "LQ=="; // Значение по умолчанию
+    let fileBase64 = "LQ=="; // дефолтное значение, если файл не выбран
     if (file) {
         fileBase64 = await readFileAsBase64(file);
     }
 
-    // Обновляем reportData
     const reportData = JSON.parse(localStorage.getItem('reportData')) || {};
     reportData.organization = reportData.organization || {};
     reportData.organization.achievements = fileBase64;
@@ -66,29 +63,28 @@ async function saveData() {
     localStorage.removeItem('formFields_achievements');
 }
 
-// --- Предупреждение при уходе ---
-let isFormEdited = true;
+// --- Флаг редактирования формы ---
+let isFormEdited = false; // ❗ по умолчанию отключено
 
-function beforeUnloadHandler(e) {
-    if (isFormEdited) {
-        localStorage.removeItem('formFields_achievements');
-        e.preventDefault();
-        e.returnValue = 'Вы действительно хотите уйти со страницы?';
-        return 'Вы действительно хотите уйти со страницы?';
-    }
-}
+// --- Обработчик beforeunload ---
 
-window.addEventListener('beforeunload', beforeUnloadHandler);
+window.onbeforeunload = null;
 
-// --- Инициализация событий ---
+// --- Инициализация при загрузке страницы ---
 document.addEventListener('DOMContentLoaded', function () {
     loadFormFields();
 
-    document.getElementById('event-name').addEventListener('input', saveFormFields);
+    // При вводе текста
+    document.getElementById('event-name').addEventListener('input', () => {
+        isFormEdited = true;
+        saveFormFields();
+    });
 
+    // При выборе файла
     const fileInput = document.getElementById('fileInput');
     if (fileInput) {
         fileInput.addEventListener('change', function () {
+            isFormEdited = true;
             saveFormFields();
             const file = fileInput.files[0];
             if (file) {
@@ -97,21 +93,24 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Обработка кнопок Назад и Далее
     const nextButton = document.querySelector('.button-next');
     const backButton = document.querySelector('.button-back');
 
     const saveAndReset = async () => {
         await saveData();
         isFormEdited = false;
-        window.removeEventListener('beforeunload', beforeUnloadHandler);
+        window.removeEventListener('beforeunload', beforeUnloadHandler); // снять обработчик
+        if (isFormEdited) {
+            localStorage.removeItem('formFields_achievements');
+        }
     };
 
     if (nextButton) nextButton.addEventListener('click', saveAndReset);
     if (backButton) backButton.addEventListener('click', saveAndReset);
 });
 
-
-
+// --- Меню профиля ---
 document.addEventListener('DOMContentLoaded', () => {
     const profileIcon = document.getElementById('profile-icon');
     const profileMenu = document.getElementById('profile-menu');
