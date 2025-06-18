@@ -1,6 +1,5 @@
 from django.http import JsonResponse, HttpResponse
 import json
-
 from sqlalchemy.event.base import Events
 from ReStart.db_config import Session
 from ReStart.settings import PAGE_ENTRY_COUNT, TEMP_FOLDER
@@ -240,6 +239,13 @@ def edit_user(request):
         user.occupation = json_data['occupation']
     if 'profile_image' in json_data.keys():
         user.profile_image = json_data['profile_image']
+    if 'municipality_name' in json_data.keys():
+        user.municipality_name = json_data['municipality_name']
+    if 'organization_name' in json_data.keys():
+        user_reports = session.query(Organization).order_by(Organization.organization_id.desc()).all()
+        for report in user_reports:
+            report.name = json_data['organization_name']
+
 
     session.commit()
 
