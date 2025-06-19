@@ -65,13 +65,13 @@ def export_to_excel_common(session, writer, json_data):
                 achievements_link = f'http://localhost:8000/admin/download_achievements/?id={report.id}' if report.achievements is not None else '-'
                 result.append([
                     user.municipality_name, report.name, name,
-                    report.creation_time, report.creation_time, sports.name, sports.student_count,
+                    report.creation_time.strftime('%d.%m.%Y'), report.creation_time.strftime('%d.%m.%Y'), sports.name, sports.student_count,
                     report.hours_mon, report.hours_tue, report.hours_wed, report.hours_thu, report.hours_fri, report.hours_sat, report.hours_sun,
                     hours_total, report.students_total, report.students_organization,
                     report.students_grade_1, report.students_grade_2, report.students_grade_3, report.students_grade_4, report.students_grade_5, report.students_grade_6, report.students_grade_7, report.students_grade_8, report.students_grade_9, report.students_grade_10, report.students_grade_11,
-                    latest_unofficial_event.name if latest_unofficial_event is not None else '-', latest_unofficial_event.student_count_all if latest_unofficial_event is not None else '-', latest_unofficial_event.date if latest_unofficial_event is not None else '-',
+                    latest_unofficial_event.name if latest_unofficial_event is not None else '-', latest_unofficial_event.student_count_all if latest_unofficial_event is not None else '-', latest_unofficial_event.date.strftime('%d.%m.%Y') if latest_unofficial_event is not None else '-',
                     latest_unofficial_event.student_count_organization if latest_unofficial_event is not None else '-', latest_official_event.name if latest_official_event is not None else '-',
-                    latest_official_event.student_count_all if latest_official_event is not None else '-', latest_official_event.date if latest_official_event is not None else '-', latest_official_event.official_type if latest_official_event is not None else '-',
+                    latest_official_event.student_count_all if latest_official_event is not None else '-', latest_official_event.date.strftime('%d.%m.%Y') if latest_official_event is not None else '-', latest_official_event.official_type if latest_official_event is not None else '-',
                     latest_official_event.official_location if latest_official_event is not None else '-', latest_official_event.official_organizer if latest_official_event is not None else '-', link, achievements_link
                 ])
             
@@ -201,7 +201,7 @@ def export_to_excel_events_official(session, writer, json_data):
             for event in events:
                 result.append([
                     user.municipality_name, report.name, name, event.name, 
-                    event.student_count_all, event.date,
+                    event.student_count_all, event.date.strftime('%d.%m.%Y'),
                     event.official_type, event.official_location, event.official_organizer, 
                     f'http://localhost:8000/admin/download_official_regulations/?id={event.id}' if event.official_regulations != '-' else '-',
                     f'http://localhost:8000/admin/download_achievements/?id={report.id}' if report.achievements is not None else '-'
@@ -235,7 +235,7 @@ def export_to_excel_events(session, writer, json_data):
             for event in events:
                 result.append([
                     user.municipality_name, report.name, name,
-                    event.name, event.student_count_all, event.date,
+                    event.name, event.student_count_all, event.date.strftime('%d.%m.%Y'),
                     event.student_count_organization
                 ])
 
