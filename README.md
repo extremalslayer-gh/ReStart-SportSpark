@@ -214,22 +214,25 @@ Excel файл, Content-type=application/vnd.ms-excel
 #### Ответ сервера
 
 ```json
-[
-    {
-        "id": "Id пользователя",
-        "first_name": "Имя",
-        "second_name": "Фамилия",
-        "last_name": "Отчество",
-        "email": "Email",
-        "organization_id": "Id организации",
-        "municipality_name": "Муниципальное образование",
-        "is_admin": "Является ли админом",
-        "is_banned": "Оключен ли пользователю доступ",
-        "occupation": "Должность",
-        "temp_password_changed": "Изменен ли временный пароль"
-    },
-    "..."
-]
+{
+    "users": [
+        {
+            "id": "Id пользователя",
+            "first_name": "Имя",
+            "second_name": "Фамилия",
+            "last_name": "Отчество",
+            "email": "Email",
+            "organization_id": "Id организации",
+            "municipality_name": "Муниципальное образование",
+            "is_admin": "Является ли админом",
+            "is_banned": "Оключен ли пользователю доступ",
+            "occupation": "Должность",
+            "temp_password_changed": "Изменен ли временный пароль",
+            "organization_name": "Название учреждения"
+        },
+        "..."
+    ]
+}
 ```
 
 ---
