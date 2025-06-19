@@ -389,11 +389,6 @@ def get_custom_sports(request):
     
     session = Session()
     
-    #caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
-    #if not caller_user.is_admin:
-    #    return JsonResponse({
-    #        'message': 'Неавторизованный доступ'
-    
     sports = session.query(CustomSports).all()
 
     result = {'sports': []}
@@ -421,7 +416,7 @@ def add_custom_event(request):
             'message': 'Неавторизованный доступ'
         }, status=403)
     
-    event = CustomEvent(name=json_data['name'])
+    event = CustomEvent(name=json_data['name'], event_type=json_data['event_type'])
     session.add(event)
     session.commit()
 
@@ -466,19 +461,14 @@ def get_custom_events(request):
     
     session = Session()
     
-    #caller_user = session.query(User).filter(User.id==request.session['user_id']).first()
-    #if not caller_user.is_admin:
-    #    return JsonResponse({
-    #        'message': 'Неавторизованный доступ'
-    #    }, status=403)
-    
     events = session.query(CustomEvent).all()
 
     result = {'events': []}
     for el in events:
         result['events'].append({
             'id': el.id,
-            'name': el.name
+            'name': el.name,
+            'event_type': el.event_type
         })
 
     return JsonResponse(result, status=200)

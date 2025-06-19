@@ -126,6 +126,7 @@ class CustomEvent(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(64), nullable=False)
+    event_type: Mapped[str] = mapped_column(String(64), nullable=False)
 
 Base.metadata.create_all(bind=engine)
 

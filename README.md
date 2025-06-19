@@ -337,6 +337,8 @@ ZIP архив, Content-type=application/x-zip-compressed
 
 - `name` (обязательный, строка) - название спорта/мероприятия
 
+- `event_type` (**_обязательный только для мероприятий_**, строка) - тип мероприятия
+
 #### Ответ сервера
 
 ```json
@@ -379,7 +381,7 @@ ZIP архив, Content-type=application/x-zip-compressed
 
 **POST** `/admin/get_custom_sports/` - для получения видов спорта
 
-**POST** `/admin/get_custom_eventss/` - для получения мероприятий
+**POST** `/admin/get_custom_events/` - для получения мероприятий
 
 #### Ответ сервера
 
@@ -405,11 +407,13 @@ ZIP архив, Content-type=application/x-zip-compressed
     "events": [
         {
             "id": "id мероприятия",
-            "name": "название мероприятия"
+            "name": "название мероприятия",
+            "event_type": "тип мероприятия"
         },
         {
             "id": "id мероприятия",
-            "name": "название мероприятия"
+            "name": "название мероприятия",
+            "event_type": "тип мероприятия"
         }
     ]
 }
