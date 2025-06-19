@@ -242,7 +242,7 @@ def edit_user(request):
     if 'municipality_name' in json_data.keys():
         user.municipality_name = json_data['municipality_name']
     if 'organization_name' in json_data.keys():
-        user_reports = session.query(Organization).order_by(Organization.organization_id.desc()).all()
+        user_reports = session.query(Organization).filter(Organization.organization_id==user.organization_id).all()
         for report in user_reports:
             report.name = json_data['organization_name']
 
