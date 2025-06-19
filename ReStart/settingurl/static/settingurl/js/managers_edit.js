@@ -59,7 +59,8 @@ async function handleSubmit(event) {
     const secondName = fullName[1] || '';
     const thirdName = fullName[2] || '';
     const occupation = document.getElementById('occupation').value;
-
+    const municipality = document.getElementById('municipality_name').value;
+    const organization_name =  document.getElementById('Establishment').value;
     const userId = localStorage.getItem('user.id');
 
     if (!userId) {
@@ -72,7 +73,9 @@ async function handleSubmit(event) {
         first_name: firstName,
         second_name: secondName,
         last_name: thirdName,
-        occupation: occupation
+        occupation: occupation,
+        municipality_name: municipality,
+        organization_name: organization_name
     };
 
     try {
