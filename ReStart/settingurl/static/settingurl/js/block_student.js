@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
             totalStudents: document.getElementById('total-students')?.value || '',
             clubStudents: document.getElementById('club-students')?.value || '',
             grades: {},
-            sports: []
+            sports: {}
         };
 
         for (let i = 1; i <= 11; i++) {
@@ -28,10 +28,12 @@ document.addEventListener("DOMContentLoaded", () => {
         sportItems.forEach(item => {
             const checkbox = item.querySelector("input[type='checkbox']");
             const input = item.querySelector("input[type='text']");
-            formFields.sports.push({
+            const name = checkbox.nextSibling.textContent.trim(); // Название вида спорта
+
+            formFields.sports[name] = {
                 checked: checkbox.checked,
                 value: input.value || ''
-            });
+            };
         });
 
         localStorage.setItem('formFields_sports', JSON.stringify(formFields));
@@ -50,17 +52,20 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const sportItems = document.querySelectorAll('.sports > div');
-        sportItems.forEach((item, index) => {
+        sportItems.forEach(item => {
             const checkbox = item.querySelector("input[type='checkbox']");
             const input = item.querySelector("input[type='text']");
-            if (formFields.sports[index]) {
-                input.value = formFields.sports[index].value;
+            const name = checkbox.nextSibling.textContent.trim();
+
+            const saved = formFields.sports[name];
+            if (saved) {
+                checkbox.checked = saved.checked;
+                input.value = saved.value;
                 input.style.display = checkbox.checked ? 'inline-block' : 'none';
             }
         });
-        updateSportInputs();
-        console.log('Loaded formFields_sports:', formFields);
     }
+
 
     function saveData() {
         const totalStudents = document.getElementById('total-students').value;
@@ -190,6 +195,7 @@ function loadDataForBlockStudentEdit() {
     });
   }
 }
+
 
 // Вызываем функцию при загрузке страницы
 document.addEventListener('DOMContentLoaded', loadDataForBlockStudentEdit);
