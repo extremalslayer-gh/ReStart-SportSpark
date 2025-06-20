@@ -358,3 +358,10 @@ body::before {
     display: none !important;
 }
 
+
+.form-actions {
+    margin-top: 30px;
+}
+
+
+

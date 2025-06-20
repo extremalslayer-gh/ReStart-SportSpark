@@ -32,6 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await postData('/admin/get_custom_events/', {});
             eventsContainer.innerHTML = '';
             data.events.forEach(event => {
+                if (event.event_type != 'Всероссийское')
+                {
+                    return;
+                }
                 const eventDiv = document.createElement('div');
                 eventDiv.classList.add('event-item');
                 eventDiv.setAttribute('data-id', event.id);
@@ -48,7 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    loadEvents();
+        loadEvents();
+
+    loadEvents().then(() => {
+        deactivateDeleteMode(); // <-- Сразу скрываем чекбоксы и кнопку "Отменить"
+    });
+
 
     function activateDeleteMode() {
         container.classList.add('delete-mode');
@@ -91,10 +100,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const eventName = newEventName.value.trim();
         if (eventName) {
             try {
-                const response = await postData('/admin/add_custom_event/', { name: eventName });
+                const response = await postData('/admin/add_custom_event/', { name: eventName, event_type: 'Всероссийское'});
                 alert(response.message);
                 deactivateAddMode();
                 await loadEvents();
+                deactivateDeleteMode(); // <-- добавьте это
             } catch (err) {
                 console.error('Ошибка при добавлении:', err);
             }
@@ -119,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         deactivateDeleteMode();
         await loadEvents();
+        deactivateDeleteMode(); // <-- добавьте это (ещё раз, чтобы скрыть чекбоксы после обновления)
     });
 
     document.addEventListener('change', (e) => {
@@ -154,3 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Сохранённые данные:', events);
     };
 });
+
+
+
+

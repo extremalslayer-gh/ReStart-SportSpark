@@ -50,11 +50,11 @@
     <div class="form-container">
         <h2>Зарегистрировать руководителя</h2>
         <form id="registrationForm" onsubmit="handleSubmit(event)">
-            <input type="text" id="all_name" placeholder="ФИО">
-            <input type="text" id="municipality_name" placeholder="Муниципальное образование">
-            <input type="text" id="Establishment" placeholder="Учреждение">
-            <input type="text" id="occupation" placeholder="Должность">
-            <input type="email" id="email" placeholder="Почта">
+            <input type="text" id="all_name" placeholder="ФИО" required pattern="^[А-Яа-яЁё]+ [А-Яа-яЁё]+ [А-Яа-яЁё]+$" title="Введите ФИО через пробел"><br>
+            <input type="text" id="municipality_name" placeholder="Муниципальное образование" required><br>
+            <input type="text" id="Establishment" placeholder="Учреждение" required><br>
+            <input type="text" id="occupation" placeholder="Должность" required><br>
+            <input type="email" id="email" placeholder="Почта" minlength="3" required><br>
             <button type="submit" onclick="handleSubmit()">Зарегистрировать</button>
         </form>
     </div>

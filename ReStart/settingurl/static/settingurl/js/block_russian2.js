@@ -223,3 +223,185 @@ document.addEventListener('DOMContentLoaded', function () {
     };*/
 });
 
+
+
+document.addEventListener("DOMContentLoaded", async function () {
+    const container = document.getElementById('vs-events-container');
+
+    async function loadVsEventsToForm() {
+        try {
+            const response = await fetch('/admin/get_custom_events/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const contentType = response.headers.get('Content-Type') || '';
+            if (!contentType.includes('application/json')) {
+                const text = await response.text();
+                throw new Error('Ожидался JSON, получен HTML:\n' + text);
+            }
+
+            const data = await response.json();
+            const vsEvents = data.events.filter(ev => ev.event_type === 'Всероссийское');
+
+                vsEvents.forEach((event, index) => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'form-item';
+
+                    const checkboxId = `event-checkbox-${index + 1}`;
+                    const inputId = `number-${index + 1}`;
+
+                    wrapper.innerHTML = `
+                        <label>
+                            <input type="checkbox" id="${checkboxId}">
+                            ${index + 1}. ${event.name}
+                        </label>
+                        <div class="form-fields" style="display: block;">
+                            <label>
+                                Количество участников
+                                <input type="text" placeholder="Введите количество" id="${inputId}" value="${event.student_count_all || ''}">
+                            </label>
+                        </div>
+                    `;
+
+                    container.appendChild(wrapper);
+
+                    const checkbox = wrapper.querySelector('input[type="checkbox"]');
+                    const formFields = wrapper.querySelector('.form-fields');
+
+                    checkbox.addEventListener('change', () => {
+                        formFields.style.display = checkbox.checked ? 'block' : 'none';
+                    });
+                });
+
+
+            const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', () => {
+                    const fields = cb.closest('.form-item').querySelector('.form-fields');
+                    fields.style.display = cb.checked ? 'block' : 'none';
+                    saveFormFields();
+                });
+            });
+
+            checkboxes.forEach(cb => cb.addEventListener('change', saveFormFields));
+            container.querySelectorAll('input[type="number"]').forEach(inp => {
+                inp.addEventListener('input', saveFormFields);
+            });
+
+            loadFormFields();
+        } catch (err) {
+            console.error('Ошибка загрузки Всероссийских мероприятий:', err);
+        }
+    }
+
+    await loadVsEventsToForm();
+});
+
+function saveFormFields() {
+    const formState = {
+        checkboxes: [],
+        inputs: {}
+    };
+
+    document.querySelectorAll('.form-item input[type="checkbox"]').forEach((checkbox, index) => {
+        formState.checkboxes[index] = checkbox.checked;
+    });
+
+    document.querySelectorAll('.form-item input[type="number"], .form-item input[type="text"]').forEach((input) => {
+        formState.inputs[input.id] = input.value;
+    });
+
+    localStorage.setItem('formFields_vs_events', JSON.stringify(formState));
+}
+
+function loadFormFields() {
+    const formState = JSON.parse(localStorage.getItem('formFields_vs_events'));
+    if (!formState) return;
+
+    document.querySelectorAll('.form-item input[type="checkbox"]').forEach((checkbox, index) => {
+        checkbox.checked = formState.checkboxes[index];
+    });
+
+    for (let id in formState.inputs) {
+        const input = document.getElementById(id);
+        if (input) input.value = formState.inputs[id];
+    }
+
+    const event = new Event('change');
+    document.querySelectorAll('.form-item input[type="checkbox"]').forEach(cb => cb.dispatchEvent(event));
+}
+
+function sendDataToServer() {
+    const reportData = JSON.parse(localStorage.getItem('reportData'));
+    if (!reportData || !reportData.events) {
+        alert('Нет данных для отправки');
+        return;
+    }
+
+    const data = {
+        events: reportData.events || [],
+        organization: reportData.organization,
+        sports: reportData.sports || []
+    };
+
+    fetch('/reports/create_report/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Ошибка при отправке данных');
+        })
+        .then(result => {
+            console.log('Данные успешно отправлены:', result);
+            alert('Данные успешно отправлены на сервер!');
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert('Произошла ошибка при отправке данных.');
+        });
+}
+
+function saveData() {
+    const events = [];
+
+    function addEvent(name, studentCount) {
+        events.push({
+            "name": name,
+            "student_count_all": parseInt(studentCount),
+            "student_count_organization": 0,
+            "is_official": true,
+            "official_type": "Всероссийское",
+            "official_location": "Официальное мероприятие",
+            "official_organizer": "Официальное мероприятие",
+            "official_regulations": "LQ=="
+        });
+    }
+
+    document.querySelectorAll('.form-item').forEach((item) => {
+        const checkbox = item.querySelector('input[type="checkbox"]');
+        const numberInput = item.querySelector('input[type="text"]');
+        const name = checkbox.nextSibling.textContent.trim();
+        const studentCount = numberInput.value;
+
+        if (checkbox.checked && name && studentCount) {
+            addEvent(name, studentCount);
+        }
+    });
+
+    let reportData = JSON.parse(localStorage.getItem('reportData')) || {};
+    reportData['events'] = (reportData['events'] || []).concat(events);
+    localStorage.setItem('reportData', JSON.stringify(reportData));
+
+    sendDataToServer();
+    localStorage.clear();
+}
+
+

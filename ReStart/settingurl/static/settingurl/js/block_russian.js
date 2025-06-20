@@ -28,8 +28,12 @@ document.addEventListener("DOMContentLoaded", function () {
     async function renderEvents() {
         const events = await fetchEventsFromDB();
         formSection.innerHTML = '';
-
-        events.forEach((event, index) => {
+        let index = 0;
+        events.forEach((event, _) => {
+            if (event.event_type != 'Региональное')
+            {
+                return;
+            }
             const formItem = document.createElement('div');
             formItem.classList.add('form-item');
 
@@ -38,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             formItem.innerHTML = `
                 <label>
-                    <input type="checkbox" id="${checkboxId}" checked>
+                    <input type="checkbox" id="${checkboxId}">
                     ${index + 1}. ${event.name}
                 </label>
                 <div class="form-fields" style="display: block;">
@@ -56,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
             checkbox.addEventListener('change', () => {
                 formFields.style.display = checkbox.checked ? 'block' : 'none';
             });
+            index++;
         });
     }
 
@@ -64,7 +69,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         document.querySelectorAll('.form-item').forEach(item => {
             const checkbox = item.querySelector('input[type="checkbox"]');
-            const title = item.querySelector('label').textContent.replace(/^\d+\.\s*/, '').trim();
+            const labelText = item.querySelector('label').textContent.trim();
+            const title = labelText.replace(/^\d+\.\s*/, ''); // убираем только "1. " или "23. "
             const count = item.querySelector('input[type="text"]').value;
 
             if (checkbox.checked) {

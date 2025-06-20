@@ -168,7 +168,7 @@ def edit_report(request):
     
     sports_list = []
     for sports in json_data['sports']:
-        sports_dict = { k: v for k, v in sports.items() if k.lower() not in ('id') }
+        sports_dict = { k: v for k, v in sports.items() if k.lower() not in ('id', 'organization_id') }
         sports_list.append(Sports(**sports_dict, organization_id=organization.id))
     
     event_list = []

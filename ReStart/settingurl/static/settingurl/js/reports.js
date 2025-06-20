@@ -42,14 +42,15 @@ function renderTable(reports) {
 
     reports.forEach(report => {
         const org = report.organization;
-
+        let date = org.creation_time.split('T')[0].split('-').reverse();
+        const dateStr = date.join('.');
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>${report.municipality_name || "–"}</td>
             <td>${org.name || "–"}</td>
             <td>${report.user_name || "–"}</td>
-            <td>${(org.creation_time || "–").split(" ")[0]}</td>
-            <td>${(org.creation_time || "–").split(" ")[0]}</td>
+            <td>${(dateStr || "–").split(" ")[0]}</td>
+            <td>${(dateStr || "–").split(" ")[0]}</td>
         `;
         tbody.appendChild(row);
     });

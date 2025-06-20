@@ -189,6 +189,10 @@ body {
 
 
 
+.hidden {
+    display: none !important;
+}
+
 #profile-menu {
     position: absolute;
     top: 50px;
