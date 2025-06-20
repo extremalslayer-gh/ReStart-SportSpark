@@ -194,6 +194,7 @@ body::before {
     font-size: 14px; /* Размер шрифта */
     text-align: center; /* Текст по центру */
     margin-left: 10px; /* Отступ слева для отделения от текста */
+    display: none;
 }
 
 

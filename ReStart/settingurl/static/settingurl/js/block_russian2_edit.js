@@ -152,3 +152,54 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
+document.addEventListener("DOMContentLoaded", function () {
+  loadVsEventsDynamically();
+});
+
+async function loadVsEventsDynamically() {
+  try {
+    const response = await fetch('/admin/get_custom_events/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const data = await response.json();
+    const vsEvents = data.events.filter(ev => ev.event_type === 'Всероссийское');
+
+    const container = document.getElementById('vs-events-container');
+    container.innerHTML = '';
+
+    vsEvents.forEach((event, index) => {
+      const checkboxId = `checkbox${index}`;
+      const inputId = `number${index}`;
+      const html = `
+        <div class="form-item">
+          <label><input type="checkbox" id="${checkboxId}"> ${index + 1}. ${event.name}</label>
+          <div class="form-fields" style="display: none;">
+            <label>Количество участников
+              <input type="text" id="${inputId}" placeholder="Введите количество">
+            </label>
+          </div>
+        </div>`;
+      container.insertAdjacentHTML('beforeend', html);
+    });
+
+    initCheckboxToggle();
+  } catch (err) {
+    console.error('Ошибка загрузки мероприятий:', err);
+  }
+}
+
+function initCheckboxToggle() {
+  const checkboxes = document.querySelectorAll('.form-item input[type="checkbox"]');
+  checkboxes.forEach(cb => {
+    const fields = cb.closest('.form-item').querySelector('.form-fields');
+    if (fields) fields.style.display = cb.checked ? 'block' : 'none';
+
+    cb.addEventListener('change', () => {
+      if (fields) fields.style.display = cb.checked ? 'block' : 'none';
+    });
+  });
+}

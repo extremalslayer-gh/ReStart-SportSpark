@@ -1,32 +1,227 @@
+document.addEventListener('DOMContentLoaded', () => {
+  loadFormFields();
 
-
-document.addEventListener("DOMContentLoaded", function () {
-    // Получаем все чекбоксы
-    const checkboxes = document.querySelectorAll('.form-item input[type="checkbox"]');
-
-    // Функция для обновления видимости полей
-    function updateFields() {
-        checkboxes.forEach(checkbox => {
-            const formFields = checkbox.closest('.form-item').querySelector('.form-fields');
-            if (checkbox.checked) {
-                formFields.style.display = 'block'; // Показываем поля ввода
-            } else {
-                formFields.style.display = 'none'; // Скрываем поля ввода
-            }
-        });
-    }
-
-    // Инициализация видимости полей при загрузке страницы
-    updateFields();
-
-    // Добавляем обработчик события для каждого чекбокса
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', updateFields);
+  document.querySelectorAll('.form-item input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const fields = cb.closest('.form-item').querySelector('.form-fields');
+      if (fields) fields.style.display = cb.checked ? 'block' : 'none';
+      saveFormFields();
     });
+  });
+
+  document.querySelectorAll('.form-item input[type="text"]').forEach(inp => {
+    inp.addEventListener('input', saveFormFields);
+  });
+
+    document.querySelector('.button-next')?.addEventListener('click', () => {
+      saveData(); // <--- Добавляем вызов!
+      document.getElementById('modal').style.display = 'block';
+      renderPreviewModalFromLocalStorage();
+    });
+
+  loadVsEventsToForm();
 });
 
+function saveFormFields() {
+  const formState = { checkboxes: [], inputs: {} };
+  document.querySelectorAll('.form-item input[type="checkbox"]').forEach((cb, i) => formState.checkboxes[i] = cb.checked);
+  document.querySelectorAll('.form-item input[type="text"]').forEach(input => formState.inputs[input.id] = input.value);
+  localStorage.setItem('formFields_vs_events', JSON.stringify(formState));
+}
 
-    // Функция для отправки данных на сервер
+function loadFormFields() {
+  const formState = JSON.parse(localStorage.getItem('formFields_vs_events'));
+  if (!formState) return;
+  document.querySelectorAll('.form-item input[type="checkbox"]').forEach((cb, i) => cb.checked = formState.checkboxes[i]);
+  for (let id in formState.inputs) {
+    const input = document.getElementById(id);
+    if (input) input.value = formState.inputs[id];
+  }
+  document.querySelectorAll('.form-item input[type="checkbox"]').forEach(cb => {
+    const fields = cb.closest('.form-item').querySelector('.form-fields');
+    if (fields) fields.style.display = cb.checked ? 'block' : 'none';
+  });
+}
+
+function renderPreviewModalFromLocalStorage() {
+  const data = JSON.parse(localStorage.getItem('reportData'));
+  if (!data) return;
+
+  // Расписание занятий ШСК
+  const scheduleTable = document.querySelector('.schedule-table tbody');
+  scheduleTable.innerHTML = '';
+  const scheduleRow = document.createElement('tr');
+  [
+    data.organization?.hours_mon,
+    data.organization?.hours_tue,
+    data.organization?.hours_wed,
+    data.organization?.hours_thu,
+    data.organization?.hours_fri,
+    data.organization?.hours_sat,
+    data.organization?.hours_sun
+  ].forEach(hour => {
+    const td = document.createElement('td');
+    td.textContent = hour || '-';
+    scheduleRow.appendChild(td);
+  });
+  scheduleTable.appendChild(scheduleRow);
+
+  // Численность обучающихся
+  document.querySelector('.students-organization').textContent = data.organization?.students_organization || '-';
+  document.querySelector('.students-total').textContent = data.organization?.students_total || '-';
+
+  const classTable = document.querySelector('.students-table tbody');
+  classTable.innerHTML = '';
+  for (let i = 1; i <= 11; i++) {
+    const count = data.organization[`students_grade_${i}`] || '-';
+    classTable.insertAdjacentHTML('beforeend', `<tr><td>${i}</td><td>${count}</td></tr>`);
+  }
+
+  const sportTable = document.querySelector('.activity-table tbody');
+  sportTable.innerHTML = '';
+  (data.sports || []).forEach(sp => {
+    sportTable.insertAdjacentHTML('beforeend', `<tr><td>${sp.name}</td><td>${sp.student_count}</td></tr>`);
+  });
+
+  // Всероссийские мероприятия
+  const all = document.querySelector('.event-table-all tbody');
+  all.innerHTML = '';
+  (data.events || []).forEach(ev => {
+    if (ev.official_type === 'Всероссийское') {
+      const date = ev.date ? ev.date.split('T')[0].split('-').reverse().join('.') : '-';
+      all.insertAdjacentHTML('beforeend', `<tr><td>${ev.name}</td><td>${ev.student_count_all}</td></tr>`);
+    }
+  });
+
+  // Региональные мероприятия
+  const reg = document.querySelector('.event-table-reg tbody');
+  reg.innerHTML = '';
+  (data.events || []).forEach(ev => {
+    if (ev.official_type === 'Региональное') {
+      const date = ev.date ? ev.date.split('T')[0].split('-').reverse().join('.') : '-';
+      reg.insertAdjacentHTML('beforeend', `<tr><td>${ev.name}</td><td>${ev.student_count_all}</td></tr>`);
+    }
+  });
+
+  // Муниципальные мероприятия
+  const mun = document.querySelector('.full-event-table tbody');
+  mun.innerHTML = '';
+  let count = 1;
+  (data.events || []).forEach(ev => {
+    if (ev.official_type === 'Муниципальное') {
+      const date = ev.date ? ev.date.split('T')[0].split('-').reverse().join('.') : '-';
+      mun.insertAdjacentHTML('beforeend', `
+        <tr>
+          <td>${count++}</td>
+          <td>${ev.name}</td>
+          <td>${ev.student_count_all}</td>
+          <td>${date}</td>
+          <td>${ev.official_location || '-'}</td>
+          <td>${ev.official_organizer || '-'}</td>
+        </tr>`);
+    }
+  });
+
+    // === Новый блок: Таблица достижений (Блок 2) ===
+    const achievementTable = document.querySelector('.achievement-table tbody');
+     const row = `
+        <tr>
+          <td>Достижение</td>
+          <td><a href="${data.organization.achievements}" target="_blank">Скачать</a></td>
+        </tr>
+      `;
+      achievementTable.insertAdjacentHTML('beforeend', row);
+
+  // Базовые мероприятия
+  const base = document.querySelector('.event-table tbody');
+  base.innerHTML = '';
+  (data.events || []).forEach(ev => {
+    if (!ev.is_official) {
+      const date = ev.date ? ev.date.split('T')[0].split('-').reverse().join('.') : '-';
+      base.insertAdjacentHTML('beforeend', `
+        <tr>
+          <td>${ev.name}</td>
+          <td>${ev.student_count_organization || '-'}</td>
+          <td>${date}</td>
+          <td>${ev.student_count_all || '-'}</td>
+        </tr>`);
+    }
+  });
+}
+
+function closePreview() {
+  document.getElementById('modal').style.display = 'none';
+}
+
+
+async function loadVsEventsToForm() {
+  try {
+    const response = await fetch('/admin/get_custom_events/', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }
+    });
+    const data = await response.json();
+    const vsEvents = data.events.filter(ev => ev.event_type === 'Всероссийское');
+    const container = document.getElementById('vs-events-container');
+    container.innerHTML = '';
+
+    vsEvents.forEach((event, index) => {
+      const id = `number-${index + 1}`;
+      const checkboxId = `event-checkbox-${index + 1}`;
+      const html = `
+        <div class="form-item">
+          <label><input type="checkbox" id="${checkboxId}"> ${index + 1}. ${event.name}</label>
+          <div class="form-fields">
+            <label>Количество участников <input type="text" id="${id}" placeholder="Введите количество"></label>
+          </div>
+        </div>`;
+      container.insertAdjacentHTML('beforeend', html);
+    });
+
+    loadFormFields();
+    addCheckboxHandlers(); // 👈 Обязательный вызов
+  } catch (err) {
+    console.error('Ошибка загрузки мероприятий:', err);
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+
+function saveData() {
+  const events = [];
+  const formItems = document.querySelectorAll('.form-item');
+
+  formItems.forEach((item, index) => {
+    const checkbox = item.querySelector('input[type="checkbox"]');
+    const input = item.querySelector('input[type="text"]');
+    const label = item.querySelector('label');
+
+    if (checkbox && checkbox.checked && input) {
+      const name = label.textContent.trim().replace(/^\d+\.\s*/, '');
+      const studentCount = input.value;
+
+      events.push({
+        name: name,
+        student_count_all: parseInt(studentCount) || 0,
+        student_count_organization: 0,
+        is_official: true,
+        official_type: "Всероссийское",
+        official_location: "Официальное мероприятие",
+        official_organizer: "Официальное мероприятие",
+        official_regulations: "LQ==",
+      });
+    }
+  });
+
+  let reportData = JSON.parse(localStorage.getItem('reportData')) || {};
+  reportData.events = (reportData.events || []).concat(events);
+  localStorage.setItem('reportData', JSON.stringify(reportData));
+}
+
+
+
+
+
+    // Функция для отправки данных на серверMore actions
     function sendDataToServer() {
         // Получаем объект reportData из localStorage
         const reportData = JSON.parse(localStorage.getItem('reportData'));
@@ -65,6 +260,9 @@ document.addEventListener("DOMContentLoaded", function () {
             // Обработка ответа от сервера
             console.log('Данные успешно отправлены:', result);
             alert('Данные успешно отправлены на сервер!');
+            window.location.href = '/recentrep';
+
+            localStorage.clear()
         })
         .catch(error => {
             console.error('Ошибка:', error);
@@ -74,334 +272,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-    // Эта функция собирает данные о выбранных мероприятиях и сохраняет их в localStorage
-    function saveData() {
-        // Массив для хранения данных о мероприятиях
-        const events = [];
-
-        // Функция для добавления данных мероприятия в массив
-        function addEvent(name, studentCount) {
-            events.push({
-                "name": name,
-                "student_count_all": parseInt(studentCount), // Получаем количество участников
-                "student_count_organization": 0, // строго 0
-                "is_official": true, // только true
-                "official_type": "Всероссийское", // Значение передается как аргумент
-                "official_location": "Официальное мероприятие", // только "Официальное мероприятие"
-                "official_organizer": "Официальное мероприятие", // только "Официальное мероприятие"
-                "official_regulations": "LQ==", // только "LQ=="
-            });
-        }
-
-        // Проверка всех мероприятий, которые отмечены галочкой
-        const checkboxes = document.querySelectorAll('.form-item input[type="checkbox"]');
-        checkboxes.forEach((checkbox, index) => {
-            if (checkbox.checked) {
-                // Для каждого отмеченного мероприятия, собираем данные
-                let name = '';
-                let studentCount = '';
-
-                // В зависимости от мероприятия получаем данные
-                switch (index) {
-                    case 0:
-                        name = 'Всероссийские соревнования по баскетболу среди команд общеобразовательных организаций';
-                        studentCount = document.getElementById('number1').value;
-                        break;
-                    case 1:
-                        name = 'Всероссийские соревнования по волейболу «Серебряный мяч»';
-                        studentCount = document.getElementById('number2').value;
-                        break;
-                    case 2:
-                        name = 'Всероссийские соревнования по легкоатлетическому четырехборью «Шиповка юных»';
-                        studentCount = document.getElementById('number3').value;
-                        break;
-                    case 3:
-                        name = 'Всероссийские соревнования по лыжным гонкам';
-                        studentCount = document.getElementById('number4').value;
-                        break;
-                    case 4:
-                        name = document.getElementById('name5').value || 'Другое';
-                        studentCount = document.getElementById('number5').value;
-                        break;
-                }
-
-                // Добавляем в массив, если есть название мероприятия
-                if (name) {
-                    addEvent(name, studentCount);
-                }
-            }
-        });
-
-        // Получаем текущие данные из localStorage
-        let reportData = JSON.parse(localStorage.getItem('reportData')) || {};
-
-        if (reportData.hasOwnProperty('events'))
-        {
-               reportData['events'] = reportData['events'].concat(events);
-            }
-            else {
-                reportData['events'] = events;
-            }
-
-        // Сохраняем обновленные данные обратно в localStorage
-        localStorage.setItem('reportData', JSON.stringify(reportData));
-
-        sendDataToServer();
-
-        localStorage.clear();
+function addCheckboxHandlers() {
+  document.querySelectorAll('.form-item input[type="checkbox"]').forEach(cb => {
+    const fields = cb.closest('.form-item').querySelector('.form-fields');
+    if (fields) {
+      fields.style.display = cb.checked ? 'block' : 'none'; // начальная установка
     }
 
-
-
-// --- Сохраняем состояние формы (чекбоксы и инпуты) ---
-function saveFormFields() {
-    const formState = {
-        checkboxes: [],
-        inputs: {}
-    };
-
-    document.querySelectorAll('.form-item input[type="checkbox"]').forEach((checkbox, index) => {
-        formState.checkboxes[index] = checkbox.checked;
+    cb.addEventListener('change', () => {
+      if (fields) fields.style.display = cb.checked ? 'block' : 'none';
+      saveFormFields();
     });
-
-    // Сохраняем все поля с количеством участников
-    formState.inputs.number1 = document.getElementById('number1')?.value || '';
-    formState.inputs.number2 = document.getElementById('number2')?.value || '';
-    formState.inputs.number3 = document.getElementById('number3')?.value || '';
-    formState.inputs.number4 = document.getElementById('number4')?.value || '';
-    formState.inputs.number5 = document.getElementById('number5')?.value || '';
-    formState.inputs.name5 = document.getElementById('name5')?.value || '';
-
-    localStorage.setItem('formFields_vs_events', JSON.stringify(formState));
+  });
 }
-
-// --- Восстанавливаем данные из localStorage ---
-function loadFormFields() {
-    const formState = JSON.parse(localStorage.getItem('formFields_vs_events'));
-    if (!formState) return;
-
-    document.querySelectorAll('.form-item input[type="checkbox"]').forEach((checkbox, index) => {
-        checkbox.checked = formState.checkboxes[index];
-    });
-
-    if (document.getElementById('number1')) document.getElementById('number1').value = formState.inputs.number1;
-    if (document.getElementById('number2')) document.getElementById('number2').value = formState.inputs.number2;
-    if (document.getElementById('number3')) document.getElementById('number3').value = formState.inputs.number3;
-    if (document.getElementById('number4')) document.getElementById('number4').value = formState.inputs.number4;
-    if (document.getElementById('number5')) document.getElementById('number5').value = formState.inputs.number5;
-    if (document.getElementById('name5'))   document.getElementById('name5').value   = formState.inputs.name5;
-
-    // Обновляем отображение полей
-    const event = new Event('change');
-    document.querySelectorAll('.form-item input[type="checkbox"]').forEach(cb => cb.dispatchEvent(event));
-}
-
-window.onbeforeunload = null;
-
-// --- Инициализация событий и обработчиков ---
-document.addEventListener('DOMContentLoaded', function () {
-    loadFormFields();
-
-    // Слушатели на чекбоксы
-    document.querySelectorAll('.form-item input[type="checkbox"]').forEach((checkbox) => {
-        checkbox.addEventListener('change', saveFormFields);
-    });
-
-    // Слушатели на поля
-    ['number1', 'number2', 'number3', 'number4', 'number5', 'name5'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.addEventListener('input', saveFormFields);
-    });
-
-    // Подменяем функцию отправки, чтобы снять блокировку и очистить localStorage
-    /*const originalSendData = sendDataToServer;
-    sendDataToServer = function () {
-        isFormEdited = false;
-        window.removeEventListener('beforeunload');
-        localStorage.removeItem('formFields_vs_events');
-        originalSendData(); // вызов оригинальной функции
-    };*/
-});
-
-
-
-document.addEventListener("DOMContentLoaded", async function () {
-    const container = document.getElementById('vs-events-container');
-
-    async function loadVsEventsToForm() {
-        try {
-            const response = await fetch('/admin/get_custom_events/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            const contentType = response.headers.get('Content-Type') || '';
-            if (!contentType.includes('application/json')) {
-                const text = await response.text();
-                throw new Error('Ожидался JSON, получен HTML:\n' + text);
-            }
-
-            const data = await response.json();
-            const vsEvents = data.events.filter(ev => ev.event_type === 'Всероссийское');
-
-                vsEvents.forEach((event, index) => {
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'form-item';
-
-                    const checkboxId = `event-checkbox-${index + 1}`;
-                    const inputId = `number-${index + 1}`;
-
-                    wrapper.innerHTML = `
-                        <label>
-                            <input type="checkbox" id="${checkboxId}">
-                            ${index + 1}. ${event.name}
-                        </label>
-                        <div class="form-fields" style="display: block;">
-                            <label>
-                                Количество участников
-                                <input type="text" placeholder="Введите количество" id="${inputId}" value="${event.student_count_all || ''}">
-                            </label>
-                        </div>
-                    `;
-
-                    container.appendChild(wrapper);
-
-                    const checkbox = wrapper.querySelector('input[type="checkbox"]');
-                    const formFields = wrapper.querySelector('.form-fields');
-
-                    checkbox.addEventListener('change', () => {
-                        formFields.style.display = checkbox.checked ? 'block' : 'none';
-                    });
-                });
-
-
-            const checkboxes = container.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(cb => {
-                cb.addEventListener('change', () => {
-                    const fields = cb.closest('.form-item').querySelector('.form-fields');
-                    fields.style.display = cb.checked ? 'block' : 'none';
-                    saveFormFields();
-                });
-            });
-
-            checkboxes.forEach(cb => cb.addEventListener('change', saveFormFields));
-            container.querySelectorAll('input[type="number"]').forEach(inp => {
-                inp.addEventListener('input', saveFormFields);
-            });
-
-            loadFormFields();
-        } catch (err) {
-            console.error('Ошибка загрузки Всероссийских мероприятий:', err);
-        }
-    }
-
-    await loadVsEventsToForm();
-});
-
-function saveFormFields() {
-    const formState = {
-        checkboxes: [],
-        inputs: {}
-    };
-
-    document.querySelectorAll('.form-item input[type="checkbox"]').forEach((checkbox, index) => {
-        formState.checkboxes[index] = checkbox.checked;
-    });
-
-    document.querySelectorAll('.form-item input[type="number"], .form-item input[type="text"]').forEach((input) => {
-        formState.inputs[input.id] = input.value;
-    });
-
-    localStorage.setItem('formFields_vs_events', JSON.stringify(formState));
-}
-
-function loadFormFields() {
-    const formState = JSON.parse(localStorage.getItem('formFields_vs_events'));
-    if (!formState) return;
-
-    document.querySelectorAll('.form-item input[type="checkbox"]').forEach((checkbox, index) => {
-        checkbox.checked = formState.checkboxes[index];
-    });
-
-    for (let id in formState.inputs) {
-        const input = document.getElementById(id);
-        if (input) input.value = formState.inputs[id];
-    }
-
-    const event = new Event('change');
-    document.querySelectorAll('.form-item input[type="checkbox"]').forEach(cb => cb.dispatchEvent(event));
-}
-
-function sendDataToServer() {
-    const reportData = JSON.parse(localStorage.getItem('reportData'));
-    if (!reportData || !reportData.events) {
-        alert('Нет данных для отправки');
-        return;
-    }
-
-    const data = {
-        events: reportData.events || [],
-        organization: reportData.organization,
-        sports: reportData.sports || []
-    };
-
-    fetch('/reports/create_report/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            }
-            throw new Error('Ошибка при отправке данных');
-        })
-        .then(result => {
-            console.log('Данные успешно отправлены:', result);
-            alert('Данные успешно отправлены на сервер!');
-        })
-        .catch(error => {
-            console.error('Ошибка:', error);
-            alert('Произошла ошибка при отправке данных.');
-        });
-}
-
-function saveData() {
-    const events = [];
-
-    function addEvent(name, studentCount) {
-        events.push({
-            "name": name,
-            "student_count_all": parseInt(studentCount),
-            "student_count_organization": 0,
-            "is_official": true,
-            "official_type": "Всероссийское",
-            "official_location": "Официальное мероприятие",
-            "official_organizer": "Официальное мероприятие",
-            "official_regulations": "LQ=="
-        });
-    }
-
-    document.querySelectorAll('.form-item').forEach((item) => {
-        const checkbox = item.querySelector('input[type="checkbox"]');
-        const numberInput = item.querySelector('input[type="text"]');
-        const name = checkbox.nextSibling.textContent.trim();
-        const studentCount = numberInput.value;
-
-        if (checkbox.checked && name && studentCount) {
-            addEvent(name, studentCount);
-        }
-    });
-
-    let reportData = JSON.parse(localStorage.getItem('reportData')) || {};
-    reportData['events'] = (reportData['events'] || []).concat(events);
-    localStorage.setItem('reportData', JSON.stringify(reportData));
-
-    sendDataToServer();
-    localStorage.clear();
-}
-
-

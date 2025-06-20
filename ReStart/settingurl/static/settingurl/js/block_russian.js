@@ -45,13 +45,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     <input type="checkbox" id="${checkboxId}">
                     ${index + 1}. ${event.name}
                 </label>
-                <div class="form-fields" style="display: block;">
+                <div class="form-fields" style="display: none;">
                     <label>
                         Количество участников
                         <input type="text" placeholder="Введите количество" id="${inputId}" value="${event.student_count_all || ''}">
                     </label>
                 </div>
             `;
+
 
             formSection.appendChild(formItem);
 
