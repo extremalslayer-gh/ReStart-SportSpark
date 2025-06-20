@@ -98,6 +98,7 @@ body {
 .section-header {
   display: flex;
   align-items: center;
+  gap: section-header
   margin-bottom: 15px;
 }
 
@@ -349,4 +350,9 @@ body {
 #profile-menu ul li a:hover,
 #profile-menu ul li button:hover {
     background-color: #f0f0f0;
+}
+
+span {
+    display: flex;
+
 }

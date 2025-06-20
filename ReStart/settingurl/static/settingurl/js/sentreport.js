@@ -86,12 +86,14 @@ scheduleTable.appendChild(hoursRow);
   // Проходим все мероприятия
   data.events.forEach((item, index) => {
     if (!item.is_official) {
+        let date = item.date.split('T')[0].split('-').reverse();
+        const dateStr = date.join('.');
       // Обычные мероприятия ШСК
       const row = `
         <tr>
           <td>${item.name}</td>
           <td>${item.student_count_organization || '-'}</td>
-          <td>${item.date || '-'}</td>
+          <td>${dateStr || '-'}</td>
           <td>${item.student_count_all || '-'}</td>
         </tr>
       `;
@@ -99,30 +101,36 @@ scheduleTable.appendChild(hoursRow);
     } else {
       // Официальные мероприятия
       if (item.official_type === 'Всероссийское') {
+        let date = item.date.split('T')[0].split('-').reverse();
+        const dateStr = date.join('.');
         const row = `
           <tr>
-            <td>${item.name}</td>
+            <td>${(item.name || '').replace(/^\d+\.\s*/, '')}</td>
             <td>${item.student_count_all || '-'}</td>
-            <td>${item.date || '-'}</td>
+            <td>${dateStr || '-'}</td>
           </tr>
         `;
         allRussianTable.insertAdjacentHTML('beforeend', row);
       } else if (item.official_type === 'Региональное') {
+        let date = item.date.split('T')[0].split('-').reverse();
+        const dateStr = date.join('.');
         const row = `
           <tr>
-            <td>${item.name}</td>
+            <td>${(item.name || '').replace(/^\d+\.\s*/, '')}</td>
             <td>${item.student_count_all || '-'}</td>
-            <td>${item.date || '-'}</td>
+            <td>${dateStr || '-'}</td>
           </tr>
         `;
         regionalTable.insertAdjacentHTML('beforeend', row);
       } else if (item.official_type === 'Муниципальное') {
+        let date = item.date.split('T')[0].split('-').reverse();
+        const dateStr = date.join('.');
         const row = `
           <tr>
             <td>${municipalCounter++}</td>
             <td>${item.name}</td>
             <td>${item.student_count_all || '-'}</td>
-            <td>${item.date || '-'}</td>
+            <td>${dateStr || '-'}</td>
             <td>${item.official_location || '-'}</td>
             <td>${item.official_organizer || '-'}</td>
             <td>${item.official_regulations || '-'}</td>
@@ -136,7 +144,7 @@ scheduleTable.appendChild(hoursRow);
     const achievementTable = document.querySelector('.achievement-table tbody');
      const row = `
         <tr>
-          <td>'Достижение'</td>
+          <td>Достижение</td>
           <td><a href="${data.organization.achievements}" target="_blank">Скачать</a></td>
         </tr>
       `;

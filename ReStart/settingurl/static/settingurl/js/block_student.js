@@ -1,57 +1,17 @@
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
     let isFormEdited = true;
 
-    const sportsContainer = document.querySelector('.sports');
+    const checkboxes = document.querySelectorAll('.sports > div input[type="checkbox"]');
     const inputsIds = ['total-students', 'club-students'];
     for (let i = 1; i <= 11; i++) inputsIds.push(`class-${i}`);
 
-    // Получение видов спорта с сервера
-    async function fetchSportsList() {
-        try {
-            const res = await fetch('/admin/get_custom_sports/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({})
-            });
-            const data = await res.json();
-            return data.sports || [];
-        } catch (e) {
-            console.error('Ошибка загрузки видов спорта:', e);
-            return [];
-        }
-    }
-
-    // Рендер чекбоксов с input'ами по списку
-    async function renderSports() {
-        const sports = await fetchSportsList();
-        sportsContainer.innerHTML = '';
-
-        sports.forEach(sport => {
-            const sportDiv = document.createElement('div');
-            sportDiv.innerHTML = `
-                <label>
-                    <input type="checkbox" data-id="${sport.id}">
-                    ${sport.name}
-                    <input type="text" placeholder="Кол-во участников" style="display: none;">
-                </label>
-            `;
-            sportsContainer.appendChild(sportDiv);
-        });
-
-        updateSportInputs();
-        loadFormFields(); // применим сохранённые данные из localStorage после рендера
-    }
-
-    // Показать/скрыть поля ввода под чекбоксами
     function updateSportInputs() {
-        const checkboxes = sportsContainer.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(cb => {
             const input = cb.parentElement.querySelector('input[type="text"]');
             if (input) input.style.display = cb.checked ? 'inline-block' : 'none';
         });
     }
 
-    // Сохранение всех полей в localStorage
     function saveFormFields() {
         const formFields = {
             totalStudents: document.getElementById('total-students')?.value || '',
@@ -64,23 +24,20 @@ document.addEventListener("DOMContentLoaded", async () => {
             formFields.grades[`class-${i}`] = document.getElementById(`class-${i}`)?.value || '';
         }
 
-        const sportItems = sportsContainer.querySelectorAll('div');
+        const sportItems = document.querySelectorAll('.sports > div');
         sportItems.forEach(item => {
             const checkbox = item.querySelector("input[type='checkbox']");
             const input = item.querySelector("input[type='text']");
             formFields.sports.push({
-                id: checkbox.dataset.id,
-                name: checkbox.nextSibling.textContent.trim(),
                 checked: checkbox.checked,
                 value: input.value || ''
             });
         });
 
         localStorage.setItem('formFields_sports', JSON.stringify(formFields));
-        console.log('Сохранено: formFields_sports', formFields);
+        console.log('Saved formFields_sports:', formFields);
     }
 
-    // Загрузка данных из localStorage
     function loadFormFields() {
         const formFields = JSON.parse(localStorage.getItem('formFields_sports'));
         if (!formFields) return;
@@ -92,23 +49,20 @@ document.addEventListener("DOMContentLoaded", async () => {
             document.getElementById(`class-${i}`).value = formFields.grades[`class-${i}`] || '';
         }
 
-        const sportItems = sportsContainer.querySelectorAll('div');
+        const sportItems = document.querySelectorAll('.sports > div');
         sportItems.forEach((item, index) => {
             const checkbox = item.querySelector("input[type='checkbox']");
             const input = item.querySelector("input[type='text']");
-            const sportData = formFields.sports.find(s => s.id === checkbox.dataset.id);
-            if (sportData) {
-                checkbox.checked = sportData.checked;
-                input.value = sportData.value;
+            if (formFields.sports[index]) {
+                checkbox.checked = formFields.sports[index].checked;
+                input.value = formFields.sports[index].value;
                 input.style.display = checkbox.checked ? 'inline-block' : 'none';
             }
         });
-
         updateSportInputs();
-        console.log('Загружено: formFields_sports', formFields);
+        console.log('Loaded formFields_sports:', formFields);
     }
 
-    // Сохранение в reportData
     function saveData() {
         const totalStudents = document.getElementById('total-students').value;
         const clubStudents = document.getElementById('club-students').value;
@@ -118,14 +72,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             studentsByGrade[`students_grade_${i}`] = parseInt(document.getElementById(`class-${i}`).value) || 0;
         }
 
+        const sportsElements = document.querySelectorAll('.sports > div');
         const sports = [];
-        sportsContainer.querySelectorAll('div').forEach(item => {
-            const checkbox = item.querySelector('input[type="checkbox"]');
-            const input = item.querySelector('input[type="text"]');
+        sportsElements.forEach((sport) => {
+            const checkbox = sport.querySelector('input[type="checkbox"]');
+            const studentCountInput = sport.querySelector('input[type="text"]');
             if (checkbox.checked) {
                 sports.push({
                     name: checkbox.nextSibling.textContent.trim(),
-                    student_count: parseInt(input.value) || 0
+                    student_count: parseInt(studentCountInput.value) || 0,
                 });
             }
         });
@@ -140,71 +95,104 @@ document.addEventListener("DOMContentLoaded", async () => {
         data.sports = sports;
 
         localStorage.setItem('reportData', JSON.stringify(data));
-        console.log('Сохранено: reportData', data);
+        console.log('Saved reportData:', data);
     }
 
-    // Добавление слушателей на поля
-    inputsIds.forEach(id => {
-        const input = document.getElementById(id);
-        if (input) {
-            input.addEventListener('input', () => {
-                saveFormFields();
-                isFormEdited = true;
-            });
-        }
+    // Инициализация формы
+    loadFormFields();
+
+    // Добавляем слушатели
+    document.getElementById('total-students').addEventListener('input', () => {
+        saveFormFields();
+        isFormEdited = true;
+    });
+    document.getElementById('club-students').addEventListener('input', () => {
+        saveFormFields();
+        isFormEdited = true;
     });
 
-    // Делегирование на чекбоксы
-    sportsContainer.addEventListener('change', e => {
-        if (e.target && e.target.type === 'checkbox') {
+    for (let i = 1; i <= 11; i++) {
+        document.getElementById(`class-${i}`).addEventListener('input', () => {
+            saveFormFields();
+            isFormEdited = true;
+        });
+    }
+
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', () => {
             updateSportInputs();
             saveFormFields();
             isFormEdited = true;
+        });
+    });
+
+    // Предупреждение при уходе
+    window.addEventListener('beforeunload', (e) => {
+        if (isFormEdited) {
+            e.preventDefault();
+            e.returnValue = 'Вы действительно хотите уйти со страницы?';
+            return 'Вы действительно хотите уйти со страницы?';
         }
     });
 
-    // Сохранение при переходе
+    // Кнопка Далее
     const nextButton = document.querySelector('.button-next');
     if (nextButton) {
         nextButton.addEventListener('click', () => {
             saveFormFields();
             saveData();
-            isFormEdited = false;
+            isFormEdited = false; // чтобы не показывать предупреждение при переходе
+            // Позволяем ссылке перейти на другую страницу (если она есть)
         });
     }
 
+    // Кнопка Назад
     const backButton = document.querySelector('.button-back');
     if (backButton) {
         backButton.addEventListener('click', () => {
             saveFormFields();
-            isFormEdited = false;
+            isFormEdited = false; // чтобы не показывать предупреждение при переходе
         });
     }
-
-    window.addEventListener('beforeunload', (e) => {
-        if (isFormEdited) {
-            e.preventDefault();
-            e.returnValue = 'Вы действительно хотите уйти со страницы?';
-        }
-    });
-
-    // Загружаем и рендерим всё при старте
-    await renderSports();
 });
 
+function loadDataForBlockStudentEdit() {
+  var reportData = JSON.parse(localStorage.getItem('reportData'));
+  if (!reportData || !reportData.organization) return;
+  localStorage.setItem('oldEvents', JSON.stringify(reportData.events));
+    reportData.events = [];
+    localStorage.setItem('reportData', JSON.stringify(reportData));
 
-document.addEventListener('DOMContentLoaded', () => {
-    const profileIcon = document.getElementById('profile-icon');
-    const profileMenu = document.getElementById('profile-menu');
+  // Заполняем общие поля
+  document.getElementById('total-students').value = reportData.organization.students_total || '';
+  document.getElementById('club-students').value = reportData.organization.students_organization || '';
 
-    profileIcon.addEventListener('click', (e) => {
-        e.stopPropagation();
-        profileMenu.classList.toggle('hidden');
+  // Заполняем классы
+  for (let i = 1; i <= 11; i++) {
+    const gradeKey = `students_grade_${i}`;
+    const input = document.getElementById(`class-${i}`);
+    if (input) {
+      input.value = reportData.organization[gradeKey] || '';
+    }
+  }
+
+  // Заполняем виды спорта
+  const sportsElements = document.querySelectorAll('.sports > div');
+  if (reportData.sports && reportData.sports.length) {
+    sportsElements.forEach((sportEl, index) => {
+      const checkbox = sportEl.querySelector('input[type="checkbox"]');
+      const input = sportEl.querySelector('input[type="text"]');
+      const sportData = reportData.sports[index];
+      if (checkbox && input && sportData) {
+        checkbox.checked = !!sportData.checked;
+        input.value = sportData.student_count || '';
+        input.style.display = checkbox.checked ? 'inline-block' : 'none';
+      }
     });
+  }
+}
 
-    document.addEventListener('click', () => {
-        if (!profileMenu.classList.contains('hidden')) {
-            profileMenu.classList.add('hidden');
-        }
-    });
-});
+// Вызываем функцию при загрузке страницы
+document.addEventListener('DOMContentLoaded', loadDataForBlockStudentEdit);
+
+ let studentCount = document.querySelector('#total-students')

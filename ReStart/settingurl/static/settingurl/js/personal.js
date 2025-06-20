@@ -13,7 +13,7 @@ document.getElementById("avatarUpload").addEventListener("change", function(even
 });
 
 
-document.addEventListener('DOMContentLoaded', () => {
+     document.addEventListener('DOMContentLoaded', () => {
     const profileIcon = document.getElementById('profile-icon');
     const profileMenu = document.getElementById('profile-menu');
 

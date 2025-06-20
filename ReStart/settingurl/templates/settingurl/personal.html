@@ -17,20 +17,20 @@
                 <li><a href="{% url 'reports' %}">Посмотреть отчеты</a></li>
                 <li><a href="{% url 'treasonreport' %}">Редактировать отчёт</a></li>
             </ul>
-            <div class="profile" style="position: relative;">
-                <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon" id="profile-icon" style="cursor: pointer;">
-                <div id="profile-menu" class="hidden">
-                    <ul>
-                        <li><a href="{% url 'personal' %}">Личный кабинет</a></li>
-                        <li>
-                            <form action="{% url 'logout' %}" method="post" style="margin: 0;">
-                                {% csrf_token %}
-                                <button type="submit">Выйти</button>
-                            </form>
-                        </li>
-                    </ul>
+                <div class="profile" style="position: relative;">
+                    <img src="{% static 'settingurl/img/profile.png' %}" alt="Профиль" class="profile-icon" id="profile-icon" style="cursor: pointer;">
+                    <div id="profile-menu" class="hidden">
+                        <ul>
+                            <li><a href="{% url 'personal' %}">Личный кабинет</a></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post" style="margin: 0;">
+                                    {% csrf_token %}
+                                    <button type="submit">Выйти</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
         </nav>
     </header>
 

@@ -165,8 +165,9 @@ main h1 {
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 5px;
-    width: 8%; /* Поля растягиваются на всю ширину контейнера */
+    width: 150px; /* фиксированная ширина как у региональных */
 }
+
 
 footer {
     display: flex;
