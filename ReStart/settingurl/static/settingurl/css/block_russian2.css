@@ -112,17 +112,7 @@ main h1 {
     gap: 20px;
 }
 
-.step-indicator {
-    font-size: 20px;
-    color: #fff;
-    background-color: #4b4b4b;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+
 
 .form-section {
     flex: 1;
@@ -149,10 +139,12 @@ main h1 {
 
 /* Обновляем стили для вертикального расположения */
 .form-fields {
-    display: block;  /* Элементы будут вертикальными */
+    display: none;  /* Элементы будут вертикальными */
     margin-top: 5px;
     margin-left: 25px;
 }
+
+
 
 .form-fields label {
     font-size: 12px;
@@ -165,7 +157,7 @@ main h1 {
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 5px;
-    width: 8%; /* Поля растягиваются на всю ширину контейнера */
+    width: 150px; /* Поля растягиваются на всю ширину контейнера */
 }
 
 footer {
@@ -261,4 +253,18 @@ footer {
 #profile-menu ul li a:hover,
 #profile-menu ul li button:hover {
     background-color: #f0f0f0;
+}
+
+
+
+.step-indicator {
+    width: 40px;
+    height: 40px;
+    background-color: #6a4ccf;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    border-radius: 8px;
 }

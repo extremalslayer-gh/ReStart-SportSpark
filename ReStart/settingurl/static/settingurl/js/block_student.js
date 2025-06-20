@@ -54,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const checkbox = item.querySelector("input[type='checkbox']");
             const input = item.querySelector("input[type='text']");
             if (formFields.sports[index]) {
-                checkbox.checked = formFields.sports[index].checked;
                 input.value = formFields.sports[index].value;
                 input.style.display = checkbox.checked ? 'inline-block' : 'none';
             }

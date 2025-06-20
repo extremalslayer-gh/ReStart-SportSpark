@@ -107,7 +107,6 @@ scheduleTable.appendChild(hoursRow);
           <tr>
             <td>${(item.name || '').replace(/^\d+\.\s*/, '')}</td>
             <td>${item.student_count_all || '-'}</td>
-            <td>${dateStr || '-'}</td>
           </tr>
         `;
         allRussianTable.insertAdjacentHTML('beforeend', row);
@@ -118,7 +117,6 @@ scheduleTable.appendChild(hoursRow);
           <tr>
             <td>${(item.name || '').replace(/^\d+\.\s*/, '')}</td>
             <td>${item.student_count_all || '-'}</td>
-            <td>${dateStr || '-'}</td>
           </tr>
         `;
         regionalTable.insertAdjacentHTML('beforeend', row);
