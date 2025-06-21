@@ -78,7 +78,8 @@ ReStart/
              └── tables.html - Таблица с руководителями.
 ```
 
-
+# Архитектура базы данных сервиса
+![Demo screenshot](https://drive.google.com/uc?export=view&id=1JfS_aO2V4Zq3O4gcSQnq91gLk1Q6udCh)
 
 # Конфигурационые файлы
 
